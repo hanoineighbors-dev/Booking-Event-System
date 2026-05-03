@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đặt chỗ — Dập Dìu Drag Brunch</title>
+<meta name="description" content="Đặt chỗ Dập Dìu Drag Brunch tại Hanoi Neighbors">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #FDFAF7; --surface: #FFFFFF; --surface2: #F5F0EB;
+  --border: #DDD5C8; --border2: #C8B9A8;
+  --text: #2C2420; --text2: #7A6A5E; --text3: #A89888;
+  --accent: #7B6550; --accent-light: #FAF5F0; --accent-mid: #A0856A;
+  --error: #C0392B; --error-bg: #FDECEA;
+  --success: #1D9E75; --success-bg: #EAF5F0;
+  --warn: #D4A020; --warn-bg: #FFF8E6;
+  --radius: 8px; --radius-lg: 12px;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+.page-wrap { max-width: 600px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+.page-header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; }
+.page-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 500; color: var(--text); line-height: 1.1; }
+.page-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+.adm-btn { font-size: 12px; color: var(--text2); background: none; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 5px 11px; cursor: pointer; font-family: 'DM Sans', sans-serif; flex-shrink: 0; margin-top: 4px; }
+.adm-btn:hover { background: var(--surface2); }
+.stepbar { display: flex; gap: 5px; margin-bottom: 1.75rem; }
+.sp { flex: 1; height: 3px; background: var(--border); border-radius: 2px; transition: background 0.3s; }
+.sp.a { background: var(--accent-mid); } .sp.d { background: var(--accent); }
+.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+.lbl { font-size: 10px; font-weight: 500; letter-spacing: 0.09em; color: var(--text3); text-transform: uppercase; margin-bottom: 0.85rem; }
+.hidden { display: none !important; }
+.fade { animation: fi 0.22s ease; }
+@keyframes fi { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.divider { height: 0.5px; background: var(--border); margin: 1rem 0; }
+
+.date-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 8px; }
+.date-btn { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 11px; cursor: pointer; text-align: left; transition: all 0.15s; font-family: 'DM Sans', sans-serif; width: 100%; }
+.date-btn:hover { background: var(--surface2); } .date-btn.sel { border-color: var(--accent-mid); background: var(--accent-light); } .date-btn.full { opacity: 0.4; cursor: not-allowed; }
+.dm { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 500; color: var(--text); display: block; line-height: 1.2; }
+.ds { font-size: 11px; color: var(--text2); margin-top: 3px; display: block; }
+
+.qty-big { display: flex; align-items: center; justify-content: center; gap: 28px; padding: 1.25rem 0; }
+.qbtn { width: 42px; height: 42px; border: 0.5px solid var(--border2); border-radius: 50%; background: var(--surface); cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; color: var(--text); transition: background 0.15s; font-family: 'DM Sans', sans-serif; }
+.qbtn:hover { background: var(--surface2); } .qbtn:disabled { opacity: 0.3; cursor: not-allowed; }
+.qval { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 500; min-width: 56px; text-align: center; color: var(--text); line-height: 1; }
+.qlbl { font-size: 13px; color: var(--text2); text-align: center; margin-top: 5px; }
+.qty-hint { font-size: 12px; color: var(--text3); text-align: center; padding: 4px 0 0; }
+
+.map-wrap { background: var(--surface2); border-radius: var(--radius); padding: 12px; overflow-x: auto; }
+.map-svg { display: block; width: 100%; height: auto; min-width: 480px; }
+.tbl-group { cursor: pointer; }
+.tbl-group rect.tbl-body { transition: fill 0.18s, stroke 0.18s; }
+.tbl-group text { pointer-events: none; transition: fill 0.18s; }
+.tbl-available .tbl-body { fill: #FFFFFF; stroke: #C8B9A8; stroke-width: 1.5; }
+.tbl-available .tbl-name { fill: #2C2420; } .tbl-available .tbl-cap { fill: #7A6A5E; }
+.tbl-available .tbl-comm-body { fill: #FFFFFF; stroke: #C8B9A8; stroke-width: 1.5; stroke-dasharray: 5,3; }
+.tbl-selected .tbl-body { fill: #FAF5F0; stroke: #A0856A; stroke-width: 2; }
+.tbl-selected .tbl-name { fill: #2C2420; } .tbl-selected .tbl-cap { fill: #7B6550; }
+.tbl-selected .tbl-comm-body { fill: #FAF5F0; stroke: #A0856A; stroke-width: 2; stroke-dasharray: 5,3; }
+.tbl-compatible .tbl-body { fill: #EAF5F0; stroke: #1D9E75; stroke-width: 1.5; }
+.tbl-compatible .tbl-name { fill: #085041; } .tbl-compatible .tbl-cap { fill: #0F6E56; }
+.tbl-compatible .tbl-comm-body { fill: #EAF5F0; stroke: #1D9E75; stroke-width: 1.5; stroke-dasharray: 5,3; }
+.tbl-dimmed .tbl-body, .tbl-taken .tbl-body { fill: #F1EFE8; stroke: #D3D1C7; stroke-width: 1; }
+.tbl-dimmed .tbl-name, .tbl-taken .tbl-name { fill: #B4B2A9; } .tbl-dimmed .tbl-cap, .tbl-taken .tbl-cap { fill: #B4B2A9; }
+.tbl-dimmed .tbl-comm-body, .tbl-taken .tbl-comm-body { fill: #F1EFE8; stroke: #D3D1C7; stroke-width: 1; stroke-dasharray: 5,3; }
+.tbl-dimmed, .tbl-taken { cursor: not-allowed; }
+.tbl-pending .tbl-body { fill: #FFF8E6; stroke: #D4A020; stroke-width: 1.2; stroke-dasharray: 3,2; }
+.tbl-pending .tbl-name { fill: #7A5200; } .tbl-pending .tbl-cap { fill: #A07000; }
+.tbl-pending { cursor: not-allowed; }
+
+.map-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+.leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+.leg-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.sel-bar { padding: 10px 13px; border-radius: var(--radius); font-size: 13px; color: var(--text2); background: var(--surface2); margin-top: 10px; min-height: 40px; line-height: 1.5; transition: background 0.2s; }
+.sel-bar.ok { background: var(--success-bg); color: #085041; } .sel-bar.partial { background: var(--warn-bg); color: #7A5200; }
+
+.guest-rows { display: flex; flex-direction: column; gap: 8px; }
+.guest-row { display: flex; align-items: center; gap: 10px; }
+.gnum { font-size: 13px; color: var(--text2); min-width: 62px; }
+.gsel { flex: 1; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 8px 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); background: var(--surface); outline: none; cursor: pointer; }
+.gsel:focus { border-color: var(--accent-mid); }
+.recap-bar { padding: 10px 12px; background: var(--surface2); border-radius: var(--radius); font-size: 12px; color: var(--text2); margin-bottom: 0.85rem; line-height: 1.6; }
+.recap-bar b { color: var(--text); font-weight: 500; }
+
+.inp { width: 100%; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 10px 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; }
+.inp:focus { border-color: var(--accent-mid); box-shadow: 0 0 0 2px rgba(160,133,106,0.15); }
+.inp.invalid { border-color: var(--error); }
+.ig { margin-bottom: 10px; } .il { font-size: 12px; color: var(--text2); margin-bottom: 5px; display: block; }
+.field-err { font-size: 11px; color: var(--error); margin-top: 4px; min-height: 14px; }
+
+.srow { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; font-size: 13px; border-bottom: 0.5px solid var(--border); gap: 12px; }
+.srow:last-child { border-bottom: none; padding-top: 12px; font-size: 15px; font-weight: 500; }
+.sl { color: var(--text2); flex-shrink: 0; } .sv { color: var(--text); text-align: right; }
+.total-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+.total-val { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--accent); }
+
+.qr-box { width: 200px; height: 200px; border: 0.5px solid var(--border); border-radius: var(--radius); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; background: #fff; overflow: hidden; }
+.qr-box img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.qr-box .qr-spin { font-size: 12px; color: var(--text3); }
+.bank { font-size: 13px; color: var(--text2); line-height: 2; text-align: center; }
+.bv { font-weight: 500; color: var(--text); }
+.copy-btn { font-size: 11px; padding: 2px 8px; margin-left: 6px; background: none; border: 0.5px solid var(--border); border-radius: 4px; cursor: pointer; color: var(--text2); font-family: inherit; }
+.copy-btn:hover { background: var(--surface2); } .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+.btn-p { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: var(--radius); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; margin-top: 1rem; letter-spacing: 0.01em; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-p:hover { background: #6A5642; } .btn-p:disabled { background: var(--border2); cursor: not-allowed; }
+.btn-g { background: none; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 9px 16px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text2); cursor: pointer; margin-top: 0.75rem; display: inline-block; }
+.btn-g:hover { background: var(--surface2); }
+.btn-danger { background: var(--error); color: #fff; border: none; padding: 9px 16px; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
+.btn-danger:hover { background: #A02818; }
+
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.note { font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: 0.85rem; padding: 10px 13px; background: var(--surface2); border-radius: var(--radius); }
+.note.warn { background: var(--warn-bg); color: #7A5200; }
+.note.err { background: var(--error-bg); color: var(--error); }
+
+.ok-wrap { text-align: center; padding: 0.5rem 0; }
+.ok-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); border: 0.5px solid var(--accent-mid); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.1rem; }
+.ok-ttl { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--text); margin-bottom: 0.5rem; }
+.ok-code { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--accent); letter-spacing: 0.14em; margin: 0.85rem 0; }
+.ok-msg { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+.check-status-wrap { margin-top: 1.5rem; }
+.check-status-box { display: flex; gap: 8px; }
+.check-status-box input { flex: 1; }
+.status-result { margin-top: 10px; padding: 12px 14px; border-radius: var(--radius); font-size: 13px; line-height: 1.6; }
+.status-pending  { background: var(--warn-bg); color: #7A5200; border: 0.5px solid var(--warn); }
+.status-confirmed { background: var(--success-bg); color: #085041; border: 0.5px solid var(--success); }
+.status-cancelled { background: var(--error-bg); color: var(--error); border: 0.5px solid var(--error); }
+.status-notfound { background: var(--surface2); color: var(--text2); border: 0.5px solid var(--border); }
+
+/* Toast */
+.toast-host { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { pointer-events: auto; min-width: 240px; max-width: 360px; padding: 12px 16px; border-radius: var(--radius); font-size: 13px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); animation: tin 0.25s ease; background: var(--text); color: #fff; }
+.toast.ok { background: var(--success); } .toast.err { background: var(--error); } .toast.warn { background: var(--warn); color: #2C2420; }
+@keyframes tin { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ADMIN */
+.adm-tabs { display: flex; gap: 6px; margin-bottom: 1rem; }
+.adm-tab { flex: 1; padding: 8px; border: 0.5px solid var(--border); border-radius: var(--radius); background: var(--surface); cursor: pointer; font-size: 12px; font-weight: 500; color: var(--text2); text-align: center; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+.adm-tab.active { background: var(--accent-light); border-color: var(--accent-mid); color: var(--accent); }
+.adm-stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 1rem; }
+.adm-stat { background: var(--surface2); border-radius: var(--radius); padding: 10px 12px; }
+.adm-sv { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--text); }
+.adm-sl { font-size: 11px; color: var(--text2); }
+.adm-toolbar { display: flex; gap: 6px; margin-bottom: 0.75rem; }
+.adm-toolbar input { flex: 1; }
+.adm-item { border-bottom: 0.5px solid var(--border); padding: 12px 0; font-size: 13px; }
+.adm-item:last-child { border-bottom: none; }
+.adm-name { font-weight: 500; color: var(--text); }
+.adm-meta { color: var(--text2); font-size: 12px; margin-top: 3px; line-height: 1.6; }
+.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 500; }
+.b-pend { background: var(--warn-bg); color: #A07000; border: 0.5px solid var(--warn); }
+.b-conf { background: var(--success-bg); color: #0F6E56; border: 0.5px solid var(--success); }
+.b-exp { background: var(--surface2); color: var(--text3); border: 0.5px solid var(--border); }
+.btn-confirm { font-size: 12px; padding: 5px 12px; background: var(--accent); border: none; border-radius: var(--radius); color: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 6px; margin-right: 4px; }
+.btn-confirm:hover { background: #6A5642; }
+.btn-confirm:disabled { background: var(--border2); cursor: default; }
+.btn-cancel-mini { font-size: 12px; padding: 5px 12px; background: none; border: 0.5px solid var(--border); border-radius: var(--radius); color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 6px; }
+.pw-row { display: flex; gap: 8px; align-items: center; margin-bottom: 1rem; }
+.pw-row input { flex: 1; }
+.pw-row button { padding: 9px 14px; background: none; border: 0.5px solid var(--border); border-radius: var(--radius); font-size: 13px; color: var(--text); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.pw-row button:hover { background: var(--surface2); }
+.err { font-size: 12px; color: var(--error); margin-top: 4px; }
+.set-tag { display: inline-block; font-size: 11px; padding: 1px 6px; background: var(--surface2); border: 0.5px solid var(--border); border-radius: 6px; margin: 2px 2px 0 0; color: var(--text2); }
+.loading-msg { font-size: 13px; color: var(--text3); padding: 8px 0; text-align: center; }
+.countdown { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* Print */
+@media print {
+  .adm-btn, .stepbar, .btn-p, .btn-g, .check-status-wrap, #admin-panel { display: none !important; }
+  body { background: #fff; }
+  .card { border: 1px solid #999; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="page-header">
+    <div>
+      <div class="page-title">Đặt chỗ</div>
+      <div class="page-sub">Dập Dìu Drag Brunch · Hanoi Neighbors Big Hug</div>
+    </div>
+    <button class="adm-btn" data-action="toggle-admin">Quản lý</button>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-panel" class="card hidden">
+    <div class="lbl">Bảng quản lý</div>
+    <div id="adm-auth">
+      <div class="pw-row">
+        <input class="inp" type="password" id="adm-pw" placeholder="Admin token" autocomplete="off">
+        <button data-action="check-admin">Vào</button>
+      </div>
+      <div id="adm-err" class="err hidden">Token không đúng.</div>
+      <div class="note">Token được cấu hình ở Apps Script · Project Settings · Script Properties (key <code>ADMIN_TOKEN</code>).</div>
+    </div>
+    <div id="adm-content" class="hidden">
+      <div class="adm-stat-grid" id="adm-stats"></div>
+      <div class="adm-tabs">
+        <button class="adm-tab active" id="tab-pending" data-tab="pending">Chờ xác nhận</button>
+        <button class="adm-tab" id="tab-confirmed" data-tab="confirmed">Đã xác nhận</button>
+      </div>
+      <div class="adm-toolbar">
+        <input class="inp" type="text" id="adm-search" placeholder="Tìm tên / SĐT / mã...">
+        <button class="btn-g" style="margin-top:0;" data-action="export-csv">Xuất CSV</button>
+      </div>
+      <div id="adm-list"></div>
+      <button class="btn-g" style="margin-top:.5rem;font-size:12px;" data-action="refresh-admin">Tải lại từ Sheet</button>
+      <button class="btn-g" style="margin-top:.5rem;font-size:12px;margin-left:6px;" data-action="logout-admin">Đăng xuất</button>
+    </div>
+  </div>
+
+  <!-- BOOKING FLOW -->
+  <div id="flow">
+    <div class="stepbar">
+      <div class="sp a" id="s1"></div>
+      <div class="sp" id="s2"></div>
+      <div class="sp" id="s3"></div>
+      <div class="sp" id="s4"></div>
+    </div>
+
+    <!-- STEP 1: Ngày -->
+    <div id="step-1" class="fade">
+      <div class="card">
+        <div class="lbl">Chọn ngày</div>
+        <div class="date-grid" id="date-grid"></div>
+      </div>
+      <div class="check-status-wrap">
+        <div class="lbl">Kiểm tra trạng thái đặt chỗ</div>
+        <div class="check-status-box">
+          <input class="inp" type="text" id="check-code" placeholder="Nhập mã (VD: DD-A1B2C3)" style="text-transform:uppercase;" autocomplete="off">
+          <button class="btn-g" style="margin-top:0;white-space:nowrap;" data-action="check-status">Kiểm tra</button>
+        </div>
+        <div id="status-result" class="hidden"></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Số người -->
+    <div id="step-2" class="hidden fade">
+      <div class="card">
+        <div class="lbl">Số lượng khách</div>
+        <div class="qty-big">
+          <button class="qbtn" id="qminus" data-action="qty-minus" aria-label="Giảm">−</button>
+          <div style="text-align:center;">
+            <div class="qval" id="qty-disp">1</div>
+            <div class="qlbl">khách</div>
+          </div>
+          <button class="qbtn" id="qplus" data-action="qty-plus" aria-label="Tăng">+</button>
+        </div>
+        <div class="qty-hint" id="qty-hint"></div>
+      </div>
+      <button class="btn-g" data-action="go-step" data-step="1">← Quay lại</button>
+      <button class="btn-p" data-action="go-step" data-step="3">Chọn bàn trên sơ đồ</button>
+    </div>
+
+    <!-- STEP 3: Sơ đồ -->
+    <div id="step-3" class="hidden fade">
+      <div class="card">
+        <div class="lbl">Chọn bàn trên sơ đồ</div>
+        <div class="map-wrap">
+          <svg class="map-svg" viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ bàn quán">
+            <text x="14" y="18" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" fill="#A89888" letter-spacing="0.08em">GẠCH BÔNG · PHÒNG 5</text>
+            <text x="294" y="18" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" fill="#A89888" letter-spacing="0.08em">SÀN GỖ · PHÒNG 4</text>
+            <line x1="273" y1="10" x2="273" y2="240" stroke="#DDD5C8" stroke-width="1" stroke-dasharray="4,3"/>
+
+            <g class="tbl-group tbl-available" id="tbl-gb1" data-table="gb1" role="button" aria-label="Bàn hộc to, 7 người">
+              <rect class="tbl-body" x="14" y="28" width="118" height="72" rx="6"/>
+              <text class="tbl-name" x="73" y="57" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" text-anchor="middle">Bàn hộc to</text>
+              <text class="tbl-cap" x="73" y="72" font-family="DM Sans, sans-serif" font-size="9" text-anchor="middle">7 người</text>
+              <circle cx="35" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="55" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="73" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="91" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="111" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="134" cy="48" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="134" cy="68" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-gb2" data-table="gb2" role="button" aria-label="Bàn 9H, bàn chung 4 người">
+              <rect class="tbl-body tbl-comm-body" x="148" y="28" width="58" height="58" rx="6"/>
+              <text class="tbl-name" x="177" y="52" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" text-anchor="middle">Bàn 9H</text>
+              <text class="tbl-cap" x="177" y="65" font-family="DM Sans, sans-serif" font-size="8" text-anchor="middle">chung · 4</text>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-gb3" data-table="gb3" role="button" aria-label="Bàn trống 75, bàn chung 4 người">
+              <rect class="tbl-body tbl-comm-body" x="214" y="28" width="52" height="58" rx="6"/>
+              <text class="tbl-name" x="240" y="50" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" text-anchor="middle">Trống</text>
+              <text class="tbl-name" x="240" y="63" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" text-anchor="middle">75</text>
+              <text class="tbl-cap" x="240" y="75" font-family="DM Sans, sans-serif" font-size="8" text-anchor="middle">chung · 4</text>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-gb4" data-table="gb4" role="button" aria-label="Bàn sofa dài, 5 người">
+              <rect class="tbl-body" x="14" y="118" width="140" height="58" rx="6"/>
+              <text class="tbl-name" x="84" y="144" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" text-anchor="middle">Bàn sofa dài</text>
+              <text class="tbl-cap" x="84" y="159" font-family="DM Sans, sans-serif" font-size="9" text-anchor="middle">5 người</text>
+              <circle cx="30" cy="178" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="52" cy="178" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="74" cy="178" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="96" cy="178" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="118" cy="178" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-gb5" data-table="gb5" role="button" aria-label="Bàn nhỏ giữa, 2 người">
+              <rect class="tbl-body" x="170" y="118" width="90" height="52" rx="6"/>
+              <text class="tbl-name" x="215" y="141" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" text-anchor="middle">Bàn nhỏ giữa</text>
+              <text class="tbl-cap" x="215" y="156" font-family="DM Sans, sans-serif" font-size="9" text-anchor="middle">2 người</text>
+              <circle cx="195" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="235" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-sg1" data-table="sg1" role="button" aria-label="Bàn lớn giữa, 5 người">
+              <rect class="tbl-body" x="284" y="28" width="110" height="66" rx="6"/>
+              <text class="tbl-name" x="339" y="56" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" text-anchor="middle">Bàn lớn giữa</text>
+              <text class="tbl-cap" x="339" y="71" font-family="DM Sans, sans-serif" font-size="9" text-anchor="middle">5 người</text>
+              <circle cx="299" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="319" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="339" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="359" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="379" cy="26" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-sg2" data-table="sg2" role="button" aria-label="Bàn góc trên giữa, 2 đến 4 người">
+              <rect class="tbl-body" x="408" y="28" width="66" height="50" rx="6"/>
+              <text class="tbl-name" x="441" y="49" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" text-anchor="middle">Góc trên giữa</text>
+              <text class="tbl-cap" x="441" y="62" font-family="DM Sans, sans-serif" font-size="8" text-anchor="middle">2–4 người</text>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-sg3" data-table="sg3" role="button" aria-label="Bàn phải 1, 2 người">
+              <rect class="tbl-body" x="484" y="28" width="62" height="44" rx="6"/>
+              <text class="tbl-name" x="515" y="48" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" text-anchor="middle">Phải 1</text>
+              <text class="tbl-cap" x="515" y="61" font-family="DM Sans, sans-serif" font-size="8" text-anchor="middle">2 người</text>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-sg4" data-table="sg4" role="button" aria-label="Bàn phải 2, 2 người">
+              <rect class="tbl-body" x="484" y="82" width="62" height="44" rx="6"/>
+              <text class="tbl-name" x="515" y="101" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" text-anchor="middle">Phải 2</text>
+              <text class="tbl-cap" x="515" y="114" font-family="DM Sans, sans-serif" font-size="8" text-anchor="middle">2 người</text>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-sg5" data-table="sg5" role="button" aria-label="Bàn dưới trái, 2 người">
+              <rect class="tbl-body" x="284" y="118" width="80" height="50" rx="6"/>
+              <text class="tbl-name" x="324" y="140" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" text-anchor="middle">Dưới trái</text>
+              <text class="tbl-cap" x="324" y="155" font-family="DM Sans, sans-serif" font-size="9" text-anchor="middle">2 người</text>
+              <circle cx="299" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="349" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-sg6" data-table="sg6" role="button" aria-label="Bàn dưới giữa, 2 đến 4 người">
+              <rect class="tbl-body" x="378" y="118" width="90" height="50" rx="6"/>
+              <text class="tbl-name" x="423" y="140" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" text-anchor="middle">Dưới giữa</text>
+              <text class="tbl-cap" x="423" y="155" font-family="DM Sans, sans-serif" font-size="9" text-anchor="middle">2–4 người</text>
+              <circle cx="393" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="453" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+            </g>
+
+            <g class="tbl-group tbl-available" id="tbl-sg7" data-table="sg7" role="button" aria-label="Bàn dưới phải, 4 người">
+              <rect class="tbl-body" x="480" y="118" width="66" height="50" rx="6"/>
+              <text class="tbl-name" x="513" y="140" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" text-anchor="middle">Dưới phải</text>
+              <text class="tbl-cap" x="513" y="155" font-family="DM Sans, sans-serif" font-size="9" text-anchor="middle">4 người</text>
+              <circle cx="493" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="513" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+              <circle cx="533" cy="116" r="5" fill="none" stroke="#C8B9A8" stroke-width="1.2"/>
+            </g>
+
+            <rect x="14" y="200" width="540" height="26" rx="4" fill="#F1EFE8" stroke="#DDD5C8" stroke-width="0.8"/>
+            <text x="284" y="217" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" fill="#A89888" letter-spacing="0.08em" text-anchor="middle">KHU VỰC BIỂU DIỄN</text>
+          </svg>
+        </div>
+        <div class="map-legend">
+          <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px solid #C8B9A8;"></div>Còn trống</div>
+          <div class="leg"><div class="leg-dot" style="background:#FAF5F0;border:2px solid #A0856A;"></div>Đang chọn</div>
+          <div class="leg"><div class="leg-dot" style="background:#EAF5F0;border:1.5px solid #1D9E75;"></div>Có thể ghép</div>
+          <div class="leg"><div class="leg-dot" style="background:#FFF8E6;border:1.2px dashed #D4A020;"></div>Đang chờ duyệt</div>
+          <div class="leg"><div class="leg-dot" style="background:#F1EFE8;border:1px solid #D3D1C7;"></div>Không khả dụng</div>
+          <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px dashed #C8B9A8;"></div>Bàn chung</div>
+        </div>
+        <div class="sel-bar" id="sel-bar">Bấm vào bàn để bắt đầu chọn.</div>
+      </div>
+      <button class="btn-g" data-action="go-step" data-step="2">← Quay lại</button>
+      <button class="btn-p" id="btn3" data-action="go-step" data-step="4" disabled>Xác nhận bàn này</button>
+    </div>
+
+    <!-- STEP 4: Menu + Thông tin + Thanh toán -->
+    <div id="step-4" class="hidden fade">
+      <div class="card">
+        <div class="lbl">Set menu cho từng khách</div>
+        <div class="recap-bar" id="recap-bar"></div>
+        <div class="guest-rows" id="guest-rows"></div>
+        <div class="divider"></div>
+        <div class="total-row">
+          <span style="font-size:13px;color:var(--text2);">Tổng cộng</span>
+          <span class="total-val" id="total-disp">0 ₫</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="lbl">Thông tin liên hệ</div>
+        <div class="ig">
+          <label class="il" for="inp-name">Họ tên *</label>
+          <input class="inp" type="text" id="inp-name" placeholder="Nguyễn Văn A" autocomplete="name">
+          <div class="field-err" id="err-name"></div>
+        </div>
+        <div class="ig">
+          <label class="il" for="inp-phone">Số điện thoại *</label>
+          <input class="inp" type="tel" id="inp-phone" placeholder="09xxxxxxxx" autocomplete="tel" inputmode="numeric">
+          <div class="field-err" id="err-phone"></div>
+        </div>
+        <div class="ig">
+          <label class="il" for="inp-email">Email * <span style="font-weight:400;color:var(--text3);">(để nhận xác nhận)</span></label>
+          <input class="inp" type="email" id="inp-email" placeholder="ten@email.com" autocomplete="email" inputmode="email">
+          <div class="field-err" id="err-email"></div>
+        </div>
+        <div class="ig" style="margin-bottom:0;">
+          <label class="il" for="inp-note">Ghi chú</label>
+          <input class="inp" type="text" id="inp-note" placeholder="Dị ứng, yêu cầu đặc biệt...">
+        </div>
+      </div>
+      <div class="card">
+        <div class="lbl">Tóm tắt & thanh toán</div>
+        <div id="summary"></div>
+        <div class="divider"></div>
+        <div style="text-align:center;padding:.75rem 0 1rem;">
+          <div class="qr-box" id="qr-box"><span class="qr-spin">QR sẽ hiện sau khi nhập SĐT</span></div>
+          <div class="bank">
+            Ngân hàng: <span class="bv" id="bank-name">—</span><br>
+            Số tài khoản: <span class="bv" id="bank-acc">—</span><button class="copy-btn" data-copy="bank-acc">Copy</button><br>
+            Chủ tài khoản: <span class="bv" id="bank-holder">—</span><br>
+            Nội dung CK: <span class="bv" id="pay-ref">—</span><button class="copy-btn" data-copy="pay-ref">Copy</button>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="total-row">
+          <span style="font-size:13px;color:var(--text2);">Tổng thanh toán</span>
+          <span class="total-val" id="pay-total">—</span>
+        </div>
+        <div class="note warn">Chỗ của bạn sẽ được giữ <b>60 phút</b> kể từ lúc gửi yêu cầu. Sau đó nếu chưa có thanh toán bàn sẽ được mở lại. Vui lòng chuyển khoản đúng nội dung và nhấn nút bên dưới.</div>
+      </div>
+      <button class="btn-g" data-action="go-step" data-step="3">← Quay lại</button>
+      <button class="btn-p" id="btn4" data-action="submit-booking" disabled>Đã chuyển khoản — Gửi đặt chỗ</button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="step-success" class="hidden fade">
+      <div class="card">
+        <div class="ok-wrap">
+          <div class="ok-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12.5L10 17.5L19 7" stroke="#7B6550" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ok-ttl">Yêu cầu đã được gửi!</div>
+          <div class="ok-code" id="ok-code"></div>
+          <div class="ok-msg">
+            Team Dập Dìu sẽ kiểm tra thanh toán và xác nhận trong vòng 24h.<br>
+            <span id="ok-countdown" class="countdown"></span><br><br>
+            Lưu mã này để kiểm tra trạng thái đặt chỗ.
+          </div>
+        </div>
+      </div>
+      <button class="btn-g" data-action="print">In / Lưu PDF</button>
+      <button class="btn-p" data-action="reset">Đặt chỗ mới</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-host" id="toast-host"></div>
+
+<script>
+'use strict';
+// ================================================================
+// DẬP DÌU DRAG BRUNCH — Booking Tool v4 (powered by Opus 4.7)
+// ================================================================
+
+// === CẤU HÌNH ===================================================
+const CONFIG = {
+  PRICE: 350000,
+  PENDING_TTL_MIN: 60,            // pending hết hạn sau 60 phút
+  KEY_PENDING_LOCAL: 'dapdieu_pending_v4',
+  KEY_ADMIN_TOKEN: 'dapdieu_admin_token_v4', // sessionStorage
+  // Dán URL Apps Script v4 vào đây sau khi deploy
+  SHEET_URL: 'https://script.google.com/macros/s/AKfycbziPUdeLnWLw8tkIuRHkqbZF-rvBK68yjhlqj37F3vqAGMeFvn5z2eV6klAzpq7dJfH/exec',
+  // Thông tin ngân hàng — VietQR sẽ sinh QR thật
+  BANK: {
+    name: 'Techcombank',
+    bin: '970407',          // mã BIN VietQR cho Techcombank
+    account: '19034567890123',
+    holder: 'PHONG NGUYEN',
+  },
+};
+
+// Sự kiện fallback nếu Sheet `Events` trống — đã cập nhật cho 2026
+const EVENTS_FALLBACK = [
+  { id: 'e2026-06-13', label: 'Thứ Bảy, 13/6/2026' },
+  { id: 'e2026-06-14', label: 'Chủ Nhật, 14/6/2026' },
+  { id: 'e2026-06-20', label: 'Thứ Bảy, 20/6/2026' },
+];
+
+const MENUS = [
+  { id: 'veg', name: 'Set Chay' },
+  { id: 'std', name: 'Set Thường' },
+  { id: 'sea', name: 'Set Hải Sản' },
+];
+
+const ALL_TABLES = [
+  { id: 'gb1', name: 'Bàn hộc to',           room: 'Gạch Bông', cap: 7, minCap: 7, communal: false },
+  { id: 'gb2', name: 'Bàn 9H',               room: 'Gạch Bông', cap: 4, minCap: 1, communal: true  },
+  { id: 'gb3', name: 'Bàn trống 75',         room: 'Gạch Bông', cap: 4, minCap: 1, communal: true  },
+  { id: 'gb4', name: 'Bàn sofa dài',         room: 'Gạch Bông', cap: 5, minCap: 5, communal: false },
+  { id: 'gb5', name: 'Bàn nhỏ giữa',        room: 'Gạch Bông', cap: 2, minCap: 2, communal: false },
+  { id: 'sg1', name: 'Bàn lớn giữa',        room: 'Sàn Gỗ',    cap: 5, minCap: 5, communal: false },
+  { id: 'sg2', name: 'Bàn góc trên giữa',   room: 'Sàn Gỗ',    cap: 4, minCap: 2, communal: false },
+  { id: 'sg3', name: 'Bàn góc trên phải 1', room: 'Sàn Gỗ',    cap: 2, minCap: 2, communal: false },
+  { id: 'sg4', name: 'Bàn góc trên phải 2', room: 'Sàn Gỗ',    cap: 2, minCap: 2, communal: false },
+  { id: 'sg5', name: 'Bàn dưới trái',       room: 'Sàn Gỗ',    cap: 2, minCap: 2, communal: false },
+  { id: 'sg6', name: 'Bàn dưới giữa',       room: 'Sàn Gỗ',    cap: 4, minCap: 2, communal: false },
+  { id: 'sg7', name: 'Bàn dưới phải',       room: 'Sàn Gỗ',    cap: 4, minCap: 4, communal: false },
+];
+
+// === STATE ======================================================
+const State = {
+  step: 1,
+  events: EVENTS_FALLBACK.slice(),
+  date: null,
+  qty: 1,
+  selectedTableIds: [],
+  guests: [{ menu: 'std' }],
+  name: '', phone: '', email: '', note: '', ref: '',
+  // Server data
+  confirmed: [],           // booking[]
+  pending: [],             // booking[] (đã filter expired)
+  // UI
+  adminTab: 'pending',
+  adminToken: sessionStorage.getItem(CONFIG.KEY_ADMIN_TOKEN) || '',
+  countdownTimer: null,
+};
+
+// === UTIL =======================================================
+const $ = id => document.getElementById(id);
+const fmt = n => (Number(n) || 0).toLocaleString('vi-VN') + ' ₫';
+const getTable = id => ALL_TABLES.find(t => t.id === id);
+const getTotal = () => CONFIG.PRICE * State.qty;
+const hasSheetUrl = () => CONFIG.SHEET_URL && !CONFIG.SHEET_URL.startsWith('PASTE');
+
+function genCode() {
+  // 7 ký tự: 4 từ timestamp + 3 random từ crypto
+  const ts = Date.now().toString(36).toUpperCase().slice(-4);
+  const arr = new Uint8Array(2);
+  (window.crypto || window.msCrypto).getRandomValues(arr);
+  const rand = Array.from(arr).map(b => b.toString(36).toUpperCase().padStart(2,'0')).join('').slice(0,3);
+  return 'DD-' + ts + rand;
+}
+
+function genPaymentRef(code) {
+  // Mã CK ngắn cho khách dễ điền (chỉ chữ + số, bỏ dấu gạch)
+  return code.replace(/[^A-Z0-9]/g,'');
+}
+
+function isExpired(booking) {
+  if (booking.status !== 'pending') return false;
+  if (!booking.createdAt) return false;
+  const ageMs = Date.now() - new Date(booking.createdAt).getTime();
+  return ageMs > CONFIG.PENDING_TTL_MIN * 60 * 1000;
+}
+
+function normalizeBooking(r) {
+  return {
+    ...r,
+    tableIds: typeof r.tableIds === 'string' ? r.tableIds.split('|').filter(Boolean) : (r.tableIds || []),
+    guests:   typeof r.guests   === 'string' ? r.guests.split('|').filter(Boolean)   : (r.guests   || []),
+    qty:   Number(r.qty)   || 0,
+    total: Number(r.total) || 0,
+  };
+}
+
+// === TOAST ======================================================
+function toast(msg, kind = 'info', ms = 3500) {
+  const host = $('toast-host');
+  const el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  host.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; }, ms - 300);
+  setTimeout(() => el.remove(), ms);
+}
+
+// === STORAGE ====================================================
+function loadPendingLocal() {
+  try { return JSON.parse(localStorage.getItem(CONFIG.KEY_PENDING_LOCAL) || '[]'); }
+  catch { return []; }
+}
+function savePendingLocal(b) {
+  const a = loadPendingLocal();
+  if (!a.find(x => x.code === b.code)) a.push(b);
+  localStorage.setItem(CONFIG.KEY_PENDING_LOCAL, JSON.stringify(a));
+}
+
+// === API ========================================================
+async function api(action, payload = {}, opts = {}) {
+  if (!hasSheetUrl()) {
+    if (action === 'getAll') return { events: [], confirmed: [], pending: loadPendingLocal() };
+    return { ok: false, error: 'no-sheet-url' };
+  }
+  try {
+    if (opts.method === 'POST') {
+      const res = await fetch(CONFIG.SHEET_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action, ...payload }),
+      });
+      return await res.json();
+    } else {
+      const params = new URLSearchParams({ action, ...payload });
+      const res = await fetch(CONFIG.SHEET_URL + '?' + params.toString());
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn('api error', action, e);
+    return { ok: false, error: e.message || 'network' };
+  }
+}
+
+async function syncFromSheet() {
+  const data = await api('getAll');
+  if (data && Array.isArray(data.confirmed)) {
+    State.confirmed = data.confirmed.map(normalizeBooking);
+  }
+  if (data && Array.isArray(data.pending)) {
+    State.pending = data.pending.map(normalizeBooking).filter(b => !isExpired(b));
+  } else {
+    // Fallback: dùng pending local
+    State.pending = loadPendingLocal().filter(b => !isExpired(b));
+  }
+  if (data && Array.isArray(data.events) && data.events.length) {
+    State.events = data.events.map(e => ({ id: String(e.id), label: String(e.label) }));
+  }
+}
+
+// === BUSINESS LOGIC ============================================
+// Bàn bị khoá = pending (chưa hết hạn) + confirmed
+function takenIds(eventId) {
+  const set = new Set();
+  State.confirmed.filter(b => b.eventId === eventId)
+    .forEach(b => (b.tableIds || []).forEach(id => set.add(id)));
+  State.pending.filter(b => b.eventId === eventId && !isExpired(b))
+    .forEach(b => (b.tableIds || []).forEach(id => set.add(id)));
+  return set;
+}
+
+// Bàn pending (để hiển thị màu vàng riêng nếu cần)
+function pendingIds(eventId) {
+  const set = new Set();
+  State.pending.filter(b => b.eventId === eventId && !isExpired(b))
+    .forEach(b => (b.tableIds || []).forEach(id => set.add(id)));
+  return set;
+}
+
+function selectedCap() {
+  return State.selectedTableIds.reduce((s, id) => {
+    const t = getTable(id); return s + (t.communal ? 1 : t.minCap);
+  }, 0);
+}
+function selectedMaxCap() {
+  return State.selectedTableIds.reduce((s, id) => s + getTable(id).cap, 0);
+}
+function isCompatible(tableId) {
+  const taken = takenIds(State.date);
+  if (taken.has(tableId) || State.selectedTableIds.includes(tableId)) return false;
+  const t = getTable(tableId);
+  return (selectedCap() + (t.communal ? 1 : t.minCap)) <= State.qty
+      && (selectedMaxCap() + t.cap) >= State.qty;
+}
+function selectionValid() {
+  return selectedCap() <= State.qty && selectedMaxCap() >= State.qty;
+}
+
+// === RENDER: MAP ================================================
+function updateMapStates() {
+  const taken = takenIds(State.date);
+  const pending = pendingIds(State.date);
+  const confirmed = new Set(State.confirmed
+    .filter(b => b.eventId === State.date)
+    .flatMap(b => b.tableIds || []));
+
+  ALL_TABLES.forEach(t => {
+    const el = $('tbl-' + t.id);
+    if (!el) return;
+    el.classList.remove('tbl-available','tbl-selected','tbl-compatible','tbl-dimmed','tbl-taken','tbl-pending');
+    if (confirmed.has(t.id)) { el.classList.add('tbl-taken'); return; }
+    if (pending.has(t.id))   { el.classList.add('tbl-pending'); return; }
+    if (State.selectedTableIds.includes(t.id)) { el.classList.add('tbl-selected'); return; }
+    if (State.selectedTableIds.length === 0) { el.classList.add('tbl-available'); return; }
+    el.classList.add(isCompatible(t.id) ? 'tbl-compatible' : 'tbl-dimmed');
+  });
+  document.querySelectorAll('.map-svg circle').forEach(c => {
+    const g = c.closest('.tbl-group');
+    if (!g) return;
+    c.setAttribute('stroke',
+      g.classList.contains('tbl-selected')   ? '#A0856A' :
+      g.classList.contains('tbl-compatible') ? '#1D9E75' :
+      g.classList.contains('tbl-pending')    ? '#D4A020' :
+      (g.classList.contains('tbl-dimmed') || g.classList.contains('tbl-taken')) ? '#D3D1C7' : '#C8B9A8'
+    );
+  });
+  updateSelBar();
+}
+
+function updateSelBar() {
+  const bar = $('sel-bar'); const btn = $('btn3');
+  if (State.selectedTableIds.length === 0) {
+    bar.className = 'sel-bar';
+    bar.textContent = 'Bấm vào bàn để bắt đầu chọn.';
+    btn.disabled = true; return;
+  }
+  const names = State.selectedTableIds.map(id => getTable(id).name).join(' + ');
+  const mx = selectedMaxCap();
+  if (selectionValid()) {
+    bar.className = 'sel-bar ok';
+    bar.innerHTML = '<b>Đã chọn:</b> ' + names + ' — đủ cho ' + State.qty + ' khách.';
+    btn.disabled = false;
+  } else if (mx < State.qty) {
+    bar.className = 'sel-bar partial';
+    bar.innerHTML = '<b>Đã chọn:</b> ' + names + ' — còn thiếu ' + (State.qty - mx) + ' chỗ.';
+    btn.disabled = true;
+  } else {
+    bar.className = 'sel-bar partial';
+    bar.innerHTML = '<b>Đã chọn:</b> ' + names + ' — không khớp ' + State.qty + ' khách. Bỏ chọn và thử lại.';
+    btn.disabled = true;
+  }
+}
+
+function tableClick(id) {
+  const taken = takenIds(State.date);
+  if (taken.has(id)) {
+    toast('Bàn này đã có người đặt hoặc đang chờ duyệt.', 'warn');
+    return;
+  }
+  if (State.selectedTableIds.includes(id)) {
+    State.selectedTableIds = State.selectedTableIds.filter(x => x !== id);
+    updateMapStates(); return;
+  }
+  const el = $('tbl-' + id);
+  if (el && el.classList.contains('tbl-dimmed')) return;
+  State.selectedTableIds.push(id);
+  updateMapStates();
+}
+
+// === RENDER: DATES ==============================================
+function renderDates() {
+  const grid = $('date-grid');
+  grid.innerHTML = '';
+  State.events.forEach(ev => {
+    const taken = takenIds(ev.id);
+    const totalCap = ALL_TABLES.filter(t => !taken.has(t.id))
+      .reduce((s, t) => s + t.cap, 0);
+    const full = totalCap <= 0;
+    const btn = document.createElement('button');
+    btn.className = 'date-btn' + (full ? ' full' : '');
+    btn.id = 'dt-' + ev.id;
+    btn.dataset.event = ev.id;
+    btn.innerHTML = '<span class="dm">' + ev.label + '</span><span class="ds">' +
+      (full ? 'Hết chỗ' : totalCap + ' chỗ còn trống') + '</span>';
+    grid.appendChild(btn);
+  });
+}
+
+function selectDate(id) {
+  State.date = id;
+  State.selectedTableIds = [];
+  document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('sel'));
+  const el = $('dt-' + id);
+  if (el) el.classList.add('sel');
+  setTimeout(() => goStep(2), 180);
+}
+
+// === STEP 2: QTY ================================================
+function maxAvailQty() {
+  const taken = takenIds(State.date);
+  return ALL_TABLES.filter(t => !taken.has(t.id)).reduce((s, t) => s + t.cap, 0);
+}
+function updateQtyHint() {
+  const max = maxAvailQty();
+  $('qty-hint').textContent = 'Tối đa ' + max + ' chỗ còn trống';
+  $('qminus').disabled = State.qty <= 1;
+  $('qplus').disabled = State.qty >= max;
+}
+function changeQty(d) {
+  const max = maxAvailQty();
+  const nq = Math.max(1, Math.min(State.qty + d, max));
+  if (nq === State.qty) return;
+  State.qty = nq;
+  while (State.guests.length < State.qty) State.guests.push({ menu: 'std' });
+  State.guests = State.guests.slice(0, State.qty);
+  $('qty-disp').textContent = State.qty;
+  updateQtyHint();
+}
+
+// === STEP 4: MENU + FORM ========================================
+function renderGuestRows() {
+  $('recap-bar').innerHTML = State.selectedTableIds.map(id => {
+    const t = getTable(id); return '<b>' + t.name + '</b> · ' + t.room;
+  }).join(' &nbsp;+&nbsp; ');
+  const el = $('guest-rows'); el.innerHTML = '';
+  State.guests.forEach((g, i) => {
+    const row = document.createElement('div'); row.className = 'guest-row';
+    const lbl = document.createElement('span'); lbl.className = 'gnum'; lbl.textContent = 'Khách ' + (i + 1);
+    const sel = document.createElement('select'); sel.className = 'gsel';
+    sel.setAttribute('aria-label','Set menu cho khách ' + (i+1));
+    MENUS.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m.id; o.textContent = m.name;
+      if (g.menu === m.id) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.onchange = () => { State.guests[i].menu = sel.value; };
+    row.appendChild(lbl); row.appendChild(sel); el.appendChild(row);
+  });
+  $('total-disp').textContent = fmt(getTotal());
+}
+
+const RE_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const RE_PHONE = /^0\d{9,10}$/;
+
+function validateForm() {
+  State.name  = $('inp-name').value.trim();
+  State.phone = $('inp-phone').value.trim().replace(/\s+/g,'');
+  State.email = $('inp-email').value.trim();
+  State.note  = $('inp-note').value.trim();
+
+  const errors = {};
+  if (!State.name) errors.name = 'Vui lòng nhập họ tên.';
+  if (!RE_PHONE.test(State.phone)) errors.phone = 'SĐT phải bắt đầu 0 và có 10–11 số.';
+  if (!RE_EMAIL.test(State.email)) errors.email = 'Email chưa đúng định dạng.';
+
+  ['name','phone','email'].forEach(f => {
+    const inp = $('inp-' + f); const err = $('err-' + f);
+    if (errors[f]) { inp.classList.add('invalid'); err.textContent = errors[f]; }
+    else { inp.classList.remove('invalid'); err.textContent = ''; }
+  });
+
+  // Sinh mã + ref khi form đã có SĐT hợp lệ
+  if (!State.ref && RE_PHONE.test(State.phone)) {
+    const code = genCode();
+    State.ref = genPaymentRef(code);
+    State._previewCode = code;
+  }
+  renderSummary();
+  $('pay-ref').textContent  = State.ref || '—';
+  $('pay-total').textContent = fmt(getTotal());
+  renderQR();
+  $('btn4').disabled = Object.keys(errors).length > 0;
+}
+
+function renderQR() {
+  const box = $('qr-box');
+  $('bank-name').textContent = CONFIG.BANK.name;
+  $('bank-acc').textContent  = CONFIG.BANK.account;
+  $('bank-holder').textContent = CONFIG.BANK.holder;
+  if (!State.ref) { box.innerHTML = '<span class="qr-spin">Nhập SĐT để hiện QR</span>'; return; }
+  const amount = getTotal();
+  const url = 'https://img.vietqr.io/image/' +
+    CONFIG.BANK.bin + '-' + CONFIG.BANK.account + '-compact2.png' +
+    '?amount=' + amount +
+    '&addInfo=' + encodeURIComponent(State.ref) +
+    '&accountName=' + encodeURIComponent(CONFIG.BANK.holder);
+  box.innerHTML = '<img src="' + url + '" alt="VietQR" loading="lazy" onerror="this.parentElement.innerHTML=\'<span class=qr-spin>Lỗi tải QR — vui lòng chuyển khoản thủ công</span>\'">';
+}
+
+function renderSummary() {
+  const ev = State.events.find(e => e.id === State.date);
+  const tablesStr = State.selectedTableIds.map(id => {
+    const t = getTable(id); return t.name + ' (' + t.room + ')';
+  }).join(' + ');
+  const menuLines = State.guests.map((g, i) => {
+    const m = MENUS.find(m => m.id === g.menu);
+    return '<div class="srow"><span class="sl">Khách ' + (i+1) + '</span><span class="sv">' + (m ? m.name : '—') + '</span></div>';
+  }).join('');
+  $('summary').innerHTML =
+    '<div class="srow"><span class="sl">Ngày</span><span class="sv">' + (ev ? ev.label : '—') + '</span></div>' +
+    '<div class="srow"><span class="sl">Bàn</span><span class="sv">' + tablesStr + '</span></div>' +
+    '<div class="srow"><span class="sl">Số khách</span><span class="sv">' + State.qty + ' người · ' + fmt(CONFIG.PRICE) + '/người</span></div>' +
+    menuLines +
+    '<div class="srow"><span class="sl">Tổng cộng</span><span class="sv" style="color:#7B6550;">' + fmt(getTotal()) + '</span></div>';
+}
+
+// === SUBMIT BOOKING =============================================
+async function submitBooking(btn) {
+  if (btn.disabled) return;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang gửi...';
+
+  // Sync lại trước khi gửi để tránh đặt trùng
+  await syncFromSheet();
+  const taken = takenIds(State.date);
+  const conflict = State.selectedTableIds.find(id => taken.has(id));
+  if (conflict) {
+    toast('Tiếc quá! Bàn "' + getTable(conflict).name + '" vừa có người đặt. Bạn chọn bàn khác nhé.', 'err', 5000);
+    btn.disabled = false;
+    btn.textContent = 'Đã chuyển khoản — Gửi đặt chỗ';
+    goStep(3);
+    return;
+  }
+
+  const ev = State.events.find(e => e.id === State.date);
+  const code = State._previewCode || genCode();
+  const tableNames = State.selectedTableIds.map(id => {
+    const t = getTable(id); return t.name + ' (' + t.room + ')';
+  });
+  const booking = {
+    code, eventId: State.date, eventLabel: ev.label,
+    tableIds: State.selectedTableIds, tableNames,
+    comboLabel: tableNames.join(' + '),
+    qty: State.qty, guests: State.guests.map(g => g.menu),
+    total: getTotal(), name: State.name,
+    phone: State.phone, email: State.email, note: State.note, ref: State.ref,
+    status: 'pending', createdAt: new Date().toISOString(),
+  };
+
+  savePendingLocal(booking);
+  let serverOk = false;
+  if (hasSheetUrl()) {
+    const res = await api('pending', booking, { method: 'POST' });
+    serverOk = res && res.ok === true;
+    if (!serverOk) {
+      toast('Lỗi đồng bộ với server — chỗ của bạn được lưu tạm. Vui lòng liên hệ team.', 'warn', 6000);
+    }
+  }
+
+  // Update local state để UI khoá bàn ngay
+  State.pending.push(booking);
+
+  // Show success
+  $('ok-code').textContent = code;
+  startCountdown(booking.createdAt);
+  for (let i = 1; i <= 4; i++) {
+    const el = $('s'+i); el.classList.remove('a'); el.classList.add('d');
+  }
+  ['step-1','step-2','step-3','step-4'].forEach(id => $(id).classList.add('hidden'));
+  const s = $('step-success');
+  s.classList.remove('hidden'); setTimeout(() => s.classList.add('fade'), 10);
+  toast(serverOk ? 'Yêu cầu đã được gửi!' : 'Đã lưu yêu cầu (cần xác nhận với team).', serverOk ? 'ok' : 'warn');
+}
+
+function startCountdown(createdAt) {
+  if (State.countdownTimer) clearInterval(State.countdownTimer);
+  const expireAt = new Date(createdAt).getTime() + CONFIG.PENDING_TTL_MIN * 60 * 1000;
+  function tick() {
+    const remain = expireAt - Date.now();
+    if (remain <= 0) {
+      $('ok-countdown').textContent = 'Đã hết thời gian giữ chỗ. Liên hệ team nếu bạn đã chuyển khoản.';
+      clearInterval(State.countdownTimer); return;
+    }
+    const m = Math.floor(remain / 60000);
+    const s = Math.floor((remain % 60000) / 1000);
+    $('ok-countdown').textContent = 'Còn ' + m + ' phút ' + s + ' giây để chuyển khoản giữ chỗ.';
+  }
+  tick();
+  State.countdownTimer = setInterval(tick, 1000);
+}
+
+// === CHECK STATUS ===============================================
+async function checkStatus(codeArg) {
+  const code = (codeArg || $('check-code').value).trim().toUpperCase();
+  $('check-code').value = code;
+  const resultEl = $('status-result');
+  if (!code) return;
+
+  resultEl.classList.remove('hidden');
+  resultEl.className = 'status-result status-notfound';
+  resultEl.textContent = 'Đang kiểm tra...';
+
+  await syncFromSheet();
+  const confirmed = State.confirmed.find(b => b.code === code);
+  if (confirmed) {
+    resultEl.className = 'status-result status-confirmed';
+    resultEl.innerHTML = '<b>Đã xác nhận!</b> ' + confirmed.name + ' · ' + confirmed.eventLabel + ' · ' + (confirmed.comboLabel || '') +
+      '<br>Hẹn gặp bạn tại sự kiện!';
+    return;
+  }
+  const pending = State.pending.find(b => b.code === code) || loadPendingLocal().find(b => b.code === code);
+  if (pending && !isExpired(pending)) {
+    const ageMs = Date.now() - new Date(pending.createdAt).getTime();
+    const remainMin = Math.max(0, Math.ceil((CONFIG.PENDING_TTL_MIN * 60 * 1000 - ageMs) / 60000));
+    resultEl.className = 'status-result status-pending';
+    resultEl.innerHTML = '<b>Đang chờ xác nhận.</b> Mã: ' + code +
+      '<br>Còn ' + remainMin + ' phút trước khi giữ chỗ tự huỷ.' +
+      '<br><button class="btn-cancel-mini" data-action="cancel-booking" data-code="' + code + '">Huỷ đặt chỗ này</button>';
+    return;
+  }
+  if (pending && isExpired(pending)) {
+    resultEl.className = 'status-result status-cancelled';
+    resultEl.innerHTML = '<b>Đã hết hạn.</b> Mã <b>' + code + '</b> không được thanh toán trong ' + CONFIG.PENDING_TTL_MIN + ' phút.';
+    return;
+  }
+  resultEl.className = 'status-result status-notfound';
+  resultEl.innerHTML = 'Không tìm thấy mã <b>' + code + '</b>. Kiểm tra lại hoặc liên hệ team.';
+}
+
+async function cancelBooking(code) {
+  if (!confirm('Bạn chắc chắn muốn huỷ đặt chỗ ' + code + '?')) return;
+  const phone = prompt('Để xác minh, vui lòng nhập 4 số cuối SĐT đặt chỗ:');
+  if (!phone) return;
+  const res = await api('cancel', { code, phoneLast4: phone }, { method: 'POST' });
+  if (res && res.ok) {
+    toast('Đã huỷ đặt chỗ ' + code, 'ok');
+    // Cập nhật local
+    localStorage.setItem(CONFIG.KEY_PENDING_LOCAL,
+      JSON.stringify(loadPendingLocal().filter(b => b.code !== code)));
+    await syncFromSheet();
+    renderDates();
+    checkStatus(code);
+  } else {
+    toast('Không huỷ được: ' + (res && res.error || 'lỗi không xác định'), 'err');
+  }
+}
+
+// === FLOW =======================================================
+function goStep(n) {
+  ['step-1','step-2','step-3','step-4','step-success'].forEach(id => {
+    const el = $(id); el.classList.add('hidden'); el.classList.remove('fade');
+  });
+  for (let i = 1; i <= 4; i++) {
+    const el = $('s'+i); el.classList.remove('a','d');
+    if (i < n) el.classList.add('d'); else if (i === n) el.classList.add('a');
+  }
+  const el = $('step-' + n);
+  el.classList.remove('hidden');
+  setTimeout(() => el.classList.add('fade'), 10);
+  State.step = n;
+  if (n === 2) updateQtyHint();
+  if (n === 3) { State.selectedTableIds = []; updateMapStates(); }
+  if (n === 4) { renderGuestRows(); validateForm(); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetBooking() {
+  Object.assign(State, {
+    step: 1, date: null, qty: 1, selectedTableIds: [],
+    guests: [{ menu: 'std' }], name: '', phone: '', email: '', note: '', ref: '',
+    _previewCode: null,
+  });
+  ['inp-name','inp-phone','inp-email','inp-note'].forEach(id => { $(id).value = ''; });
+  ['err-name','err-phone','err-email'].forEach(id => { $(id).textContent = ''; });
+  if (State.countdownTimer) clearInterval(State.countdownTimer);
+  syncFromSheet().then(() => { renderDates(); goStep(1); });
+}
+
+// === ADMIN ======================================================
+function toggleAdmin() {
+  $('admin-panel').classList.toggle('hidden');
+  if (State.adminToken && !$('admin-panel').classList.contains('hidden')) {
+    enterAdmin();
+  }
+}
+
+async function checkAdmin() {
+  const token = $('adm-pw').value.trim();
+  if (!token) return;
+  const res = await api('verifyAdmin', { token }, { method: 'POST' });
+  if (res && res.ok) {
+    sessionStorage.setItem(CONFIG.KEY_ADMIN_TOKEN, token);
+    State.adminToken = token;
+    $('adm-err').classList.add('hidden');
+    enterAdmin();
+  } else {
+    $('adm-err').classList.remove('hidden');
+    $('adm-err').textContent = 'Token không đúng.';
+  }
+}
+
+function enterAdmin() {
+  $('adm-auth').classList.add('hidden');
+  $('adm-content').classList.remove('hidden');
+  refreshAdmin();
+}
+
+function logoutAdmin() {
+  sessionStorage.removeItem(CONFIG.KEY_ADMIN_TOKEN);
+  State.adminToken = '';
+  $('adm-auth').classList.remove('hidden');
+  $('adm-content').classList.add('hidden');
+  $('adm-pw').value = '';
+}
+
+function switchTab(tab) {
+  State.adminTab = tab;
+  $('tab-pending').classList.toggle('active', tab === 'pending');
+  $('tab-confirmed').classList.toggle('active', tab === 'confirmed');
+  renderAdminList();
+}
+
+async function refreshAdmin() {
+  $('adm-list').innerHTML = '<div class="loading-msg">Đang tải...</div>';
+  const res = await api('adminList', { token: State.adminToken });
+  if (!res || !res.ok) {
+    if (res && res.error === 'auth') { logoutAdmin(); toast('Phiên admin đã hết hạn', 'warn'); return; }
+    $('adm-list').innerHTML = '<div class="loading-msg">Lỗi tải dữ liệu.</div>';
+    return;
+  }
+  State.confirmed = (res.confirmed || []).map(normalizeBooking);
+  State.pending   = (res.pending   || []).map(normalizeBooking);
+  renderAdminStats();
+  renderAdminList();
+}
+
+function renderAdminStats() {
+  const tG = State.confirmed.reduce((s, b) => s + b.qty, 0);
+  const tR = State.confirmed.reduce((s, b) => s + b.total, 0);
+  $('adm-stats').innerHTML =
+    '<div class="adm-stat"><div class="adm-sv">' + State.pending.filter(b => !isExpired(b)).length + '</div><div class="adm-sl">Chờ duyệt</div></div>' +
+    '<div class="adm-stat"><div class="adm-sv">' + tG + '</div><div class="adm-sl">Khách đã xác nhận</div></div>' +
+    '<div class="adm-stat"><div class="adm-sv">' + (tR/1000000).toFixed(1) + 'M</div><div class="adm-sl">Doanh thu (₫)</div></div>';
+}
+
+function renderAdminList() {
+  const el = $('adm-list');
+  const search = ($('adm-search').value || '').toLowerCase().trim();
+  const filterFn = b => !search ||
+    (b.name||'').toLowerCase().includes(search) ||
+    (b.phone||'').includes(search) ||
+    (b.code||'').toLowerCase().includes(search);
+
+  let list;
+  if (State.adminTab === 'pending') {
+    list = State.pending.filter(filterFn);
+  } else {
+    list = State.confirmed.filter(filterFn);
+  }
+  if (!list.length) {
+    el.innerHTML = '<div class="loading-msg">Không có đơn nào.</div>';
+    return;
+  }
+  el.innerHTML = [...list].reverse().map(b => adminItemHtml(b, State.adminTab === 'pending')).join('');
+}
+
+function adminItemHtml(b, isPending) {
+  const menuTags = (b.guests||[]).map((mid, i) => {
+    const m = MENUS.find(m => m.id === mid);
+    return '<span class="set-tag">K' + (i+1) + ': ' + (m ? m.name : mid) + '</span>';
+  }).join('');
+  const expired = isPending && isExpired(b);
+  const actions = isPending
+    ? (expired
+      ? '<span class="badge b-exp">Đã hết hạn</span>'
+      : '<button class="btn-confirm" data-action="admin-confirm" data-code="' + b.code + '">Xác nhận</button>' +
+        '<button class="btn-cancel-mini" data-action="admin-reject" data-code="' + b.code + '">Từ chối</button>')
+    : '<span class="badge b-conf">Đã xác nhận</span>';
+  return '<div class="adm-item">' +
+    '<div style="display:flex;justify-content:space-between;align-items:baseline;">' +
+      '<span class="adm-name">' + b.name + '</span>' +
+      '<span style="font-size:13px;color:#7B6550;font-weight:500;">' + fmt(b.total) + '</span>' +
+    '</div>' +
+    '<div class="adm-meta">' + b.eventLabel + ' · ' + (b.comboLabel || '') + ' · ' + b.qty + ' khách</div>' +
+    '<div style="margin-top:4px;">' + menuTags + '</div>' +
+    '<div class="adm-meta" style="margin-top:4px;">SĐT: ' + b.phone + ' · Mã: ' + b.code + ' · CK: ' + b.ref + (b.note ? ' · ' + b.note : '') + '</div>' +
+    '<div style="margin-top:6px;">' + actions + '</div>' +
+  '</div>';
+}
+
+async function adminConfirm(code, btnEl) {
+  btnEl.disabled = true; btnEl.textContent = 'Đang xác nhận...';
+  const res = await api('confirm', { token: State.adminToken, code }, { method: 'POST' });
+  if (res && res.ok) {
+    toast('Đã xác nhận ' + code, 'ok');
+    await refreshAdmin();
+  } else {
+    btnEl.disabled = false; btnEl.textContent = 'Xác nhận';
+    toast('Xác nhận thất bại: ' + (res && res.error || 'lỗi'), 'err');
+  }
+}
+
+async function adminReject(code, btnEl) {
+  if (!confirm('Từ chối booking ' + code + '? Hành động này không hoàn tác được.')) return;
+  btnEl.disabled = true; btnEl.textContent = 'Đang từ chối...';
+  const res = await api('reject', { token: State.adminToken, code }, { method: 'POST' });
+  if (res && res.ok) {
+    toast('Đã từ chối ' + code, 'ok');
+    await refreshAdmin();
+  } else {
+    btnEl.disabled = false;
+    toast('Lỗi: ' + (res && res.error || ''), 'err');
+  }
+}
+
+function exportCSV() {
+  const list = State.adminTab === 'pending' ? State.pending : State.confirmed;
+  if (!list.length) { toast('Không có dữ liệu để xuất', 'warn'); return; }
+  const headers = ['code','eventLabel','comboLabel','qty','total','name','phone','email','note','ref','status','createdAt'];
+  const rows = [headers.join(',')].concat(list.map(b =>
+    headers.map(h => '"' + String(b[h] || '').replace(/"/g,'""') + '"').join(',')
+  ));
+  const blob = new Blob(['﻿' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'dapdieu_' + State.adminTab + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// === EVENT DELEGATION ===========================================
+document.addEventListener('click', async (e) => {
+  const t = e.target.closest('[data-action]');
+  if (t) {
+    const action = t.dataset.action;
+    if (action === 'toggle-admin') return toggleAdmin();
+    if (action === 'check-admin') return checkAdmin();
+    if (action === 'logout-admin') return logoutAdmin();
+    if (action === 'refresh-admin') return refreshAdmin();
+    if (action === 'export-csv') return exportCSV();
+    if (action === 'qty-minus') return changeQty(-1);
+    if (action === 'qty-plus')  return changeQty(1);
+    if (action === 'go-step')   return goStep(Number(t.dataset.step));
+    if (action === 'check-status') return checkStatus();
+    if (action === 'submit-booking') return submitBooking(t);
+    if (action === 'reset') return resetBooking();
+    if (action === 'print') return window.print();
+    if (action === 'cancel-booking') return cancelBooking(t.dataset.code);
+    if (action === 'admin-confirm') return adminConfirm(t.dataset.code, t);
+    if (action === 'admin-reject')  return adminReject(t.dataset.code, t);
+  }
+  // Date click
+  const dt = e.target.closest('.date-btn');
+  if (dt && !dt.classList.contains('full')) {
+    return selectDate(dt.dataset.event);
+  }
+  // Tab click
+  const tab = e.target.closest('.adm-tab');
+  if (tab) return switchTab(tab.dataset.tab);
+  // Table click
+  const tbl = e.target.closest('.tbl-group');
+  if (tbl && State.step === 3) return tableClick(tbl.dataset.table);
+  // Copy
+  const copy = e.target.closest('[data-copy]');
+  if (copy) {
+    const text = $(copy.dataset.copy).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      copy.classList.add('copied'); copy.textContent = 'Đã copy';
+      setTimeout(() => { copy.classList.remove('copied'); copy.textContent = 'Copy'; }, 1500);
+    });
+  }
+});
+
+// Keyboard support: Enter for inputs
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    if (e.target.id === 'adm-pw') checkAdmin();
+    if (e.target.id === 'check-code') checkStatus();
+    if (e.target.id === 'adm-search') renderAdminList();
+  }
+});
+['inp-name','inp-phone','inp-email','inp-note'].forEach(id => {
+  document.addEventListener('input', (e) => { if (e.target.id === id) validateForm(); });
+});
+document.addEventListener('input', (e) => { if (e.target.id === 'adm-search') renderAdminList(); });
+
+// Auto-refresh khi user quay lại tab
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && State.step <= 3) {
+    syncFromSheet().then(() => {
+      renderDates();
+      if (State.step === 3) updateMapStates();
+      else if (State.step === 2) updateQtyHint();
+    });
+  }
+});
+
+// === INIT =======================================================
+async function init() {
+  $('date-grid').innerHTML = '<div class="loading-msg">Đang tải dữ liệu...</div>';
+  if (!hasSheetUrl()) {
+    toast('Chưa cấu hình SHEET_URL — chạy ở chế độ offline', 'warn', 5000);
+  }
+  try {
+    await syncFromSheet();
+  } catch (e) {
+    toast('Lỗi kết nối server, dữ liệu có thể chưa cập nhật.', 'warn');
+  }
+  renderDates();
+
+  // Deep link: ?code=DD-XXXXX → auto check status
+  const urlCode = new URLSearchParams(location.search).get('code');
+  if (urlCode) {
+    $('check-code').value = urlCode.toUpperCase();
+    setTimeout(() => checkStatus(urlCode), 200);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
