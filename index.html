@@ -65,7 +65,67 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .qlbl { font-size: 13px; color: var(--text2); text-align: center; margin-top: 5px; }
 .qty-hint { font-size: 12px; color: var(--text3); text-align: center; padding: 4px 0 0; }
 
-.map-wrap { background: var(--surface2); border-radius: var(--radius); padding: 12px; overflow-x: auto; }
+.map-wrap { background: var(--surface2); border-radius: var(--radius); padding: 12px; overflow-x: auto; position: relative; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+/* Gradient hai cạnh báo còn nội dung scroll. Tự ẩn khi user đã scroll tới rìa. */
+.map-wrap::before, .map-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 36px;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.25s;
+}
+.map-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--surface2) 0%, rgba(245, 240, 235, 0) 100%);
+  opacity: 0;
+}
+.map-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--surface2) 0%, rgba(245, 240, 235, 0) 100%);
+  opacity: 1;
+}
+.map-wrap.scrolled-start::before { opacity: 1; }
+.map-wrap.scrolled-end::after    { opacity: 0; }
+/* Khi không scroll được (tablet+) → ẩn cả 2 gradient */
+.map-wrap.no-scroll::before, .map-wrap.no-scroll::after { opacity: 0; }
+
+/* Mũi tên animation báo "vuốt sang phải" — chỉ hiển thị khi còn scroll */
+.map-scroll-hint {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(123, 101, 80, 0.35);
+  animation: nudgeArrow 1.4s infinite ease-in-out;
+  transition: opacity 0.3s;
+}
+@keyframes nudgeArrow {
+  0%, 100% { transform: translateY(-50%) translateX(0); }
+  50%       { transform: translateY(-50%) translateX(-5px); }
+}
+.map-wrap.scrolled-end .map-scroll-hint,
+.map-wrap.no-scroll  .map-scroll-hint { opacity: 0; }
+
+/* Hint text dưới sơ đồ — chỉ hiển thị trên mobile khi còn cần scroll */
+.map-hint-text { font-size: 11px; color: var(--text3); text-align: center; margin-top: 8px; font-style: italic; transition: opacity 0.3s; }
+.map-wrap-outer.scrolled-end .map-hint-text,
+.map-wrap-outer.no-scroll .map-hint-text { opacity: 0.4; }
+@media (min-width: 768px) { .map-hint-text, .map-scroll-hint { display: none; } }
 /* SVG sơ đồ: scale theo container nhưng có min để không bị nén quá khó đọc.
    Mobile rất hẹp sẽ scroll ngang; tablet+ thì fit-to-container. */
 .map-svg { display: block; width: 100%; height: auto; min-width: 520px; }
@@ -390,7 +450,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <div id="step-3" class="hidden fade">
       <div class="card">
         <div class="lbl">Chọn bàn trên sơ đồ</div>
-        <div class="map-wrap">
+        <div class="map-wrap-outer">
+        <div class="map-wrap" id="map-wrap">
+          <span class="map-scroll-hint" id="map-scroll-hint" aria-hidden="true">›</span>
           <svg id="map-svg" class="map-svg" viewBox="0 0 800 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ bàn">
             <!--
               ╔══════════════════════════════════════════════════════════════════╗
@@ -404,6 +466,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
                  Bàn được render từ TABLE_LAYOUT (JS) khi init().
                  Đây là 1 SVG trống — JS sẽ inject nội dung. -->
           </svg>
+        </div>
+        <div class="map-hint-text" id="map-hint-text">← Vuốt ngang để xem cả Khu A và Khu B →</div>
         </div>
         <div class="map-legend">
           <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px solid #C8B9A8;"></div>Còn trống</div>
@@ -829,6 +893,58 @@ function buildMapSvg() {
     }
     svg.appendChild(g);
   });
+}
+
+// Setup scroll hints cho map: gradient + hide khi đã scroll đến rìa.
+// Gọi 1 lần sau buildMapSvg(). Tự re-evaluate khi resize (debounced).
+function setupMapScrollHints() {
+  const wrap = $('map-wrap');
+  const outer = wrap && wrap.parentElement;
+  if (!wrap || !outer) return;
+
+  const update = () => {
+    const max = wrap.scrollWidth - wrap.clientWidth;
+    if (max <= 4) {
+      // SVG fit container → không scroll được, ẩn hết hints
+      wrap.classList.add('no-scroll');
+      wrap.classList.remove('scrolled-start', 'scrolled-end');
+      outer.classList.add('no-scroll');
+      outer.classList.remove('scrolled-end');
+      return;
+    }
+    wrap.classList.remove('no-scroll');
+    outer.classList.remove('no-scroll');
+    const sl = wrap.scrollLeft;
+    wrap.classList.toggle('scrolled-start', sl > 5);
+    const atEnd = sl >= max - 5;
+    wrap.classList.toggle('scrolled-end', atEnd);
+    outer.classList.toggle('scrolled-end', atEnd);
+  };
+
+  wrap.addEventListener('scroll', update, { passive: true });
+  // Update khi window resize (debounce nhẹ)
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(update, 150);
+  });
+  // Initial state — đợi 1 frame để layout ổn định
+  setTimeout(update, 50);
+}
+
+// Auto-scroll preview: lần đầu user vào Step 3 trong session, animate scroll
+// sang phải rồi quay lại để hint còn nội dung.
+let _autoScrolledOnce = false;
+function autoScrollPreview() {
+  if (_autoScrolledOnce) return;
+  const wrap = $('map-wrap');
+  if (!wrap) return;
+  const max = wrap.scrollWidth - wrap.clientWidth;
+  if (max <= 4) return; // Không cần preview nếu fit
+  _autoScrolledOnce = true;
+  // Animate: 0 → max → 0 với delay
+  setTimeout(() => wrap.scrollTo({ left: max, behavior: 'smooth' }), 350);
+  setTimeout(() => wrap.scrollTo({ left: 0,   behavior: 'smooth' }), 1200);
 }
 
 // Tự động sắp 4 ghế đơn 2x2 trong bàn (cho A2, A3). Tránh overlap với tên bàn ở top.
@@ -2125,6 +2241,8 @@ function goStep(n) {
       State.communalPicks = {};
     }
     updateMapStates();
+    // Hint scroll cho mobile: animate preview lần đầu user vào step 3 trong session.
+    autoScrollPreview();
   }
   if (n === 4) { renderStep4Menu(); validateForm(); }
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2676,6 +2794,7 @@ async function init() {
   $('date-grid').innerHTML = '<div class="loading-msg">Đang tải dữ liệu...</div>';
   // Render sơ đồ SVG động từ TABLE_LAYOUT (1 lần khi load page).
   buildMapSvg();
+  setupMapScrollHints();
   if (!hasSheetUrl()) {
     toast('Chưa cấu hình SHEET_URL — chạy ở chế độ offline', 'warn', 5000);
   }
