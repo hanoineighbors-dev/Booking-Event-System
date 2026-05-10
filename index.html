@@ -499,7 +499,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
             <span class="menu-wizard-counter" id="menu-wizard-counter">Khách 1 / 1</span>
             <span class="menu-wizard-dots" id="menu-wizard-dots"></span>
           </div>
-          <div class="choice-rule" id="drink-rule"></div>
           <div class="guest-rows" id="guest-rows"></div>
           <div class="menu-wizard-nav">
             <button class="btn-g" id="menu-prev-btn" data-action="menu-prev" style="margin-top:0;">← Trước</button>
@@ -1686,9 +1685,6 @@ function renderMenuBanner() {
 // theo State.menuStep. Trong review mode (xem trước thanh toán), không gọi hàm này.
 function renderGuestRows() {
   const menu = getEventMenu(State.date);
-  const ruleEl = $('drink-rule');
-  if (ruleEl) ruleEl.textContent = (menu.drinks && menu.drinks.length) ? (menu.drinkRule || '') : '';
-
   const el = $('guest-rows');
   const i = State.menuStep;
   const g = State.guestSelections[i] || { set: null, drink: null };
@@ -1735,8 +1731,13 @@ function renderGuestRows() {
           badge = '<span class="gcard-drink-badge ' + cls + '">' + txt + '</span>';
         }
       }
+      // Rule text (vd "Chọn 1 trong 5") đưa vào ngay cạnh label đồ uống thay vì trên đầu menu —
+      // tránh khách nhầm là rule áp dụng cho việc chọn set.
+      const ruleInline = menu.drinkRule
+        ? ' <span style="color:var(--text3);font-weight:400;font-size:11px;">· ' + escapeHtml(menu.drinkRule) + '</span>'
+        : '';
       drinkHtml = '<div class="gcard-drink">' +
-        '<label class="il">Đồ uống <span class="il-req">*</span></label>' +
+        '<label class="il">Đồ uống <span class="il-req">*</span>' + ruleInline + '</label>' +
         '<select class="gsel" data-action="pick-drink" data-guest="' + i + '">' + opts + '</select>' +
         badge +
       '</div>';
@@ -2011,11 +2012,20 @@ async function submitBooking(btn) {
   const conflict = State.selectedTableIds.find(id => {
     const t = getTable(id);
     if (!t) return false;
-    if (t.communal) return remainingCommunal(id, State.date) < State.qty;
+    if (t.communal) {
+      // Bàn chung: chỉ cần đủ chỗ cho số ghế tôi đặt ở bàn ĐÓ (không phải qty toàn bộ).
+      // Khách qty=2 chia 1 ghế A2 + 1 ghế A3 → mỗi bàn chỉ cần 1 chỗ trống.
+      const myPicks = Number(State.communalPicks[id] || 0);
+      return myPicks > 0 && remainingCommunal(id, State.date) < myPicks;
+    }
     return taken.has(id);
   });
   if (conflict) {
-    toast('Tiếc quá! Bàn "' + getTable(conflict).name + '" vừa có người đặt. Bạn chọn bàn khác nhé.', 'err', 5000);
+    const ct = getTable(conflict);
+    const msg = ct && ct.communal
+      ? 'Tiếc quá! Bàn ' + ct.name + ' không còn đủ ghế trống (vừa có người khác đặt). Bạn chọn lại nhé.'
+      : 'Tiếc quá! Bàn ' + (ct ? ct.name : conflict) + ' vừa có người đặt. Bạn chọn bàn khác nhé.';
+    toast(msg, 'err', 5000);
     btn.disabled = false;
     btn.textContent = 'Đã chuyển khoản — Gửi đặt chỗ';
     goStep(3);
