@@ -474,7 +474,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <div class="leg"><div class="leg-dot" style="background:#FAF5F0;border:2px solid #A0856A;"></div>Đang chọn</div>
           <div class="leg"><div class="leg-dot" style="background:#EAF5F0;border:1.5px solid #1D9E75;"></div>Có thể ghép</div>
           <div class="leg"><div class="leg-dot" style="background:#FFF8E6;border:1.2px dashed #D4A020;"></div>Đang chờ duyệt</div>
-          <div class="leg"><div class="leg-dot" style="background:#F1EFE8;border:1px solid #D3D1C7;"></div>Không khả dụng</div>
+          <div class="leg"><div class="leg-dot" style="background:#F1EFE8;border:1px solid #D3D1C7;"></div>Đã đặt</div>
           <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px dashed #C8B9A8;"></div>Bàn chung · click từng ghế</div>
         </div>
         <div class="sel-bar" id="sel-bar">Bấm vào bàn để bắt đầu chọn.</div>
@@ -565,7 +565,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
             <span style="font-size:13px;color:var(--text2);">Tổng thanh toán</span>
             <span class="total-val" id="pay-total">—</span>
           </div>
-          <div class="note warn">Chỗ của bạn sẽ được giữ <b>60 phút</b> kể từ lúc gửi yêu cầu. Sau đó nếu chưa có thanh toán bàn sẽ được mở lại. Vui lòng chuyển khoản đúng nội dung và nhấn nút bên dưới.</div>
+          <div class="note warn">Chỗ của bạn sẽ được giữ <b>8 tiếng</b> để Hanoi Neighbors xác nhận thanh toán. Sau đó nếu chưa được confirm, bàn sẽ được mở lại. Vui lòng chuyển khoản đúng nội dung trước khi nhấn nút bên dưới.</div>
         </div>
         <button class="btn-p" id="btn4" data-action="submit-booking" disabled>Đã chuyển khoản — Gửi đặt chỗ</button>
       </div>
@@ -585,7 +585,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
           <div class="ok-ttl">Yêu cầu đã được gửi!</div>
           <div class="ok-code" id="ok-code"></div>
           <div class="ok-msg">
-            Team Dập Dìu sẽ kiểm tra thanh toán và xác nhận trong vòng 24h.<br>
+            Hanoi Neighbors sẽ kiểm tra thanh toán và xác nhận trong vòng 8 tiếng.<br>
             <span id="ok-countdown" class="countdown"></span><br><br>
             Lưu mã này để kiểm tra trạng thái đặt chỗ.
           </div>
@@ -623,7 +623,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 // === CẤU HÌNH ===================================================
 const CONFIG = {
   PRICE: 350000,
-  PENDING_TTL_MIN: 60,            // pending hết hạn sau 60 phút
+  PENDING_TTL_MIN: 480,           // pending hết hạn sau 8 giờ (480 phút) — phải khớp backend
   KEY_PENDING_LOCAL: 'dapdieu_pending_v4',
   KEY_ADMIN_TOKEN: 'dapdieu_admin_token_v4', // sessionStorage
   // Dán URL Apps Script v4 vào đây sau khi deploy
@@ -1125,7 +1125,7 @@ function loadPendingLocal() {
   try { all = JSON.parse(localStorage.getItem(CONFIG.KEY_PENDING_LOCAL) || '[]'); }
   catch { return []; }
   if (!Array.isArray(all)) return [];
-  // Cleanup: loại bỏ các entry đã hết hạn (TTL 60 phút) để localStorage không phình mãi.
+  // Cleanup: loại bỏ các entry đã hết hạn để localStorage không phình mãi.
   const fresh = all.filter(b => !isExpired(b));
   if (fresh.length !== all.length) {
     try { localStorage.setItem(CONFIG.KEY_PENDING_LOCAL, JSON.stringify(fresh)); } catch {}
@@ -2095,7 +2095,7 @@ async function submitBooking(btn) {
     }
     serverOk = res && res.ok === true;
     if (!serverOk) {
-      toast('Lỗi đồng bộ với server — chỗ của bạn được lưu tạm. Vui lòng liên hệ team.', 'warn', 6000);
+      toast('Lỗi đồng bộ với server — chỗ của bạn được lưu tạm. Vui lòng liên hệ Hanoi Neighbors.', 'warn', 6000);
     }
   }
 
@@ -2111,7 +2111,19 @@ async function submitBooking(btn) {
   ['step-1','step-2','step-3','step-4'].forEach(id => $(id).classList.add('hidden'));
   const s = $('step-success');
   s.classList.remove('hidden'); setTimeout(() => s.classList.add('fade'), 10);
-  toast(serverOk ? 'Yêu cầu đã được gửi!' : 'Đã lưu yêu cầu (cần xác nhận với team).', serverOk ? 'ok' : 'warn');
+  toast(serverOk ? 'Yêu cầu đã được gửi!' : 'Đã lưu yêu cầu (cần xác nhận với Hanoi Neighbors).', serverOk ? 'ok' : 'warn');
+}
+
+// Format thời gian còn lại: "5 giờ 23 phút" / "45 phút" / "12 phút 30 giây" tuỳ độ dài.
+function formatRemainTime(ms) {
+  if (ms <= 0) return '0 phút';
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0) return h + ' giờ ' + m + ' phút';
+  if (m > 0) return m + ' phút' + (m < 10 ? ' ' + s + ' giây' : '');
+  return s + ' giây';
 }
 
 function startCountdown(createdAt) {
@@ -2120,15 +2132,14 @@ function startCountdown(createdAt) {
   function tick() {
     const remain = expireAt - Date.now();
     if (remain <= 0) {
-      $('ok-countdown').textContent = 'Đã hết thời gian giữ chỗ. Liên hệ team nếu bạn đã chuyển khoản.';
+      $('ok-countdown').textContent = 'Hết thời gian giữ chỗ. Liên hệ Hanoi Neighbors nếu bạn đã chuyển khoản.';
       clearInterval(State.countdownTimer); return;
     }
-    const m = Math.floor(remain / 60000);
-    const s = Math.floor((remain % 60000) / 1000);
-    $('ok-countdown').textContent = 'Còn ' + m + ' phút ' + s + ' giây để chuyển khoản giữ chỗ.';
+    $('ok-countdown').textContent = 'Còn ' + formatRemainTime(remain) + ' để Hanoi Neighbors xác nhận.';
   }
   tick();
-  State.countdownTimer = setInterval(tick, 1000);
+  // Tick 30s/lần là đủ với TTL 8h (không cần tick mỗi giây).
+  State.countdownTimer = setInterval(tick, 30000);
 }
 
 // === CHECK STATUS ===============================================
@@ -2170,21 +2181,21 @@ async function checkStatus(codeArg) {
   const pending = pendingLocal || pendingServer;
   if (pending && !isExpired(pending)) {
     const ageMs = Date.now() - new Date(pending.createdAt).getTime();
-    const remainMin = Math.max(0, Math.ceil((CONFIG.PENDING_TTL_MIN * 60 * 1000 - ageMs) / 60000));
+    const remainMs = Math.max(0, CONFIG.PENDING_TTL_MIN * 60 * 1000 - ageMs);
     resultEl.className = 'status-result status-pending';
     resultEl.innerHTML = '<b>Đang chờ xác nhận.</b> Mã: ' + escapeHtml(code) +
-      '<br>Còn ' + remainMin + ' phút trước khi giữ chỗ tự huỷ.' +
+      '<br>Hanoi Neighbors sẽ kiểm tra và confirm trong 8 tiếng. Còn ' + formatRemainTime(remainMs) + '.' +
       statusDetailHtml(pending) +
       '<br><button class="btn-cancel-mini" data-action="cancel-booking" data-code="' + escapeHtml(code) + '">Huỷ đặt chỗ này</button>';
     return;
   }
   if (pending && isExpired(pending)) {
     resultEl.className = 'status-result status-cancelled';
-    resultEl.innerHTML = '<b>Đã hết hạn.</b> Mã <b>' + escapeHtml(code) + '</b> không được thanh toán trong ' + CONFIG.PENDING_TTL_MIN + ' phút.';
+    resultEl.innerHTML = '<b>Đã hết hạn.</b> Mã <b>' + escapeHtml(code) + '</b> không được Hanoi Neighbors xác nhận trong ' + (CONFIG.PENDING_TTL_MIN / 60) + ' giờ. Vui lòng liên hệ Hanoi Neighbors.';
     return;
   }
   resultEl.className = 'status-result status-notfound';
-  resultEl.innerHTML = 'Không tìm thấy mã <b>' + escapeHtml(code) + '</b>. Kiểm tra lại hoặc liên hệ team.';
+  resultEl.innerHTML = 'Không tìm thấy mã <b>' + escapeHtml(code) + '</b>. Kiểm tra lại hoặc liên hệ Hanoi Neighbors.';
 }
 
 async function cancelBooking(code) {
