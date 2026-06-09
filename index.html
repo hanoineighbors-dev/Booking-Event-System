@@ -35,6 +35,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .page-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
 .adm-btn { font-size: 12px; color: var(--text2); background: none; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 5px 11px; cursor: pointer; font-family: 'DM Sans', sans-serif; flex-shrink: 0; margin-top: 4px; }
 .adm-btn:hover { background: var(--surface2); }
+.header-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.lang-btn { font-size: 12px; color: var(--text2); background: none; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 5px 11px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 4px; white-space: nowrap; }
+.lang-btn:hover { background: var(--surface2); }
 .adm-dot { background: none; border: none; padding: 10px; cursor: pointer; flex-shrink: 0; margin-top: 4px; line-height: 0; -webkit-tap-highlight-color: transparent; }
 .adm-dot-circle { display: block; width: 11px; height: 11px; border-radius: 50%; background: var(--text3); transition: background 0.2s, transform 0.15s; }
 .adm-dot:hover .adm-dot-circle { background: var(--text2); }
@@ -367,12 +370,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 
   <div class="page-header">
     <div>
-      <div class="page-title">Đặt chỗ</div>
+      <div class="page-title" data-i18n="page_title">Đặt chỗ</div>
       <div class="page-sub">Dập Dìu Drag Brunch · Hanoi Neighbors Big Hug</div>
     </div>
-    <button class="adm-dot" data-action="admin-tap" aria-label="Truy cập" title="">
-      <span class="adm-dot-circle"></span>
-    </button>
+    <div class="header-actions">
+      <button class="lang-btn" id="lang-toggle" data-action="toggle-lang" aria-label="Switch language">English</button>
+      <button class="adm-dot" data-action="admin-tap" aria-label="Truy cập" title="">
+        <span class="adm-dot-circle"></span>
+      </button>
+    </div>
   </div>
 
   <!-- ADMIN PANEL -->
@@ -415,14 +421,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <!-- STEP 1: Ngày -->
     <div id="step-1" class="fade">
       <div class="card">
-        <div class="lbl">Chọn ngày</div>
+        <div class="lbl" data-i18n="select_date">Chọn ngày</div>
         <div class="date-grid" id="date-grid"></div>
       </div>
       <div class="check-status-wrap">
-        <div class="lbl">Kiểm tra trạng thái đặt chỗ</div>
+        <div class="lbl" data-i18n="check_status_title">Kiểm tra trạng thái đặt chỗ</div>
         <div class="check-status-box">
-          <input class="inp" type="text" id="check-code" placeholder="Nhập mã (VD: DD-A1B2C3)" style="text-transform:uppercase;" autocomplete="off">
-          <button class="btn-g" style="margin-top:0;white-space:nowrap;" data-action="check-status">Kiểm tra</button>
+          <input class="inp" type="text" id="check-code" data-i18n-ph="check_code_ph" placeholder="Nhập mã (VD: DD-A1B2C3)" style="text-transform:uppercase;" autocomplete="off">
+          <button class="btn-g" style="margin-top:0;white-space:nowrap;" data-action="check-status" data-i18n="check_btn">Kiểm tra</button>
         </div>
         <div id="status-result" class="hidden"></div>
       </div>
@@ -431,25 +437,25 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <!-- STEP 2: Số người -->
     <div id="step-2" class="hidden fade">
       <div class="card">
-        <div class="lbl">Số lượng khách</div>
+        <div class="lbl" data-i18n="guest_count">Số lượng khách</div>
         <div class="qty-big">
           <button class="qbtn" id="qminus" data-action="qty-minus" aria-label="Giảm">−</button>
           <div style="text-align:center;">
             <div class="qval" id="qty-disp">1</div>
-            <div class="qlbl">khách</div>
+            <div class="qlbl" data-i18n="guests_unit">khách</div>
           </div>
           <button class="qbtn" id="qplus" data-action="qty-plus" aria-label="Tăng">+</button>
         </div>
         <div class="qty-hint" id="qty-hint"></div>
       </div>
-      <button class="btn-g" data-action="go-step" data-step="1">← Quay lại</button>
-      <button class="btn-p" data-action="go-step" data-step="3">Chọn bàn trên sơ đồ</button>
+      <button class="btn-g" data-action="go-step" data-step="1" data-i18n="back">← Quay lại</button>
+      <button class="btn-p" data-action="go-step" data-step="3" data-i18n="to_map">Chọn bàn trên sơ đồ</button>
     </div>
 
     <!-- STEP 3: Sơ đồ -->
     <div id="step-3" class="hidden fade">
       <div class="card">
-        <div class="lbl">Chọn bàn trên sơ đồ</div>
+        <div class="lbl" data-i18n="choose_table">Chọn bàn trên sơ đồ</div>
         <div class="map-wrap-outer">
         <div class="map-wrap" id="map-wrap">
           <span class="map-scroll-hint" id="map-scroll-hint" aria-hidden="true">›</span>
@@ -467,20 +473,20 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
                  Đây là 1 SVG trống — JS sẽ inject nội dung. -->
           </svg>
         </div>
-        <div class="map-hint-text" id="map-hint-text">← Vuốt ngang để xem cả Khu A và Khu B →</div>
+        <div class="map-hint-text" id="map-hint-text" data-i18n="map_swipe_hint">← Vuốt ngang để xem cả Khu A và Khu B →</div>
         </div>
         <div class="map-legend">
-          <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px solid #C8B9A8;"></div>Còn trống</div>
-          <div class="leg"><div class="leg-dot" style="background:#FAF5F0;border:2px solid #A0856A;"></div>Đang chọn</div>
-          <div class="leg"><div class="leg-dot" style="background:#EAF5F0;border:1.5px solid #1D9E75;"></div>Có thể ghép</div>
-          <div class="leg"><div class="leg-dot" style="background:#FFF8E6;border:1.2px dashed #D4A020;"></div>Đang chờ duyệt</div>
-          <div class="leg"><div class="leg-dot" style="background:#F1EFE8;border:1px solid #D3D1C7;"></div>Đã đặt</div>
-          <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px dashed #C8B9A8;"></div>Bàn chung · click từng ghế</div>
+          <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px solid #C8B9A8;"></div><span data-i18n="legend_free">Còn trống</span></div>
+          <div class="leg"><div class="leg-dot" style="background:#FAF5F0;border:2px solid #A0856A;"></div><span data-i18n="legend_selecting">Đang chọn</span></div>
+          <div class="leg"><div class="leg-dot" style="background:#EAF5F0;border:1.5px solid #1D9E75;"></div><span data-i18n="legend_combine">Có thể ghép</span></div>
+          <div class="leg"><div class="leg-dot" style="background:#FFF8E6;border:1.2px dashed #D4A020;"></div><span data-i18n="legend_pending">Đang chờ duyệt</span></div>
+          <div class="leg"><div class="leg-dot" style="background:#F1EFE8;border:1px solid #D3D1C7;"></div><span data-i18n="legend_booked">Đã đặt</span></div>
+          <div class="leg"><div class="leg-dot" style="background:#fff;border:1.5px dashed #C8B9A8;"></div><span data-i18n="legend_shared">Bàn chung · click từng ghế</span></div>
         </div>
-        <div class="sel-bar" id="sel-bar">Bấm vào bàn để bắt đầu chọn.</div>
+        <div class="sel-bar" id="sel-bar" data-i18n="sel_start">Bấm vào bàn để bắt đầu chọn.</div>
       </div>
-      <button class="btn-g" data-action="go-step" data-step="2">← Quay lại</button>
-      <button class="btn-p" id="btn3" data-action="go-step" data-step="4" disabled>Xác nhận bàn này</button>
+      <button class="btn-g" data-action="go-step" data-step="2" data-i18n="back">← Quay lại</button>
+      <button class="btn-p" id="btn3" data-action="go-step" data-step="4" disabled data-i18n="confirm_table">Xác nhận bàn này</button>
     </div>
 
     <!-- STEP 4: Menu wizard (per-guest) → Info + Payment -->
@@ -488,7 +494,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       <!-- Card 1: banner 2 set + wizard chọn menu cho từng khách -->
       <!--          Khi xong wizard, card này thu gọn thành review (có nút Sửa) -->
       <div class="card">
-        <div class="lbl" id="menu-card-lbl">Set menu cho từng khách</div>
+        <div class="lbl" id="menu-card-lbl" data-i18n="menu_card_wizard">Set menu cho từng khách</div>
         <div class="recap-bar" id="recap-bar"></div>
         <div class="menu-banner" id="menu-banner"></div>
         <div class="menu-shared" id="menu-shared"></div>
@@ -509,15 +515,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
         <!-- REVIEW MODE: tóm tắt menu đã chọn (sau khi xong wizard) -->
         <div id="menu-review" class="hidden">
           <div class="menu-review-head">
-            <span class="menu-section-lbl" style="margin:0;">Menu đã chọn</span>
-            <button class="menu-edit-btn" data-action="menu-edit">Sửa</button>
+            <span class="menu-section-lbl" style="margin:0;" data-i18n="menu_chosen">Menu đã chọn</span>
+            <button class="menu-edit-btn" data-action="menu-edit" data-i18n="edit">Sửa</button>
           </div>
           <div id="menu-summary-list" class="menu-summary-list"></div>
         </div>
 
         <div class="divider"></div>
         <div class="total-row">
-          <span style="font-size:13px;color:var(--text2);">Tổng cộng</span>
+          <span style="font-size:13px;color:var(--text2);" data-i18n="subtotal_lbl">Tổng cộng</span>
           <span class="total-val" id="total-disp">0 ₫</span>
         </div>
       </div>
@@ -525,51 +531,51 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
       <!-- Cards 2-3: info + payment, chỉ hiện sau khi wizard xong -->
       <div id="info-payment-wrap" class="hidden">
         <div class="card">
-          <div class="lbl">Thông tin liên hệ</div>
+          <div class="lbl" data-i18n="contact_info">Thông tin liên hệ</div>
           <div class="ig">
-            <label class="il" for="inp-name">Họ tên *</label>
-            <input class="inp" type="text" id="inp-name" placeholder="Nguyễn Văn A" autocomplete="name">
+            <label class="il" for="inp-name" data-i18n="name_lbl">Họ tên *</label>
+            <input class="inp" type="text" id="inp-name" data-i18n-ph="name_ph" placeholder="Nguyễn Văn A" autocomplete="name">
             <div class="field-err" id="err-name" aria-live="polite"></div>
           </div>
           <div class="ig">
-            <label class="il" for="inp-phone">Số điện thoại *</label>
+            <label class="il" for="inp-phone" data-i18n="phone_lbl">Số điện thoại *</label>
             <input class="inp" type="tel" id="inp-phone" placeholder="09xxxxxxxx" autocomplete="tel" inputmode="numeric">
             <div class="field-err" id="err-phone" aria-live="polite"></div>
           </div>
           <div class="ig">
-            <label class="il" for="inp-email">Email * <span style="font-weight:400;color:var(--text3);">(để nhận xác nhận)</span></label>
-            <input class="inp" type="email" id="inp-email" placeholder="ten@email.com" autocomplete="email" inputmode="email">
+            <label class="il" for="inp-email" data-i18n-html="email_lbl">Email * <span style="font-weight:400;color:var(--text3);">(để nhận xác nhận)</span></label>
+            <input class="inp" type="email" id="inp-email" data-i18n-ph="email_ph" placeholder="ten@email.com" autocomplete="email" inputmode="email">
             <div class="field-err" id="err-email" aria-live="polite"></div>
           </div>
           <div class="ig" style="margin-bottom:0;">
-            <label class="il" for="inp-note">Ghi chú</label>
-            <input class="inp" type="text" id="inp-note" placeholder="Dị ứng, yêu cầu đặc biệt...">
+            <label class="il" for="inp-note" data-i18n="note_lbl">Ghi chú</label>
+            <input class="inp" type="text" id="inp-note" data-i18n-ph="note_ph" placeholder="Dị ứng, yêu cầu đặc biệt...">
           </div>
         </div>
         <div class="card">
-          <div class="lbl">Tóm tắt & thanh toán</div>
+          <div class="lbl" data-i18n="summary_pay">Tóm tắt & thanh toán</div>
           <div id="summary"></div>
           <div class="divider"></div>
           <div style="text-align:center;padding:.75rem 0 1rem;">
-            <div class="qr-box" id="qr-box"><span class="qr-spin">QR sẽ hiện sau khi nhập SĐT</span></div>
+            <div class="qr-box" id="qr-box"><span class="qr-spin" data-i18n="qr_after_phone">QR sẽ hiện sau khi nhập SĐT</span></div>
             <div class="bank">
-              Ngân hàng: <span class="bv" id="bank-name">—</span><br>
-              Số tài khoản: <span class="bv" id="bank-acc">—</span><button class="copy-btn" data-copy="bank-acc">Copy</button><br>
-              Chủ tài khoản: <span class="bv" id="bank-holder">—</span><br>
-              Nội dung CK: <span class="bv" id="pay-ref">—</span><button class="copy-btn" data-copy="pay-ref">Copy</button>
+              <span data-i18n="bank_lbl">Ngân hàng:</span> <span class="bv" id="bank-name">—</span><br>
+              <span data-i18n="bank_acc_lbl">Số tài khoản:</span> <span class="bv" id="bank-acc">—</span><button class="copy-btn" data-copy="bank-acc" data-i18n="copy">Copy</button><br>
+              <span data-i18n="bank_holder_lbl">Chủ tài khoản:</span> <span class="bv" id="bank-holder">—</span><br>
+              <span data-i18n="pay_ref_lbl">Nội dung CK:</span> <span class="bv" id="pay-ref">—</span><button class="copy-btn" data-copy="pay-ref" data-i18n="copy">Copy</button>
             </div>
           </div>
           <div class="divider"></div>
           <div class="total-row">
-            <span style="font-size:13px;color:var(--text2);">Tổng thanh toán</span>
+            <span style="font-size:13px;color:var(--text2);" data-i18n="pay_total_lbl">Tổng thanh toán</span>
             <span class="total-val" id="pay-total">—</span>
           </div>
-          <div class="note warn">Chỗ của bạn sẽ được giữ <b>8 tiếng</b> để Hanoi Neighbors xác nhận thanh toán. Sau đó nếu chưa được confirm, bàn sẽ được mở lại. Vui lòng chuyển khoản đúng nội dung trước khi nhấn nút bên dưới.</div>
+          <div class="note warn" data-i18n-html="hold_note">Chỗ của bạn sẽ được giữ <b>8 tiếng</b> để Hanoi Neighbors xác nhận thanh toán. Sau đó nếu chưa được confirm, bàn sẽ được mở lại. Vui lòng chuyển khoản đúng nội dung trước khi nhấn nút bên dưới.</div>
         </div>
-        <button class="btn-p" id="btn4" data-action="submit-booking" disabled>Đã chuyển khoản — Gửi đặt chỗ</button>
+        <button class="btn-p" id="btn4" data-action="submit-booking" disabled data-i18n="submit_btn">Đã chuyển khoản — Gửi đặt chỗ</button>
       </div>
 
-      <button class="btn-g" data-action="go-step" data-step="3">← Quay lại sơ đồ bàn</button>
+      <button class="btn-g" data-action="go-step" data-step="3" data-i18n="back_to_map">← Quay lại sơ đồ bàn</button>
     </div>
 
     <!-- SUCCESS -->
@@ -581,17 +587,17 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
               <path d="M5 12.5L10 17.5L19 7" stroke="#7B6550" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <div class="ok-ttl">Yêu cầu đã được gửi!</div>
+          <div class="ok-ttl" data-i18n="success_title">Yêu cầu đã được gửi!</div>
           <div class="ok-code" id="ok-code"></div>
           <div class="ok-msg">
-            Hanoi Neighbors sẽ kiểm tra thanh toán và xác nhận trong vòng 8 tiếng.<br>
+            <span data-i18n="success_line1">Hanoi Neighbors sẽ kiểm tra thanh toán và xác nhận trong vòng 8 tiếng.</span><br>
             <span id="ok-countdown" class="countdown"></span><br><br>
-            Lưu mã này để kiểm tra trạng thái đặt chỗ.
+            <span data-i18n="success_line2">Lưu mã này để kiểm tra trạng thái đặt chỗ.</span>
           </div>
         </div>
       </div>
-      <button class="btn-g" data-action="print">In / Lưu PDF</button>
-      <button class="btn-p" data-action="reset">Đặt chỗ mới</button>
+      <button class="btn-g" data-action="print" data-i18n="print_btn">In / Lưu PDF</button>
+      <button class="btn-p" data-action="reset" data-i18n="new_booking">Đặt chỗ mới</button>
     </div>
 
   </div>
@@ -603,6 +609,348 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 'use strict';
 // ================================================================
 // DẬP DÌU DRAG BRUNCH — Booking Tool v4.2 (powered by Opus 4.7)
+// ================================================================
+
+// ================================================================
+// I18N — Song ngữ VI/EN cho luồng KHÁCH (admin giữ tiếng Việt).
+//   - t(key, params): tra cứu chuỗi theo ngôn ngữ hiện tại; thay {x}.
+//   - Tên món ăn/đồ uống giữ nguyên (danh từ riêng), chỉ dịch nhãn UI.
+//   - applyStaticI18n(): set text/placeholder/html cho [data-i18n*].
+//   - applyLang(): đổi ngôn ngữ + render lại phần đang hiển thị.
+// ================================================================
+let LANG = (function () {
+  try { return localStorage.getItem('dd_lang') || 'vi'; } catch (e) { return 'vi'; }
+})();
+const I18N = {
+  vi: {
+    page_title: 'Đặt chỗ',
+    select_date: 'Chọn ngày',
+    check_status_title: 'Kiểm tra trạng thái đặt chỗ',
+    check_code_ph: 'Nhập mã (VD: DD-A1B2C3)',
+    check_btn: 'Kiểm tra',
+    guest_count: 'Số lượng khách',
+    guests_unit: 'khách',
+    back: '← Quay lại',
+    to_map: 'Chọn bàn trên sơ đồ',
+    choose_table: 'Chọn bàn trên sơ đồ',
+    map_swipe_hint: '← Vuốt ngang để xem cả Khu A và Khu B →',
+    legend_free: 'Còn trống',
+    legend_selecting: 'Đang chọn',
+    legend_combine: 'Có thể ghép',
+    legend_pending: 'Đang chờ duyệt',
+    legend_booked: 'Đã đặt',
+    legend_shared: 'Bàn chung · click từng ghế',
+    confirm_table: 'Xác nhận bàn này',
+    menu_card_wizard: 'Set menu cho từng khách',
+    menu_chosen: 'Menu đã chọn',
+    edit: 'Sửa',
+    subtotal_lbl: 'Tổng cộng',
+    contact_info: 'Thông tin liên hệ',
+    name_lbl: 'Họ tên *',
+    name_ph: 'Nguyễn Văn A',
+    phone_lbl: 'Số điện thoại *',
+    email_lbl: 'Email * <span style="font-weight:400;color:var(--text3);">(để nhận xác nhận)</span>',
+    email_ph: 'ten@email.com',
+    note_lbl: 'Ghi chú',
+    note_ph: 'Dị ứng, yêu cầu đặc biệt...',
+    summary_pay: 'Tóm tắt & thanh toán',
+    qr_after_phone: 'QR sẽ hiện sau khi nhập SĐT',
+    qr_enter_phone: 'Nhập SĐT để hiện QR',
+    qr_error: 'Lỗi tải QR — vui lòng chuyển khoản thủ công',
+    bank_lbl: 'Ngân hàng:',
+    bank_acc_lbl: 'Số tài khoản:',
+    bank_holder_lbl: 'Chủ tài khoản:',
+    pay_ref_lbl: 'Nội dung CK:',
+    pay_total_lbl: 'Tổng thanh toán',
+    hold_note: 'Chỗ của bạn sẽ được giữ <b>8 tiếng</b> để Hanoi Neighbors xác nhận thanh toán. Sau đó nếu chưa được confirm, bàn sẽ được mở lại. Vui lòng chuyển khoản đúng nội dung trước khi nhấn nút bên dưới.',
+    submit_btn: 'Đã chuyển khoản — Gửi đặt chỗ',
+    back_to_map: '← Quay lại sơ đồ bàn',
+    success_title: 'Yêu cầu đã được gửi!',
+    success_line1: 'Hanoi Neighbors sẽ kiểm tra thanh toán và xác nhận trong vòng 8 tiếng.',
+    success_line2: 'Lưu mã này để kiểm tra trạng thái đặt chỗ.',
+    print_btn: 'In / Lưu PDF',
+    new_booking: 'Đặt chỗ mới',
+    // dynamic
+    seats_taken: '{used}/{cap} đã đặt',
+    sel_start: 'Bấm vào bàn để bắt đầu chọn.',
+    n_seats_at: '{n} ghế {id}',
+    seat_word: 'ghế',
+    remove_seat: 'Bỏ 1 ghế {id}',
+    add_seat: 'Thêm 1 ghế {id}',
+    enough_guests: 'Đủ {n} khách.',
+    need_more_seats: 'Còn thiếu {n} ghế — bấm thêm vào bàn chung.',
+    too_many_seats: 'Vượt {n} ghế — bấm − để bỏ bớt.',
+    selected: 'Đã chọn',
+    enough_for: 'đủ cho {n} khách.',
+    need_more_spots: 'còn thiếu {n} chỗ.',
+    mismatch: 'không khớp {n} khách. Bỏ chọn và thử lại.',
+    toast_has_private: 'Bạn đã chọn bàn riêng. Bỏ chọn để chuyển sang bàn chung.',
+    toast_table_full: 'Bàn {name} đã hết ghế.',
+    toast_seats_full: 'Đã đủ {n} ghế. Bấm − để bỏ ghế trước nếu muốn đổi.',
+    toast_table_taken: 'Bàn này đã có người đặt hoặc đang chờ duyệt.',
+    full: 'Hết chỗ',
+    spots_left: '{n} chỗ còn trống',
+    max_spots: 'Tối đa {n} chỗ còn trống',
+    illustration: 'Hình minh hoạ',
+    starter_lbl: 'Khai vị',
+    main_lbl: 'Món chính',
+    dessert_lbl: 'Tráng miệng',
+    drinks_lbl: 'Đồ uống',
+    choose_drink_opt: '— Chọn 1 đồ uống —',
+    alcoholic: 'Có cồn',
+    zero_alc: '0% cồn',
+    drink_rule: 'Chọn 1 trong {n}',
+    pick_set_hint: 'Chọn 1 set để xem chi tiết và chọn đồ uống.',
+    guest_n: 'Khách {n}',
+    guest_counter: 'Khách {a} / {b}',
+    back_map_short: '← Sơ đồ bàn',
+    prev_guest: '← Khách {n}',
+    next_guest: 'Khách {n} →',
+    to_payment: 'Tiếp tục → Thanh toán',
+    toast_pick_first: 'Vui lòng chọn set và đồ uống trước.',
+    toast_complete_menu: 'Cần chọn xong menu cho tất cả khách trước khi thanh toán.',
+    err_name: 'Vui lòng nhập họ tên.',
+    err_phone: 'SĐT phải bắt đầu 0 và có 10–11 số.',
+    err_email: 'Email chưa đúng định dạng.',
+    date_lbl: 'Ngày',
+    table_lbl: 'Bàn',
+    guests_lbl: 'Số khách',
+    amount_lbl: 'Tổng tiền',
+    total_lbl: 'Tổng cộng',
+    people: 'người',
+    person: 'người',
+    sending: 'Đang gửi...',
+    conflict_communal: 'Tiếc quá! Bàn {name} không còn đủ ghế trống (vừa có người khác đặt). Bạn chọn lại nhé.',
+    conflict_table: 'Tiếc quá! Bàn {name} vừa có người đặt. Bạn chọn bàn khác nhé.',
+    toast_sync_err: 'Lỗi đồng bộ với server — chỗ của bạn được lưu tạm. Vui lòng liên hệ Hanoi Neighbors.',
+    toast_sent: 'Yêu cầu đã được gửi!',
+    toast_saved: 'Đã lưu yêu cầu (cần xác nhận với Hanoi Neighbors).',
+    unit_hour: 'giờ', unit_min: 'phút', unit_sec: 'giây', zero_min: '0 phút',
+    countdown_expired: 'Hết thời gian giữ chỗ. Liên hệ Hanoi Neighbors nếu bạn đã chuyển khoản.',
+    countdown_left: 'Còn {time} để Hanoi Neighbors xác nhận.',
+    checking: 'Đang kiểm tra...',
+    status_confirmed: '<b>Đã xác nhận!</b> Hẹn gặp bạn tại sự kiện.',
+    status_pending: 'Đang chờ xác nhận.',
+    code_lbl: 'Mã',
+    status_pending_msg: 'Hanoi Neighbors sẽ kiểm tra và confirm trong 8 tiếng. Còn {time}.',
+    cancel_this: 'Huỷ đặt chỗ này',
+    status_expired: '<b>Đã hết hạn.</b> Mã <b>{code}</b> không được Hanoi Neighbors xác nhận trong {h} giờ. Vui lòng liên hệ Hanoi Neighbors.',
+    status_notfound: 'Không tìm thấy mã <b>{code}</b>. Kiểm tra lại hoặc liên hệ Hanoi Neighbors.',
+    cancel_title: 'Huỷ đặt chỗ {code}?',
+    cancel_body: 'Sau khi huỷ, bàn sẽ được mở lại cho khách khác.',
+    cancel_confirm: 'Huỷ đặt chỗ',
+    cancel_dismiss: 'Không huỷ',
+    verify_title: 'Xác minh',
+    verify_body: 'Vui lòng nhập 4 số cuối SĐT đã dùng khi đặt chỗ.',
+    verify_ph: '4 số cuối',
+    verify_ok: 'Xác minh',
+    toast_cancelled: 'Đã huỷ đặt chỗ {code}',
+    toast_cancel_fail: 'Không huỷ được: {err}',
+    err_unknown: 'lỗi không xác định',
+    ok_default: 'Đồng ý',
+    cancel_default: 'Huỷ',
+    confirm_default: 'Xác nhận',
+    loading: 'Đang tải dữ liệu...',
+    toast_offline: 'Chưa cấu hình SHEET_URL — chạy ở chế độ offline',
+    toast_conn_err: 'Lỗi kết nối server, dữ liệu có thể chưa cập nhật.',
+    copied: 'Đã copy',
+    copy: 'Copy',
+    days: ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'],
+  },
+  en: {
+    page_title: 'Book a table',
+    select_date: 'Select a date',
+    check_status_title: 'Check booking status',
+    check_code_ph: 'Enter code (e.g. DD-A1B2C3)',
+    check_btn: 'Check',
+    guest_count: 'Number of guests',
+    guests_unit: 'guests',
+    back: '← Back',
+    to_map: 'Choose a table on the map',
+    choose_table: 'Choose a table on the map',
+    map_swipe_hint: '← Swipe to see Area A and Area B →',
+    legend_free: 'Available',
+    legend_selecting: 'Selecting',
+    legend_combine: 'Can combine',
+    legend_pending: 'Pending approval',
+    legend_booked: 'Booked',
+    legend_shared: 'Shared table · click each seat',
+    confirm_table: 'Confirm this table',
+    menu_card_wizard: 'Set menu for each guest',
+    menu_chosen: 'Selected menu',
+    edit: 'Edit',
+    subtotal_lbl: 'Total',
+    contact_info: 'Contact details',
+    name_lbl: 'Full name *',
+    name_ph: 'Your full name',
+    phone_lbl: 'Phone number *',
+    email_lbl: 'Email * <span style="font-weight:400;color:var(--text3);">(to receive confirmation)</span>',
+    email_ph: 'you@email.com',
+    note_lbl: 'Notes',
+    note_ph: 'Allergies, special requests...',
+    summary_pay: 'Summary & payment',
+    qr_after_phone: 'QR will appear after you enter your phone',
+    qr_enter_phone: 'Enter your phone to show the QR',
+    qr_error: 'QR failed to load — please transfer manually',
+    bank_lbl: 'Bank:',
+    bank_acc_lbl: 'Account number:',
+    bank_holder_lbl: 'Account holder:',
+    pay_ref_lbl: 'Transfer note:',
+    pay_total_lbl: 'Total to pay',
+    hold_note: 'Your seat is held for <b>8 hours</b> while Hanoi Neighbors confirms your payment. If it is not confirmed by then, the table is released. Please transfer with the exact note before tapping the button below.',
+    submit_btn: 'I have transferred — Submit booking',
+    back_to_map: '← Back to table map',
+    success_title: 'Your request has been sent!',
+    success_line1: 'Hanoi Neighbors will check your payment and confirm within 8 hours.',
+    success_line2: 'Save this code to check your booking status.',
+    print_btn: 'Print / Save PDF',
+    new_booking: 'New booking',
+    // dynamic
+    seats_taken: '{used}/{cap} booked',
+    sel_start: 'Tap a table to start selecting.',
+    n_seats_at: '{n} seat(s) {id}',
+    seat_word: 'seat(s)',
+    remove_seat: 'Remove 1 seat {id}',
+    add_seat: 'Add 1 seat {id}',
+    enough_guests: 'Enough for {n} guests.',
+    need_more_seats: '{n} more seat(s) needed — tap a shared table to add.',
+    too_many_seats: '{n} seat(s) over — tap − to remove.',
+    selected: 'Selected',
+    enough_for: 'enough for {n} guests.',
+    need_more_spots: '{n} more spot(s) needed.',
+    mismatch: "doesn't match {n} guests. Deselect and try again.",
+    toast_has_private: 'You already picked a private table. Deselect it to switch to a shared table.',
+    toast_table_full: 'Table {name} is full.',
+    toast_seats_full: 'Already {n} seat(s). Tap − to remove a seat first if you want to change.',
+    toast_table_taken: 'This table is already booked or pending approval.',
+    full: 'Full',
+    spots_left: '{n} spots left',
+    max_spots: 'Up to {n} spots left',
+    illustration: 'Illustration',
+    starter_lbl: 'Starter',
+    main_lbl: 'Main course',
+    dessert_lbl: 'Dessert',
+    drinks_lbl: 'Drink',
+    choose_drink_opt: '— Choose a drink —',
+    alcoholic: 'Alcoholic',
+    zero_alc: '0% alcohol',
+    drink_rule: 'Choose 1 of {n}',
+    pick_set_hint: 'Pick a set to see details and choose a drink.',
+    guest_n: 'Guest {n}',
+    guest_counter: 'Guest {a} / {b}',
+    back_map_short: '← Table map',
+    prev_guest: '← Guest {n}',
+    next_guest: 'Guest {n} →',
+    to_payment: 'Continue → Payment',
+    toast_pick_first: 'Please choose a set and a drink first.',
+    toast_complete_menu: 'Please finish the menu for all guests before payment.',
+    err_name: 'Please enter your full name.',
+    err_phone: 'Phone must start with 0 and have 10–11 digits.',
+    err_email: 'Email format is not valid.',
+    date_lbl: 'Date',
+    table_lbl: 'Table',
+    guests_lbl: 'Guests',
+    amount_lbl: 'Total amount',
+    total_lbl: 'Total',
+    people: 'guests',
+    person: 'guest',
+    sending: 'Sending...',
+    conflict_communal: 'So sorry! Table {name} no longer has enough free seats (just booked by someone else). Please choose again.',
+    conflict_table: 'So sorry! Table {name} was just booked. Please choose another table.',
+    toast_sync_err: 'Server sync error — your seat is saved locally. Please contact Hanoi Neighbors.',
+    toast_sent: 'Your request has been sent!',
+    toast_saved: 'Request saved (needs confirmation with Hanoi Neighbors).',
+    unit_hour: 'h', unit_min: 'min', unit_sec: 'sec', zero_min: '0 min',
+    countdown_expired: 'Hold time is up. Contact Hanoi Neighbors if you have already transferred.',
+    countdown_left: '{time} left for Hanoi Neighbors to confirm.',
+    checking: 'Checking...',
+    status_confirmed: '<b>Confirmed!</b> See you at the event.',
+    status_pending: 'Awaiting confirmation.',
+    code_lbl: 'Code',
+    status_pending_msg: 'Hanoi Neighbors will check and confirm within 8 hours. {time} left.',
+    cancel_this: 'Cancel this booking',
+    status_expired: '<b>Expired.</b> Code <b>{code}</b> was not confirmed by Hanoi Neighbors within {h} hours. Please contact Hanoi Neighbors.',
+    status_notfound: 'Code <b>{code}</b> not found. Please check again or contact Hanoi Neighbors.',
+    cancel_title: 'Cancel booking {code}?',
+    cancel_body: 'After cancelling, the table is reopened for other guests.',
+    cancel_confirm: 'Cancel booking',
+    cancel_dismiss: "Don't cancel",
+    verify_title: 'Verify',
+    verify_body: 'Please enter the last 4 digits of the phone number used to book.',
+    verify_ph: 'Last 4 digits',
+    verify_ok: 'Verify',
+    toast_cancelled: 'Booking {code} cancelled',
+    toast_cancel_fail: 'Could not cancel: {err}',
+    err_unknown: 'unknown error',
+    ok_default: 'OK',
+    cancel_default: 'Cancel',
+    confirm_default: 'Confirm',
+    loading: 'Loading data...',
+    toast_offline: 'SHEET_URL not configured — running in offline mode',
+    toast_conn_err: 'Server connection error, data may be out of date.',
+    copied: 'Copied',
+    copy: 'Copy',
+    days: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  },
+};
+// Đặt tên `tr` (không phải `t`) vì code cũ dùng biến cục bộ `t` cho object bàn.
+function tr(key, p) {
+  let s = (I18N[LANG] && I18N[LANG][key] != null) ? I18N[LANG][key] : null;
+  if (s == null) s = (I18N.vi[key] != null ? I18N.vi[key] : key);
+  if (p && typeof s === 'string') {
+    Object.keys(p).forEach(k => { s = s.split('{' + k + '}').join(p[k]); });
+  }
+  return s;
+}
+// Dịch tên khu ("Khu A" → "Area A") chỉ cho hiển thị khách khi EN.
+function roomName(room) {
+  if (LANG === 'en' && typeof room === 'string') return room.replace(/^Khu\s+/i, 'Area ');
+  return room;
+}
+function applyStaticI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = tr(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = tr(el.getAttribute('data-i18n-html')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.setAttribute('placeholder', tr(el.getAttribute('data-i18n-ph'))); });
+}
+function applyLang(lang) {
+  LANG = (lang === 'en') ? 'en' : 'vi';
+  try { localStorage.setItem('dd_lang', LANG); } catch (e) {}
+  document.documentElement.lang = LANG;
+  const btn = document.getElementById('lang-toggle');
+  if (btn) btn.textContent = (LANG === 'en') ? 'Tiếng Việt' : 'English';
+  applyStaticI18n();
+  rerenderForLang();
+}
+// Render lại phần customer đang hiển thị để chuỗi động đổi ngôn ngữ ngay.
+function rerenderForLang() {
+  try { renderDates(); } catch (e) {}
+  if (State.step === 2) { try { updateQtyHint(); } catch (e) {} }
+  if (State.step === 3) { try { updateMapStates(); } catch (e) {} }
+  if (State.step === 4) {
+    try {
+      renderMenuBanner();
+      if (State.menuMode === 'wizard') {
+        $('menu-card-lbl').textContent = tr('menu_card_wizard');
+        renderGuestRows();
+        renderMenuWizardNav();
+      } else {
+        $('menu-card-lbl').textContent = tr('menu_chosen');
+        renderMenuReview();
+        validateForm();
+      }
+    } catch (e) {}
+  }
+  if (State.step === 4 || State.step === 'success') {
+    if (State._successCreatedAt) { try { startCountdown(State._successCreatedAt); } catch (e) {} }
+  }
+  // Re-render status result nếu đang hiển thị
+  const sr = document.getElementById('status-result');
+  if (sr && !sr.classList.contains('hidden')) {
+    const code = (document.getElementById('check-code').value || '').trim();
+    if (code) { try { checkStatus(code); } catch (e) {} }
+  }
+}
 // ================================================================
 // Cải tiến v4.2 (so với v4):
 //  - Pull menu từ Sheet `Menus` qua State.menus (admin sửa menu không cần redeploy).
@@ -737,7 +1085,7 @@ function decodeGuestPick(raw, eventId) {
 //  - room = "Khu A" hoặc "Khu B" (thay cho "Gạch Bông"/"Sàn Gỗ" cũ).
 const ALL_TABLES = [
   // Khu A
-  { id: 'A1', name: 'A1', room: 'Khu A', cap: 6, minCap: 4, communal: false },
+  { id: 'A1', name: 'A1', room: 'Khu A', cap: 7, minCap: 6, communal: false },
   { id: 'A2', name: 'A2', room: 'Khu A', cap: 4, minCap: 1, communal: true  },
   { id: 'A3', name: 'A3', room: 'Khu A', cap: 4, minCap: 1, communal: true  },
   { id: 'A4', name: 'A4', room: 'Khu A', cap: 5, minCap: 4, communal: false },
@@ -875,11 +1223,11 @@ function buildMapSvg() {
         'font-size': 8,
         'text-anchor': 'middle',
       });
-      cap.textContent = '0/' + t.cap + ' đã đặt';
+      cap.textContent = tr('seats_taken', { used: 0, cap: t.cap });
       g.appendChild(cap);
     } else {
       // Bàn riêng — chỉ hiện cap label
-      const capStr = t.minCap === t.cap ? t.cap + ' khách' : (t.minCap + '–' + t.cap + ' khách');
+      const capStr = t.minCap === t.cap ? (t.cap + ' ' + tr('guests_unit')) : (t.minCap + '–' + t.cap + ' ' + tr('guests_unit'));
       const cap = make('text', {
         class: 'tbl-cap',
         x: cfg.x + cfg.w / 2, y: nameY + 18,
@@ -1048,13 +1396,15 @@ function normalizeBooking(r) {
 
 // === MODAL (thay native confirm/prompt) =========================
 // Modal Promise-based — đẹp + responsive trên mobile, dùng cho cancel/reject/delete.
-function modalConfirm({ title, body, confirmText = 'Đồng ý', cancelText = 'Huỷ', danger = false }) {
+function modalConfirm({ title, body, confirmText, cancelText, danger = false }) {
+  if (confirmText == null) confirmText = tr('ok_default');
+  if (cancelText == null) cancelText = tr('cancel_default');
   return new Promise(resolve => {
     const bd = document.createElement('div');
     bd.className = 'modal-backdrop';
     bd.innerHTML =
       '<div class="modal-card" role="dialog" aria-modal="true">' +
-        '<div class="modal-title">' + escapeHtml(title || 'Xác nhận') + '</div>' +
+        '<div class="modal-title">' + escapeHtml(title || tr('confirm_default')) + '</div>' +
         (body ? '<div class="modal-body">' + escapeHtml(body) + '</div>' : '') +
         '<div class="modal-actions">' +
           '<button type="button" class="modal-btn" data-mc="cancel">' + escapeHtml(cancelText) + '</button>' +
@@ -1075,7 +1425,8 @@ function modalConfirm({ title, body, confirmText = 'Đồng ý', cancelText = 'H
   });
 }
 
-function modalPrompt({ title, body, placeholder = '', inputType = 'text', okText = 'Xác nhận' }) {
+function modalPrompt({ title, body, placeholder = '', inputType = 'text', okText }) {
+  if (okText == null) okText = tr('confirm_default');
   return new Promise(resolve => {
     const bd = document.createElement('div');
     bd.className = 'modal-backdrop';
@@ -1085,7 +1436,7 @@ function modalPrompt({ title, body, placeholder = '', inputType = 'text', okText
         (body ? '<div class="modal-body">' + escapeHtml(body) + '</div>' : '') +
         '<input class="modal-input" type="' + inputType + '" placeholder="' + escapeHtml(placeholder) + '" autofocus>' +
         '<div class="modal-actions">' +
-          '<button type="button" class="modal-btn" data-mc="cancel">Huỷ</button>' +
+          '<button type="button" class="modal-btn" data-mc="cancel">' + escapeHtml(tr('cancel_default')) + '</button>' +
           '<button type="button" class="modal-btn primary" data-mc="ok">' + escapeHtml(okText) + '</button>' +
         '</div>' +
       '</div>';
@@ -1315,7 +1666,7 @@ function updateCommunalLabels() {
     const el = $('tbl-' + t.id);
     if (!el) return;
     const capText = el.querySelector('.tbl-comm-cap');
-    if (capText) capText.textContent = used + '/' + t.cap + ' đã đặt';
+    if (capText) capText.textContent = tr('seats_taken', { used: used, cap: t.cap });
   });
 }
 
@@ -1370,7 +1721,7 @@ function updateSelBar() {
   const hasNon  = hasNonCommunalSelection();
   if (!hasComm && !hasNon) {
     bar.className = 'sel-bar';
-    bar.textContent = 'Bấm vào bàn để bắt đầu chọn.';
+    bar.textContent = tr('sel_start');
     btn.disabled = true; return;
   }
   if (hasComm) {
@@ -1383,24 +1734,24 @@ function updateSelBar() {
         const tableOcc = occ[id] || 0;
         const canAdd = (tableOcc + Number(n)) < (t ? t.cap : 0) && totalCommunalPicked() < State.qty;
         return '<span class="comm-stepper">' +
-          '<span class="comm-stepper-label">' + n + ' ghế ' + id + '</span>' +
-          '<button class="comm-stepper-btn minus" data-action="comm-minus" data-table="' + id + '" aria-label="Bỏ 1 ghế ' + id + '">−</button>' +
-          '<button class="comm-stepper-btn" data-action="comm-plus" data-table="' + id + '" ' + (canAdd ? '' : 'disabled') + ' aria-label="Thêm 1 ghế ' + id + '">+</button>' +
+          '<span class="comm-stepper-label">' + tr('n_seats_at', { n: n, id: id }) + '</span>' +
+          '<button class="comm-stepper-btn minus" data-action="comm-minus" data-table="' + id + '" aria-label="' + tr('remove_seat', { id: id }) + '">−</button>' +
+          '<button class="comm-stepper-btn" data-action="comm-plus" data-table="' + id + '" ' + (canAdd ? '' : 'disabled') + ' aria-label="' + tr('add_seat', { id: id }) + '">+</button>' +
         '</span>';
       });
     const total = totalCommunalPicked();
     let statusText;
     if (total === State.qty) {
       bar.className = 'sel-bar ok';
-      statusText = 'Đủ ' + State.qty + ' khách.';
+      statusText = tr('enough_guests', { n: State.qty });
       btn.disabled = false;
     } else if (total < State.qty) {
       bar.className = 'sel-bar partial';
-      statusText = 'Còn thiếu ' + (State.qty - total) + ' ghế — bấm thêm vào bàn chung.';
+      statusText = tr('need_more_seats', { n: State.qty - total });
       btn.disabled = true;
     } else {
       bar.className = 'sel-bar partial';
-      statusText = 'Vượt ' + (total - State.qty) + ' ghế — bấm − để bỏ bớt.';
+      statusText = tr('too_many_seats', { n: total - State.qty });
       btn.disabled = true;
     }
     bar.innerHTML = '<div class="comm-steppers">' + steppers.join('') + '</div>' + statusText;
@@ -1409,17 +1760,18 @@ function updateSelBar() {
   // Non-communal mode
   const names = State.selectedTableIds.map(id => getTable(id).name).join(' + ');
   const mx = selectedMaxCap();
+  const selLabel = '<b>' + tr('selected') + ':</b> ' + names + ' — ';
   if (selectionValid()) {
     bar.className = 'sel-bar ok';
-    bar.innerHTML = '<b>Đã chọn:</b> ' + names + ' — đủ cho ' + State.qty + ' khách.';
+    bar.innerHTML = selLabel + tr('enough_for', { n: State.qty });
     btn.disabled = false;
   } else if (mx < State.qty) {
     bar.className = 'sel-bar partial';
-    bar.innerHTML = '<b>Đã chọn:</b> ' + names + ' — còn thiếu ' + (State.qty - mx) + ' chỗ.';
+    bar.innerHTML = selLabel + tr('need_more_spots', { n: State.qty - mx });
     btn.disabled = true;
   } else {
     bar.className = 'sel-bar partial';
-    bar.innerHTML = '<b>Đã chọn:</b> ' + names + ' — không khớp ' + State.qty + ' khách. Bỏ chọn và thử lại.';
+    bar.innerHTML = selLabel + tr('mismatch', { n: State.qty });
     btn.disabled = true;
   }
 }
@@ -1430,17 +1782,17 @@ function addCommunalSeat(tableId) {
   const t = getTable(tableId);
   if (!t || !t.communal) return;
   if (hasNonCommunalSelection()) {
-    toast('Bạn đã chọn bàn riêng. Bỏ chọn để chuyển sang bàn chung.', 'warn');
+    toast(tr('toast_has_private'), 'warn');
     return;
   }
   const occ = (communalOccupancy(State.date) || {})[tableId] || 0;
   const myPicks = Number(State.communalPicks[tableId] || 0);
   if (occ + myPicks >= t.cap) {
-    toast('Bàn ' + t.name + ' đã hết ghế.', 'warn');
+    toast(tr('toast_table_full', { name: t.name }), 'warn');
     return;
   }
   if (totalCommunalPicked() >= State.qty) {
-    toast('Đã đủ ' + State.qty + ' ghế. Bấm − để bỏ ghế trước nếu muốn đổi.', 'warn');
+    toast(tr('toast_seats_full', { n: State.qty }), 'warn');
     return;
   }
   State.communalPicks[tableId] = myPicks + 1;
@@ -1465,7 +1817,7 @@ function removeCommunalSeat(tableId) {
 function tableClick(id) {
   const taken = takenIds(State.date);
   if (taken.has(id)) {
-    toast('Bàn này đã có người đặt hoặc đang chờ duyệt.', 'warn');
+    toast(tr('toast_table_taken'), 'warn');
     return;
   }
   const t = getTable(id);
@@ -1507,8 +1859,12 @@ function fmtEventDate(iso) {
   const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return String(iso);
   const y = +m[1], mo = +m[2], d = +m[3];
-  const days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
-  return days[new Date(y, mo - 1, d).getDay()] + ', ' + d + '/' + mo + '/' + y;
+  const dow = new Date(y, mo - 1, d).getDay();
+  const dayName = tr('days')[dow];
+  if (LANG === 'en') {
+    return dayName + ', ' + d + ' ' + tr('months')[mo - 1] + ' ' + y;
+  }
+  return dayName + ', ' + d + '/' + mo + '/' + y;
 }
 
 // Lấy ngày diễn ra sự kiện dạng ISO YYYY-MM-DD.
@@ -1555,7 +1911,7 @@ function renderDates() {
     const isoDate = getEventDate(ev);
     const dateText = isoDate ? fmtEventDate(isoDate) : '';
     const dateLine = dateText ? '<span class="dd">' + escapeHtml(dateText) + '</span>' : '';
-    const seatLine = '<span class="ds">' + (full ? 'Hết chỗ' : totalCap + ' chỗ còn trống') + '</span>';
+    const seatLine = '<span class="ds">' + (full ? tr('full') : tr('spots_left', { n: totalCap })) + '</span>';
     btn.innerHTML =
       '<span class="dm">' + escapeHtml(ev.label) + '</span>' +
       dateLine +
@@ -1579,7 +1935,7 @@ function maxAvailQty() {
 }
 function updateQtyHint() {
   const max = maxAvailQty();
-  $('qty-hint').textContent = 'Tối đa ' + max + ' chỗ còn trống';
+  $('qty-hint').textContent = tr('max_spots', { n: max });
   $('qminus').disabled = State.qty <= 1;
   $('qplus').disabled = State.qty >= max;
 }
@@ -1665,7 +2021,7 @@ function renderMenuBanner() {
   $('menu-banner').innerHTML = (menu.sets || []).map(s => {
     const img = s.imageUrl
       ? '<div class="menu-card-img"><img src="' + s.imageUrl + '" alt="' + s.label + '" loading="lazy"></div>'
-      : '<div class="menu-card-img">Hình minh hoạ</div>';
+      : '<div class="menu-card-img">' + tr('illustration') + '</div>';
     return '<div class="menu-card">' + img +
       '<div class="menu-card-body">' +
         '<div class="menu-card-set">' + s.label + '</div>' +
@@ -1673,8 +2029,8 @@ function renderMenuBanner() {
       '</div></div>';
   }).join('');
   const sharedParts = [];
-  if (menu.sharedStarter) sharedParts.push('Khai vị: ' + menu.sharedStarter);
-  if (menu.sharedDessert) sharedParts.push('Tráng miệng: ' + menu.sharedDessert);
+  if (menu.sharedStarter) sharedParts.push(tr('starter_lbl') + ': ' + menu.sharedStarter);
+  if (menu.sharedDessert) sharedParts.push(tr('dessert_lbl') + ': ' + menu.sharedDessert);
   $('menu-shared').textContent = sharedParts.join(' · ');
   $('menu-shared').style.display = sharedParts.length ? '' : 'none';
 }
@@ -1706,18 +2062,18 @@ function renderGuestRows() {
   if (setObj) {
     // 2) Set detail
     const lines = [];
-    if (menu.sharedStarter) lines.push('<div><span class="gcard-dlbl">Khai vị</span> ' + escapeHtml(menu.sharedStarter) + '</div>');
-    lines.push('<div><span class="gcard-dlbl">Món chính</span> ' + escapeHtml(setObj.mainDish || '—') + '</div>');
-    if (menu.sharedDessert) lines.push('<div><span class="gcard-dlbl">Tráng miệng</span> ' + escapeHtml(menu.sharedDessert) + '</div>');
+    if (menu.sharedStarter) lines.push('<div><span class="gcard-dlbl">' + tr('starter_lbl') + '</span> ' + escapeHtml(menu.sharedStarter) + '</div>');
+    lines.push('<div><span class="gcard-dlbl">' + tr('main_lbl') + '</span> ' + escapeHtml(setObj.mainDish || '—') + '</div>');
+    if (menu.sharedDessert) lines.push('<div><span class="gcard-dlbl">' + tr('dessert_lbl') + '</span> ' + escapeHtml(menu.sharedDessert) + '</div>');
     detailHtml = '<div class="gcard-detail">' + lines.join('') + '</div>';
 
     // 3) Drink dropdown
     if (menu.drinks && menu.drinks.length) {
-      const opts = ['<option value="">— Chọn 1 đồ uống —</option>']
+      const opts = ['<option value="">' + tr('choose_drink_opt') + '</option>']
         .concat(menu.drinks.map(d => {
           let label = d.label;
-          if (d.type === 'cocktail')          label += ' · Có cồn';
-          else if (d.type === 'non-alcoholic') label += ' · 0% cồn';
+          if (d.type === 'cocktail')          label += ' · ' + tr('alcoholic');
+          else if (d.type === 'non-alcoholic') label += ' · ' + tr('zero_alc');
           return '<option value="' + escapeHtml(d.id) + '"' +
             (g.drink === d.id ? ' selected' : '') + '>' + escapeHtml(label) + '</option>';
         })).join('');
@@ -1727,27 +2083,27 @@ function renderGuestRows() {
         const chosen = menu.drinks.find(d => d.id === g.drink);
         if (chosen && chosen.type) {
           const cls = chosen.type === 'cocktail' ? 'badge-alcohol' : 'badge-zeroproof';
-          const txt = chosen.type === 'cocktail' ? 'Có cồn' : '0% cồn';
+          const txt = chosen.type === 'cocktail' ? tr('alcoholic') : tr('zero_alc');
           badge = '<span class="gcard-drink-badge ' + cls + '">' + txt + '</span>';
         }
       }
       // Rule text (vd "Chọn 1 trong 5") đưa vào ngay cạnh label đồ uống thay vì trên đầu menu —
       // tránh khách nhầm là rule áp dụng cho việc chọn set.
-      const ruleInline = menu.drinkRule
-        ? ' <span style="color:var(--text3);font-weight:400;font-size:11px;">· ' + escapeHtml(menu.drinkRule) + '</span>'
+      const ruleInline = (menu.drinks && menu.drinks.length)
+        ? ' <span style="color:var(--text3);font-weight:400;font-size:11px;">· ' + escapeHtml(tr('drink_rule', { n: menu.drinks.length })) + '</span>'
         : '';
       drinkHtml = '<div class="gcard-drink">' +
-        '<label class="il">Đồ uống <span class="il-req">*</span>' + ruleInline + '</label>' +
+        '<label class="il">' + tr('drinks_lbl') + ' <span class="il-req">*</span>' + ruleInline + '</label>' +
         '<select class="gsel" data-action="pick-drink" data-guest="' + i + '">' + opts + '</select>' +
         badge +
       '</div>';
     }
   } else {
-    detailHtml = '<div class="gcard-hint">Chọn 1 set để xem chi tiết và chọn đồ uống.</div>';
+    detailHtml = '<div class="gcard-hint">' + tr('pick_set_hint') + '</div>';
   }
 
   el.innerHTML = '<div class="gcard">' +
-    '<div class="gcard-hdr">Khách ' + (i + 1) + '</div>' +
+    '<div class="gcard-hdr">' + tr('guest_n', { n: i + 1 }) + '</div>' +
     '<div class="gcard-sets">' + setBtns + '</div>' +
     detailHtml +
     drinkHtml +
@@ -1765,7 +2121,7 @@ function currentGuestComplete() {
 
 // Render header của wizard: "Khách 2 / 4" + dots
 function renderMenuWizardNav() {
-  $('menu-wizard-counter').textContent = 'Khách ' + (State.menuStep + 1) + ' / ' + State.qty;
+  $('menu-wizard-counter').textContent = tr('guest_counter', { a: State.menuStep + 1, b: State.qty });
   const dots = Array.from({ length: State.qty }, (_, i) => {
     const g = State.guestSelections[i];
     const done = g && g.set && (!getEventMenu(State.date).drinks?.length || g.drink);
@@ -1778,17 +2134,17 @@ function renderMenuWizardNav() {
   // Buttons
   const prevBtn = $('menu-prev-btn');
   const nextBtn = $('menu-next-btn');
-  prevBtn.textContent = State.menuStep === 0 ? '← Sơ đồ bàn' : '← Khách ' + State.menuStep;
+  prevBtn.textContent = State.menuStep === 0 ? tr('back_map_short') : tr('prev_guest', { n: State.menuStep });
   nextBtn.textContent = State.menuStep < State.qty - 1
-    ? 'Khách ' + (State.menuStep + 2) + ' →'
-    : 'Tiếp tục → Thanh toán';
+    ? tr('next_guest', { n: State.menuStep + 2 })
+    : tr('to_payment');
   nextBtn.disabled = !currentGuestComplete();
 }
 
 // Bấm Tiếp / Trước
 function menuNext() {
   if (!currentGuestComplete()) {
-    toast('Vui lòng chọn set và đồ uống trước.', 'warn');
+    toast(tr('toast_pick_first'), 'warn');
     return;
   }
   if (State.menuStep < State.qty - 1) {
@@ -1824,7 +2180,7 @@ function enterMenuWizard(stepIdx) {
   $('menu-wizard').classList.remove('hidden');
   $('menu-review').classList.add('hidden');
   $('info-payment-wrap').classList.add('hidden');
-  $('menu-card-lbl').textContent = 'Set menu cho từng khách';
+  $('menu-card-lbl').textContent = tr('menu_card_wizard');
   renderGuestRows();
   renderMenuWizardNav();
 }
@@ -1832,14 +2188,14 @@ function enterMenuWizard(stepIdx) {
 // Chuyển sang mode payment (đã chọn xong tất cả khách)
 function enterMenuPayment() {
   if (!step4MenuComplete()) {
-    toast('Cần chọn xong menu cho tất cả khách trước khi thanh toán.', 'warn');
+    toast(tr('toast_complete_menu'), 'warn');
     return;
   }
   State.menuMode = 'payment';
   $('menu-wizard').classList.add('hidden');
   $('menu-review').classList.remove('hidden');
   $('info-payment-wrap').classList.remove('hidden');
-  $('menu-card-lbl').textContent = 'Menu đã chọn';
+  $('menu-card-lbl').textContent = tr('menu_chosen');
   renderMenuReview();
   validateForm();
   // Scroll xuống phần info để khách thấy tiếp
@@ -1866,7 +2222,7 @@ function renderMenuReview() {
       ? escapeHtml(setName) + '<br><span style="color:var(--text2);font-weight:400;font-size:12px;">' + escapeHtml(drinkName) + '</span>'
       : escapeHtml(setName);
     return '<div class="ms-row">' +
-      '<span class="ms-name">Khách ' + (i + 1) + '</span>' +
+      '<span class="ms-name">' + tr('guest_n', { n: i + 1 }) + '</span>' +
       '<span class="ms-pick">' + pickHtml + '</span>' +
     '</div>';
   }).join('');
@@ -1880,11 +2236,11 @@ function renderStep4Menu() {
   if (hasCommunalSelection()) {
     const parts = Object.entries(State.communalPicks)
       .filter(([_, n]) => Number(n) > 0)
-      .map(([id, n]) => '<b>' + n + ' ghế ' + id + '</b>');
+      .map(([id, n]) => '<b>' + tr('n_seats_at', { n: n, id: id }) + '</b>');
     $('recap-bar').innerHTML = parts.join(' &nbsp;+&nbsp; ');
   } else {
     $('recap-bar').innerHTML = State.selectedTableIds.map(id => {
-      const t = getTable(id); return '<b>' + t.name + '</b> · ' + t.room;
+      const t = getTable(id); return '<b>' + t.name + '</b> · ' + roomName(t.room);
     }).join(' &nbsp;+&nbsp; ');
   }
   // Đảm bảo guestSelections có đúng số phần tử
@@ -1928,9 +2284,9 @@ function validateForm() {
   State.note  = $('inp-note').value.trim();
 
   const errors = {};
-  if (!State.name) errors.name = 'Vui lòng nhập họ tên.';
-  if (!RE_PHONE.test(State.phone)) errors.phone = 'SĐT phải bắt đầu 0 và có 10–11 số.';
-  if (!RE_EMAIL.test(State.email)) errors.email = 'Email chưa đúng định dạng.';
+  if (!State.name) errors.name = tr('err_name');
+  if (!RE_PHONE.test(State.phone)) errors.phone = tr('err_phone');
+  if (!RE_EMAIL.test(State.email)) errors.email = tr('err_email');
 
   ['name','phone','email'].forEach(f => {
     const inp = $('inp-' + f); const err = $('err-' + f);
@@ -1957,14 +2313,14 @@ function renderQR() {
   $('bank-name').textContent = CONFIG.BANK.name;
   $('bank-acc').textContent  = CONFIG.BANK.account;
   $('bank-holder').textContent = CONFIG.BANK.holder;
-  if (!State.ref) { box.innerHTML = '<span class="qr-spin">Nhập SĐT để hiện QR</span>'; return; }
+  if (!State.ref) { box.innerHTML = '<span class="qr-spin">' + tr('qr_enter_phone') + '</span>'; return; }
   const amount = getTotal();
   const url = 'https://img.vietqr.io/image/' +
     CONFIG.BANK.bin + '-' + CONFIG.BANK.account + '-compact2.png' +
     '?amount=' + amount +
     '&addInfo=' + encodeURIComponent(State.ref) +
     '&accountName=' + encodeURIComponent(CONFIG.BANK.holder);
-  box.innerHTML = '<img src="' + url + '" alt="VietQR" loading="lazy" onerror="this.parentElement.innerHTML=\'<span class=qr-spin>Lỗi tải QR — vui lòng chuyển khoản thủ công</span>\'">';
+  box.innerHTML = '<img src="' + url + '" alt="VietQR" loading="lazy" onerror="this.parentElement.innerHTML=\'<span class=qr-spin>' + tr('qr_error') + '</span>\'">';
 }
 
 function renderSummary() {
@@ -1975,9 +2331,9 @@ function renderSummary() {
     if (!t) return '';
     if (t.communal) {
       const n = Number(State.communalPicks[id] || 0);
-      return n + ' ghế ' + t.name + ' (' + t.room + ')';
+      return n + ' ' + tr('seat_word') + ' ' + t.name + ' (' + roomName(t.room) + ')';
     }
-    return t.name + ' (' + t.room + ')';
+    return t.name + ' (' + roomName(t.room) + ')';
   }).join(' + ');
   const menuLines = State.guestSelections.map((g, i) => {
     const setObj   = (menu.sets   || []).find(s => s.id === g.set);
@@ -1985,25 +2341,25 @@ function renderSummary() {
     const parts = [];
     parts.push(setObj ? setObj.label : '—');
     if (drinkObj) parts.push(drinkObj.label);
-    return '<div class="srow"><span class="sl">Khách ' + (i+1) + '</span><span class="sv">' + parts.join(' · ') + '</span></div>';
+    return '<div class="srow"><span class="sl">' + tr('guest_n', { n: i+1 }) + '</span><span class="sv">' + parts.join(' · ') + '</span></div>';
   }).join('');
   // Hiển thị ngày diễn ra (lookup từ ev.date hoặc suy ra từ id), không hiển thị label sự kiện.
   // Label thường là tên kiểu 'Fiona & BDchile' → khách đã biết qua banner; ô "Ngày" chỉ cần ngày.
   const isoDate = ev ? getEventDate(ev) : '';
   const dateText = isoDate ? fmtEventDate(isoDate) : (ev ? ev.label : '—');
   $('summary').innerHTML =
-    '<div class="srow"><span class="sl">Ngày</span><span class="sv">' + escapeHtml(dateText) + '</span></div>' +
-    '<div class="srow"><span class="sl">Bàn</span><span class="sv">' + escapeHtml(tablesStr) + '</span></div>' +
-    '<div class="srow"><span class="sl">Số khách</span><span class="sv">' + State.qty + ' người · ' + fmt(getEventPrice()) + '/người</span></div>' +
+    '<div class="srow"><span class="sl">' + tr('date_lbl') + '</span><span class="sv">' + escapeHtml(dateText) + '</span></div>' +
+    '<div class="srow"><span class="sl">' + tr('table_lbl') + '</span><span class="sv">' + escapeHtml(tablesStr) + '</span></div>' +
+    '<div class="srow"><span class="sl">' + tr('guests_lbl') + '</span><span class="sv">' + State.qty + ' ' + tr('people') + ' · ' + fmt(getEventPrice()) + '/' + tr('person') + '</span></div>' +
     menuLines +
-    '<div class="srow"><span class="sl">Tổng cộng</span><span class="sv" style="color:#7B6550;">' + fmt(getTotal()) + '</span></div>';
+    '<div class="srow"><span class="sl">' + tr('total_lbl') + '</span><span class="sv" style="color:#7B6550;">' + fmt(getTotal()) + '</span></div>';
 }
 
 // === SUBMIT BOOKING =============================================
 async function submitBooking(btn) {
   if (btn.disabled) return;
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Đang gửi...';
+  btn.innerHTML = '<span class="spinner"></span> ' + tr('sending');
 
   // Sync lại trước khi gửi để tránh đặt trùng
   await syncFromSheet();
@@ -2023,11 +2379,11 @@ async function submitBooking(btn) {
   if (conflict) {
     const ct = getTable(conflict);
     const msg = ct && ct.communal
-      ? 'Tiếc quá! Bàn ' + ct.name + ' không còn đủ ghế trống (vừa có người khác đặt). Bạn chọn lại nhé.'
-      : 'Tiếc quá! Bàn ' + (ct ? ct.name : conflict) + ' vừa có người đặt. Bạn chọn bàn khác nhé.';
+      ? tr('conflict_communal', { name: ct.name })
+      : tr('conflict_table', { name: (ct ? ct.name : conflict) });
     toast(msg, 'err', 5000);
     btn.disabled = false;
-    btn.textContent = 'Đã chuyển khoản — Gửi đặt chỗ';
+    btn.textContent = tr('submit_btn');
     goStep(3);
     return;
   }
@@ -2105,7 +2461,7 @@ async function submitBooking(btn) {
     }
     serverOk = res && res.ok === true;
     if (!serverOk) {
-      toast('Lỗi đồng bộ với server — chỗ của bạn được lưu tạm. Vui lòng liên hệ Hanoi Neighbors.', 'warn', 6000);
+      toast(tr('toast_sync_err'), 'warn', 6000);
     }
   }
 
@@ -2114,6 +2470,8 @@ async function submitBooking(btn) {
 
   // Show success
   $('ok-code').textContent = code;
+  State.step = 'success';
+  State._successCreatedAt = booking.createdAt;
   startCountdown(booking.createdAt);
   for (let i = 1; i <= 4; i++) {
     const el = $('s'+i); el.classList.remove('a'); el.classList.add('d');
@@ -2121,19 +2479,19 @@ async function submitBooking(btn) {
   ['step-1','step-2','step-3','step-4'].forEach(id => $(id).classList.add('hidden'));
   const s = $('step-success');
   s.classList.remove('hidden'); setTimeout(() => s.classList.add('fade'), 10);
-  toast(serverOk ? 'Yêu cầu đã được gửi!' : 'Đã lưu yêu cầu (cần xác nhận với Hanoi Neighbors).', serverOk ? 'ok' : 'warn');
+  toast(serverOk ? tr('toast_sent') : tr('toast_saved'), serverOk ? 'ok' : 'warn');
 }
 
 // Format thời gian còn lại: "5 giờ 23 phút" / "45 phút" / "12 phút 30 giây" tuỳ độ dài.
 function formatRemainTime(ms) {
-  if (ms <= 0) return '0 phút';
+  if (ms <= 0) return tr('zero_min');
   const totalSec = Math.floor(ms / 1000);
   const h = Math.floor(totalSec / 3600);
   const m = Math.floor((totalSec % 3600) / 60);
   const s = totalSec % 60;
-  if (h > 0) return h + ' giờ ' + m + ' phút';
-  if (m > 0) return m + ' phút' + (m < 10 ? ' ' + s + ' giây' : '');
-  return s + ' giây';
+  if (h > 0) return h + ' ' + tr('unit_hour') + ' ' + m + ' ' + tr('unit_min');
+  if (m > 0) return m + ' ' + tr('unit_min') + (m < 10 ? ' ' + s + ' ' + tr('unit_sec') : '');
+  return s + ' ' + tr('unit_sec');
 }
 
 function startCountdown(createdAt) {
@@ -2142,10 +2500,10 @@ function startCountdown(createdAt) {
   function tick() {
     const remain = expireAt - Date.now();
     if (remain <= 0) {
-      $('ok-countdown').textContent = 'Hết thời gian giữ chỗ. Liên hệ Hanoi Neighbors nếu bạn đã chuyển khoản.';
+      $('ok-countdown').textContent = tr('countdown_expired');
       clearInterval(State.countdownTimer); return;
     }
-    $('ok-countdown').textContent = 'Còn ' + formatRemainTime(remain) + ' để Hanoi Neighbors xác nhận.';
+    $('ok-countdown').textContent = tr('countdown_left', { time: formatRemainTime(remain) });
   }
   tick();
   // Tick 30s/lần là đủ với TTL 8h (không cần tick mỗi giây).
@@ -2156,11 +2514,11 @@ function startCountdown(createdAt) {
 // Render block chi tiết booking (ngày + bàn + qty + tổng tiền). Dùng cho cả pending và confirmed.
 function statusDetailHtml(b) {
   const lines = [];
-  if (b.eventLabel) lines.push(['Ngày', escapeHtml(b.eventLabel)]);
-  if (b.comboLabel) lines.push(['Bàn', escapeHtml(b.comboLabel)]);
-  if (b.qty)        lines.push(['Số khách', escapeHtml(String(b.qty)) + ' người']);
-  if (b.total)      lines.push(['Tổng tiền', fmt(b.total)]);
-  if (b.note)       lines.push(['Ghi chú', escapeHtml(b.note)]);
+  if (b.eventLabel) lines.push([tr('date_lbl'), escapeHtml(b.eventLabel)]);
+  if (b.comboLabel) lines.push([tr('table_lbl'), escapeHtml(b.comboLabel)]);
+  if (b.qty)        lines.push([tr('guests_lbl'), escapeHtml(String(b.qty)) + ' ' + tr('people')]);
+  if (b.total)      lines.push([tr('amount_lbl'), fmt(b.total)]);
+  if (b.note)       lines.push([tr('note_lbl'), escapeHtml(b.note)]);
   if (!lines.length) return '';
   return '<div class="status-detail">' + lines.map(([l, v]) =>
     '<div class="sd-row"><span class="sd-lbl">' + l + '</span><span class="sd-val">' + v + '</span></div>'
@@ -2175,13 +2533,13 @@ async function checkStatus(codeArg) {
 
   resultEl.classList.remove('hidden');
   resultEl.className = 'status-result status-notfound';
-  resultEl.textContent = 'Đang kiểm tra...';
+  resultEl.textContent = tr('checking');
 
   await syncFromSheet();
   const confirmed = State.confirmed.find(b => b.code === code);
   if (confirmed) {
     resultEl.className = 'status-result status-confirmed';
-    resultEl.innerHTML = '<b>Đã xác nhận!</b> Hẹn gặp bạn tại sự kiện.' +
+    resultEl.innerHTML = tr('status_confirmed') +
       statusDetailHtml(confirmed);
     return;
   }
@@ -2193,41 +2551,41 @@ async function checkStatus(codeArg) {
     const ageMs = Date.now() - new Date(pending.createdAt).getTime();
     const remainMs = Math.max(0, CONFIG.PENDING_TTL_MIN * 60 * 1000 - ageMs);
     resultEl.className = 'status-result status-pending';
-    resultEl.innerHTML = '<b>Đang chờ xác nhận.</b> Mã: ' + escapeHtml(code) +
-      '<br>Hanoi Neighbors sẽ kiểm tra và confirm trong 8 tiếng. Còn ' + formatRemainTime(remainMs) + '.' +
+    resultEl.innerHTML = '<b>' + tr('status_pending') + '</b> ' + tr('code_lbl') + ': ' + escapeHtml(code) +
+      '<br>' + tr('status_pending_msg', { time: formatRemainTime(remainMs) }) +
       statusDetailHtml(pending) +
-      '<br><button class="btn-cancel-mini" data-action="cancel-booking" data-code="' + escapeHtml(code) + '">Huỷ đặt chỗ này</button>';
+      '<br><button class="btn-cancel-mini" data-action="cancel-booking" data-code="' + escapeHtml(code) + '">' + tr('cancel_this') + '</button>';
     return;
   }
   if (pending && isExpired(pending)) {
     resultEl.className = 'status-result status-cancelled';
-    resultEl.innerHTML = '<b>Đã hết hạn.</b> Mã <b>' + escapeHtml(code) + '</b> không được Hanoi Neighbors xác nhận trong ' + (CONFIG.PENDING_TTL_MIN / 60) + ' giờ. Vui lòng liên hệ Hanoi Neighbors.';
+    resultEl.innerHTML = tr('status_expired', { code: escapeHtml(code), h: (CONFIG.PENDING_TTL_MIN / 60) });
     return;
   }
   resultEl.className = 'status-result status-notfound';
-  resultEl.innerHTML = 'Không tìm thấy mã <b>' + escapeHtml(code) + '</b>. Kiểm tra lại hoặc liên hệ Hanoi Neighbors.';
+  resultEl.innerHTML = tr('status_notfound', { code: escapeHtml(code) });
 }
 
 async function cancelBooking(code) {
   const ok = await modalConfirm({
-    title: 'Huỷ đặt chỗ ' + code + '?',
-    body: 'Sau khi huỷ, bàn sẽ được mở lại cho khách khác.',
-    confirmText: 'Huỷ đặt chỗ',
-    cancelText: 'Không huỷ',
+    title: tr('cancel_title', { code: code }),
+    body: tr('cancel_body'),
+    confirmText: tr('cancel_confirm'),
+    cancelText: tr('cancel_dismiss'),
     danger: true,
   });
   if (!ok) return;
   const phone = await modalPrompt({
-    title: 'Xác minh',
-    body: 'Vui lòng nhập 4 số cuối SĐT đã dùng khi đặt chỗ.',
-    placeholder: '4 số cuối',
+    title: tr('verify_title'),
+    body: tr('verify_body'),
+    placeholder: tr('verify_ph'),
     inputType: 'tel',
-    okText: 'Xác minh',
+    okText: tr('verify_ok'),
   });
   if (!phone) return;
   const res = await api('cancel', { code, phoneLast4: phone }, { method: 'POST' });
   if (res && res.ok) {
-    toast('Đã huỷ đặt chỗ ' + code, 'ok');
+    toast(tr('toast_cancelled', { code: code }), 'ok');
     // Cập nhật local
     localStorage.setItem(CONFIG.KEY_PENDING_LOCAL,
       JSON.stringify(loadPendingLocal().filter(b => b.code !== code)));
@@ -2235,7 +2593,7 @@ async function cancelBooking(code) {
     renderDates();
     checkStatus(code);
   } else {
-    toast('Không huỷ được: ' + (res && res.error || 'lỗi không xác định'), 'err');
+    toast(tr('toast_cancel_fail', { err: (res && res.error) || tr('err_unknown') }), 'err');
   }
 }
 
@@ -2709,6 +3067,7 @@ document.addEventListener('click', async (e) => {
   const t = e.target.closest('[data-action]');
   if (t) {
     const action = t.dataset.action;
+    if (action === 'toggle-lang') return applyLang(LANG === 'en' ? 'vi' : 'en');
     if (action === 'admin-tap') return adminTap(t);
     if (action === 'check-admin') return checkAdmin();
     if (action === 'logout-admin') return logoutAdmin();
@@ -2757,8 +3116,8 @@ document.addEventListener('click', async (e) => {
   if (copy) {
     const text = $(copy.dataset.copy).textContent;
     navigator.clipboard.writeText(text).then(() => {
-      copy.classList.add('copied'); copy.textContent = 'Đã copy';
-      setTimeout(() => { copy.classList.remove('copied'); copy.textContent = 'Copy'; }, 1500);
+      copy.classList.add('copied'); copy.textContent = tr('copied');
+      setTimeout(() => { copy.classList.remove('copied'); copy.textContent = tr('copy'); }, 1500);
     });
   }
 });
@@ -2812,17 +3171,22 @@ document.addEventListener('visibilitychange', () => {
 
 // === INIT =======================================================
 async function init() {
-  $('date-grid').innerHTML = '<div class="loading-msg">Đang tải dữ liệu...</div>';
+  // Áp ngôn ngữ đã lưu (VI mặc định) trước khi render text tĩnh.
+  applyStaticI18n();
+  document.documentElement.lang = LANG;
+  const _langBtn = document.getElementById('lang-toggle');
+  if (_langBtn) _langBtn.textContent = (LANG === 'en') ? 'Tiếng Việt' : 'English';
+  $('date-grid').innerHTML = '<div class="loading-msg">' + tr('loading') + '</div>';
   // Render sơ đồ SVG động từ TABLE_LAYOUT (1 lần khi load page).
   buildMapSvg();
   setupMapScrollHints();
   if (!hasSheetUrl()) {
-    toast('Chưa cấu hình SHEET_URL — chạy ở chế độ offline', 'warn', 5000);
+    toast(tr('toast_offline'), 'warn', 5000);
   }
   try {
     await syncFromSheet();
   } catch (e) {
-    toast('Lỗi kết nối server, dữ liệu có thể chưa cập nhật.', 'warn');
+    toast(tr('toast_conn_err'), 'warn');
   }
   renderDates();
 
