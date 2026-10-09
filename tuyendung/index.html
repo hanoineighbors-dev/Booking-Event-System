@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanoi Neighbors - Tuyển dụng</title>
+<meta name="description" content="Hanoi Neighbors không chỉ là quán cà phê - đó là những &quot;hood&quot; nhỏ giữa lòng Hà Nội, nơi tụi mình tin vào sự tử tế, chân thành và những cuộc gặp gỡ đáng nhớ.">
+<meta property="og:title" content="Hanoi Neighbors - Tuyển dụng">
+<meta property="og:description" content="Chúng mình đang tìm kiếm những &quot;người hàng xóm&quot; mới. Mời bạn đọc và điền form ứng tuyển nhé!">
+<meta property="og:type" content="website">
+<!-- Ảnh hiện khi chia sẻ link lên Facebook -->
+<meta property="og:image" content="https://hanoineighbors.com/images/facade_night.jpg">
+<meta property="og:url" content="https://hanoineighbors.com/tuyendung/">
+<meta name="theme-color" content="#1A1A18">
+<link rel="icon" type="image/png" href="../images/logo-doc.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Playfair Display + Be Vietnam Pro: cả hai đều có đủ dấu tiếng Việt -->
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,600&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1A1A18;
+    --cream:#FAF7F2;
+    --gold:#D4B282;
+    --terracotta:#B85C38;
+    --moss:#5C6B4A;
+    --stone:#C8BFAF;
+    --paper:#FFFDF9;
+    --ink-soft:#57524A;
+    --line:#E6DDCF;
+    --tint-gold:#F4EADB;
+    --tint-moss:#E7EADF;
+    --tint-terra:#F5E3DA;
+    --radius:16px;
+    --serif:"Playfair Display", Georgia, "Times New Roman", serif;
+    --sans:"Be Vietnam Pro", "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--cream);color:var(--charcoal);
+    font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  }
+  body.locked{overflow:hidden}
+  a{color:var(--terracotta)}
+  img{max-width:100%}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .narrow{max-width:820px}
+
+  /* ================= HERO ================= */
+  .hero{position:relative;background:var(--charcoal);color:var(--cream);overflow:hidden;padding:76px 0 68px}
+  .hero::before{
+    content:"";position:absolute;inset:-40% -10% auto auto;width:640px;height:640px;
+    background:radial-gradient(circle, rgba(212,178,130,.28) 0%, rgba(212,178,130,0) 65%);pointer-events:none;
+  }
+  .hero .wrap{position:relative}
+  .brand{display:block;width:210px;height:auto;margin:0 0 34px}
+  .hero h1{
+    font-family:var(--serif);font-weight:700;font-size:clamp(44px,8vw,80px);
+    line-height:1.02;margin:0 0 28px;letter-spacing:-.01em;
+  }
+  .hero h1 em{font-style:italic;font-weight:500;color:var(--gold)}
+  .intro p{margin:0 0 14px;max-width:660px;color:#E9E3D8;font-size:17px}
+  .intro .lead{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.5;color:var(--cream)}
+  .hotline{
+    display:inline-flex;align-items:center;gap:12px;margin-top:18px;padding:12px 18px;
+    border:1px solid rgba(212,178,130,.45);border-radius:999px;color:var(--cream);text-decoration:none;font-size:15px;
+    transition:background .2s,border-color .2s;
+  }
+  .hotline:hover{background:rgba(212,178,130,.12);border-color:var(--gold)}
+  .hotline svg{flex:none;color:var(--gold)}
+  .hotline b{color:var(--gold);font-weight:600}
+
+  /* ================= SECTION ================= */
+  section{padding:68px 0 8px}
+  .section-title{font-family:var(--serif);font-weight:700;font-size:clamp(26px,4vw,36px);line-height:1.2;margin:0 0 8px}
+  .section-note{color:var(--ink-soft);margin:0 0 30px}
+  .rule{width:56px;height:3px;background:var(--gold);border-radius:2px;margin:0 0 18px}
+
+  /* ================= JOB CARDS ================= */
+  .jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .job-card{
+    position:relative;display:flex;flex-direction:column;gap:14px;text-align:left;cursor:pointer;
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+    padding:24px 22px 22px;font:inherit;color:inherit;min-height:236px;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .25s, background .3s;
+  }
+  .job-card::before{ /* vệt màu ấm ở góc */
+    content:"";position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;
+    background:var(--tint);transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .job-card:nth-child(3n+1){--tint:var(--tint-gold);--ink:#9A7440}
+  .job-card:nth-child(3n+2){--tint:var(--tint-moss);--ink:var(--moss)}
+  .job-card:nth-child(3n+3){--tint:var(--tint-terra);--ink:var(--terracotta)}
+  .job-card:hover{transform:translateY(-6px);box-shadow:0 22px 40px -24px rgba(26,26,24,.45);border-color:var(--stone)}
+  .job-card:hover::before{transform:scale(1.35)}
+  .job-card:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .job-card > *{position:relative}
+  .job-card .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .job-card .no{font-family:var(--serif);font-style:italic;font-size:56px;line-height:.9;color:var(--ink)}
+  .job-card .role-ic{
+    width:54px;height:54px;border-radius:16px;background:var(--charcoal);color:var(--gold);
+    display:grid;place-items:center;flex:none;transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .job-card:hover .role-ic{transform:rotate(-8deg)}
+  .job-card .name{font-weight:700;font-size:17px;letter-spacing:.04em;margin:0;line-height:1.35}
+  .job-card .meta{display:flex;flex-wrap:wrap;gap:6px}
+  .job-card .chip{font-size:12.5px;line-height:1.3;padding:5px 10px;border-radius:999px;background:var(--cream);border:1px solid var(--line);white-space:nowrap}
+  .job-card .chip.pay{background:var(--charcoal);border-color:var(--charcoal);color:var(--cream);font-weight:600}
+  .job-card .more{
+    margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--terracotta);
+  }
+  .job-card .more svg{transition:transform .25s}
+  .job-card:hover .more svg{transform:translateX(4px)}
+
+  /* ================= MODAL ================= */
+  .modal{position:fixed;inset:0;z-index:1000;visibility:hidden}
+  .modal.open{visibility:visible}
+  .modal-backdrop{position:absolute;inset:0;background:rgba(20,20,18,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;transition:opacity .35s}
+  .modal.open .modal-backdrop{opacity:1}
+  .sheet{
+    position:absolute;top:28px;bottom:0;left:50%;width:min(1080px,100%);
+    background:var(--cream);border-radius:24px 24px 0 0;overflow-y:auto;overscroll-behavior:contain;
+    transform:translate(-50%,60px);opacity:0;transition:transform .45s cubic-bezier(.2,.8,.2,1), opacity .35s;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal.open .sheet{transform:translate(-50%,0);opacity:1}
+  .sheet-bar{position:sticky;top:0;height:0;z-index:20}
+  .close-btn{
+    position:absolute;top:16px;right:16px;width:48px;height:48px;border-radius:50%;border:0;cursor:pointer;
+    background:var(--charcoal);color:var(--cream);display:grid;place-items:center;
+    box-shadow:0 8px 22px -8px rgba(0,0,0,.5);transition:transform .25s, background .2s;
+  }
+  .close-btn:hover{transform:rotate(90deg);background:var(--terracotta)}
+  .close-btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
+  /* --- modal hero --- */
+  .m-hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:64px 56px 48px;position:relative}
+  .m-hero::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:68%;
+    background:linear-gradient(180deg,var(--tint-gold),rgba(244,234,219,0));pointer-events:none;
+  }
+  .polaroid{
+    position:relative;background:#fff;padding:12px 12px 46px;border-radius:4px;
+    box-shadow:0 30px 50px -28px rgba(26,26,24,.55),0 2px 6px rgba(26,26,24,.08);
+    transform:rotate(-2.5deg);
+  }
+  .polaroid img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--stone)}
+  .polaroid figcaption{
+    position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:var(--serif);font-style:italic;
+    color:var(--ink-soft);font-size:15px;
+  }
+  .tape{position:absolute;width:110px;height:28px;background:rgba(212,178,130,.55);top:-12px;left:50%;transform:translateX(-50%) rotate(3deg)}
+  .m-hero .txt{position:relative}
+  .m-eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--terracotta);margin-bottom:12px}
+  .m-title{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1.12;margin:0 0 22px}
+  .m-title small{display:block;font-size:.5em;letter-spacing:.18em;font-family:var(--sans);font-weight:600;color:var(--ink-soft);margin-bottom:6px}
+  .places{margin:0 0 22px;padding:0;list-style:none;display:grid;gap:8px}
+  .places li{display:flex;gap:10px;align-items:center;font-size:15.5px}
+  .places svg{color:var(--terracotta);flex:none}
+  .stats{display:grid;grid-template-columns:auto 1fr;gap:12px}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .stat small{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+  .stat b{font-family:var(--serif);font-size:28px;line-height:1.2}
+  .stat.pay{background:var(--charcoal);border-color:var(--charcoal);color:var(--cream)}
+  .stat.pay small{color:var(--gold)}
+  .stat.pay b{font-size:20px;display:block;margin-top:2px}
+
+  /* --- modal sections --- */
+  .m-sec{padding:44px 56px}
+  .m-sec + .m-sec{padding-top:12px}
+  .m-h{display:flex;align-items:baseline;gap:14px;margin:0 0 24px}
+  .m-h .idx{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:22px}
+  .m-h h3{font-family:var(--serif);font-weight:700;font-size:clamp(24px,3vw,32px);line-height:1.2;margin:0}
+  .split{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:start}
+  .split.rev{grid-template-columns:300px 1fr}
+  .split.rev > .side{order:-1}
+  .side .polaroid{transform:rotate(2deg);position:sticky;top:90px}
+  .split.rev .side .polaroid{transform:rotate(-2deg)}
+
+  .tasks{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .tasks.one{grid-template-columns:1fr}
+  .task{
+    position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 18px 18px 64px;
+    transition:transform .25s, box-shadow .25s, border-color .25s;
+  }
+  .task:hover{transform:translateY(-3px);box-shadow:0 14px 26px -20px rgba(26,26,24,.5);border-color:var(--stone)}
+  .task .num{
+    position:absolute;left:16px;top:16px;width:34px;height:34px;border-radius:50%;
+    background:var(--charcoal);color:var(--gold);display:grid;place-items:center;
+    font-family:var(--serif);font-style:italic;font-weight:600;font-size:17px;
+  }
+  .task strong{display:block;font-weight:700;margin-bottom:2px;line-height:1.4}
+  .task span{color:var(--ink-soft);font-size:15px}
+  .task.plain span{color:var(--charcoal);font-size:15.5px}
+
+  .shifts{display:flex;flex-wrap:wrap;gap:14px}
+  .shift{
+    flex:1 1 200px;display:flex;align-items:center;gap:16px;background:var(--charcoal);color:var(--cream);
+    border-radius:16px;padding:18px 20px;position:relative;overflow:hidden;
+  }
+  .shift::after{content:"";position:absolute;right:-30px;top:-30px;width:100px;height:100px;border-radius:50%;background:rgba(212,178,130,.14)}
+  .shift .ic{width:46px;height:46px;border-radius:50%;background:rgba(212,178,130,.18);color:var(--gold);display:grid;place-items:center;flex:none}
+  .shift small{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .shift b{font-family:var(--serif);font-size:24px;line-height:1.2}
+  .shift-notes{margin:16px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:10px}
+  .shift-notes li{background:var(--tint-gold);border-radius:999px;padding:7px 14px;font-size:14.5px}
+
+  .checks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+  .checks li{display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .checks .ck{width:36px;height:36px;border-radius:10px;background:var(--tint-moss);color:var(--moss);display:grid;place-items:center}
+  .checks strong{display:block;font-weight:700;line-height:1.4}
+  .checks span{color:var(--ink-soft)}
+  .checks li.plain span{color:var(--charcoal)}
+
+  .perk-group-label{font-family:var(--serif);font-style:italic;font-size:19px;margin:6px 0 12px;color:var(--terracotta)}
+  .perk-group + .perk-group{margin-top:26px}
+  .perks{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+  .perk{border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;transition:transform .25s}
+  .perk:hover{transform:translateY(-3px)}
+  .perk:nth-child(3n+1){background:var(--tint-gold)}
+  .perk:nth-child(3n+2){background:var(--tint-moss)}
+  .perk:nth-child(3n+3){background:var(--tint-terra)}
+  .perk .ic{width:42px;height:42px;border-radius:12px;background:var(--paper);display:grid;place-items:center;color:var(--charcoal)}
+  .perk strong{font-weight:700;line-height:1.35}
+  .perk span{font-size:15px;color:var(--ink-soft);line-height:1.5}
+  .perk.solo span{color:var(--charcoal);font-size:15.5px}
+  .perk.feature{grid-column:1/-1;background:var(--charcoal)!important;color:var(--cream);flex-direction:row;align-items:center;gap:18px;padding:22px}
+  .perk.feature .ic{background:rgba(212,178,130,.18);color:var(--gold);width:52px;height:52px;flex:none}
+  .perk.feature strong{display:block;color:var(--gold);font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+  .perk.feature span{display:block;color:var(--cream);font-family:var(--serif);font-size:clamp(20px,3vw,26px);line-height:1.3}
+
+  .why-photos{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-bottom:30px;padding:10px 6px}
+  .why-photos .polaroid{transform:rotate(-2deg)}
+  .why-photos .polaroid:nth-child(2){transform:rotate(2.5deg) translateY(14px)}
+  .why-photos .polaroid img{aspect-ratio:3/2}
+  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .why > div{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;position:relative}
+  .why > div::before{content:"";position:absolute;left:20px;top:0;width:40px;height:3px;background:var(--gold);border-radius:0 0 3px 3px}
+  .why b{display:block;font-family:var(--serif);font-size:19px;margin:4px 0 8px}
+  .why p{margin:0;color:var(--ink-soft);font-size:15.5px}
+  .why p strong{color:var(--charcoal)}
+
+  .sheet-cta{
+    position:sticky;bottom:0;z-index:15;padding:18px 56px 22px;
+    background:linear-gradient(180deg,rgba(250,247,242,0),var(--cream) 34%);
+    display:flex;justify-content:center;
+  }
+  .sheet-cta .inner{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;
+    background:var(--charcoal);color:var(--cream);border-radius:999px;padding:10px 10px 10px 26px;
+    box-shadow:0 18px 34px -20px rgba(0,0,0,.6);
+  }
+  .sheet-cta .lbl{font-size:14px;line-height:1.35}
+  .sheet-cta .lbl b{display:block;color:var(--gold);font-weight:600}
+  .apply-btn{
+    display:inline-flex;align-items:center;gap:10px;flex:none;
+    background:var(--terracotta);color:#fff;border:0;border-radius:999px;
+    padding:14px 24px;font:600 15px/1 var(--sans);cursor:pointer;transition:background .2s, transform .2s;
+  }
+  .apply-btn:hover{background:#9E4C2D;transform:translateY(-1px)}
+  .m-end{padding:10px 56px 40px;text-align:center;font-family:var(--serif);font-style:italic;font-size:22px;color:var(--ink-soft)}
+
+  /* reveal on scroll */
+  .rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1)}
+  .rv.in{opacity:1;transform:none}
+
+  /* ================= FORM ================= */
+  .form-card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:34px 30px;margin-top:6px}
+  .req-note{font-size:14px;color:var(--terracotta);margin:0 0 22px}
+  .field{margin:0 0 24px;border:0;padding:0;min-width:0}
+  .field > label, .field legend{display:block;font-weight:600;margin:0 0 10px;padding:0;font-size:16px;line-height:1.45}
+  .ast{color:var(--terracotta);margin-left:3px}
+  .field input[type=text], .field input[type=tel], .field input[type=date], .field select{
+    width:100%;font:16px/1.4 var(--sans);color:var(--charcoal);background:var(--cream);
+    border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;
+    transition:border-color .2s, box-shadow .2s, background .2s;-webkit-appearance:none;appearance:none;
+  }
+  .field select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%231A1A18' stroke-width='1.8'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;
+  }
+  .field input:focus, .field select:focus{outline:none;border-color:var(--gold);background:#fff;box-shadow:0 0 0 4px rgba(212,178,130,.25)}
+  .options{display:grid;gap:8px}
+  .opt{
+    position:relative;display:flex;align-items:center;gap:12px;cursor:pointer;
+    border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--cream);transition:border-color .2s, background .2s;
+  }
+  .opt:hover{border-color:var(--stone)}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt .mark{flex:none;width:20px;height:20px;border:1.8px solid var(--stone);background:#fff;display:grid;place-items:center;transition:all .15s}
+  .opt input[type=radio] + .mark{border-radius:50%}
+  .opt input[type=checkbox] + .mark{border-radius:5px}
+  .opt input:checked + .mark{border-color:var(--charcoal);background:var(--charcoal)}
+  .opt input[type=radio]:checked + .mark::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold)}
+  .opt input[type=checkbox]:checked + .mark::after{content:"";width:5px;height:10px;border:solid var(--gold);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .opt:has(input:checked){border-color:var(--charcoal);background:#fff}
+  .opt input:focus-visible + .mark{box-shadow:0 0 0 4px rgba(212,178,130,.4)}
+  .opt-text{font-size:15.5px}
+  .error{display:none;color:var(--terracotta);font-size:14px;margin-top:8px}
+  .field.invalid .error{display:block}
+  .field.invalid input[type=text], .field.invalid input[type=tel], .field.invalid input[type=date], .field.invalid .opt{border-color:var(--terracotta)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px}
+  .btn-submit{background:var(--charcoal);color:var(--cream);border:0;border-radius:999px;padding:15px 30px;font:600 16px/1 var(--sans);cursor:pointer;transition:background .2s, transform .2s}
+  .btn-submit:hover{background:#000;transform:translateY(-1px)}
+  .btn-submit[disabled]{opacity:.6;cursor:wait;transform:none}
+  .btn-clear{background:none;border:0;color:var(--ink-soft);font:500 15px/1 var(--sans);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:10px 6px}
+  .form-error{display:none;margin-top:16px;color:var(--terracotta);font-size:15px}
+  .thanks{display:none;text-align:center;padding:30px 10px}
+  .thanks svg{color:var(--gold)}
+  .thanks h3{font-family:var(--serif);font-style:italic;font-weight:600;font-size:30px;margin:14px 0 8px}
+  .thanks p{color:var(--ink-soft);margin:0 auto;max-width:460px}
+  .form-card.done form{display:none}
+  .form-card.done .thanks{display:block}
+  .flash{animation:flash 1.4s ease}
+  @keyframes flash{0%{box-shadow:0 0 0 0 rgba(212,178,130,.0)}30%{box-shadow:0 0 0 8px rgba(212,178,130,.45)}100%{box-shadow:0 0 0 0 rgba(212,178,130,0)}}
+
+  /* ================= FOOTER ================= */
+  .closing{text-align:center;padding:64px 20px 72px}
+  .closing p{font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(24px,4vw,32px);margin:0}
+  .closing small{display:block;margin-top:14px;color:var(--ink-soft);font-size:14px}
+  .closing small a{color:inherit}
+  .closing-logo{display:block;width:96px;height:auto;margin:0 auto 26px;opacity:.9}
+  .sheet-logo{position:absolute;top:24px;left:56px;width:130px;height:auto;z-index:2}
+  @media (max-width:960px){ .sheet-logo{left:32px} }
+  @media (max-width:600px){ .sheet-logo{left:18px;top:20px;width:112px} }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width:960px){
+    .jobs{grid-template-columns:repeat(2,1fr)}
+    .m-hero{grid-template-columns:1fr;gap:34px;padding:72px 32px 32px}
+    .m-hero .photo{max-width:420px;margin:0 auto;width:100%}
+    .m-sec{padding:36px 32px}
+    .split, .split.rev{grid-template-columns:1fr}
+    .split.rev > .side{order:0}
+    .side{max-width:340px;margin:8px auto 0;width:100%}
+    .side .polaroid{position:relative;top:0}
+    .sheet-cta{padding:16px 32px 20px}
+    .m-end{padding:10px 32px 36px}
+  }
+  @media (max-width:600px){
+    .wrap{padding:0 16px}
+    .hero{padding:56px 0 48px}
+    .stamp{width:76px;height:76px;top:-34px;right:12px}
+    .hero h1{padding-right:0}
+    .hotline{border-radius:16px;align-items:flex-start}
+    .hotline svg{margin-top:3px}
+    .jobs{grid-template-columns:1fr;gap:14px}
+    .job-card{min-height:0;padding:20px 18px 18px;gap:12px}
+    .job-card .no{font-size:44px}
+    .job-card .role-ic{width:46px;height:46px;border-radius:14px}
+    .job-card .name{font-size:16px}
+    .sheet{top:0;border-radius:0}
+    .close-btn{top:12px;right:12px;width:44px;height:44px}
+    .m-hero{padding:72px 18px 24px;gap:26px}
+    .m-hero .photo{max-width:300px}
+    .m-hero .polaroid img{aspect-ratio:4/3}
+    .sheet-cta .lbl{display:none}
+    .sheet-cta .inner{background:none;box-shadow:none;padding:0}
+    .sheet-cta .apply-btn{width:100%;justify-content:center;padding:16px;font-size:15px;box-shadow:0 14px 28px -14px rgba(184,92,56,.7)}
+    .m-sec{padding:30px 18px}
+    .tasks{grid-template-columns:1fr}
+    .stats{grid-template-columns:1fr 1fr}
+    .stat.pay{grid-column:1/-1}
+    .perks{grid-template-columns:1fr 1fr;gap:10px}
+    .perk{padding:14px;gap:8px}
+    .perk .ic{width:36px;height:36px;border-radius:10px}
+    .perk span, .perk.solo span{font-size:14px}
+    .perk strong{font-size:14.5px}
+    .perk.feature{padding:18px;gap:14px}
+    .perk.feature .ic{width:44px;height:44px}
+    .why-photos{gap:14px;padding:4px 2px}
+    .sheet-cta{padding:14px 12px 14px}
+    .sheet-cta .inner{padding:8px 8px 8px 18px}
+    .sheet-cta .lbl{font-size:12.5px}
+    .apply-btn{padding:13px 16px;font-size:14px}
+    .m-end{padding:6px 18px 30px;font-size:19px}
+    .form-card{padding:26px 18px}
+    .btn-submit{width:100%}
+    .actions{justify-content:center}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+    .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap narrow">
+    <a href="../" aria-label="Hanoi Neighbors - Trang chủ"><img class="brand" src="../images/logo-white-ngang.png" alt="Hanoi Neighbors" width="760" height="252"></a>
+    <h1>Hanoi Neighbors - <em>Tuyển dụng</em></h1>
+
+    <div class="intro">
+      <p class="lead">Hanoi Neighbors không chỉ là quán cà phê - đó là những "hood" nhỏ giữa lòng Hà Nội, nơi tụi mình tin vào sự tử tế, chân thành và những cuộc gặp gỡ đáng nhớ.</p>
+      <p>Chúng mình đang tìm kiếm những "người hàng xóm" mới - những bạn trẻ dễ thương, nhiệt tình, thích giao tiếp và luôn muốn mang lại trải nghiệm tốt nhất cho khách hàng. Nếu bạn yêu thích không gian ấm cúng, thích làm việc trong môi trường trẻ trung, năng động và không ngại học hỏi, mời bạn đọc và điền form ứng tuyển bên dưới này nhé!</p>
+      <a class="hotline" href="tel:0936632040">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+        <span>Bạn có thể liên hệ với ban nhân sự Hanoi Neighbors qua Hotline: <b>093 663 2040</b> - Mrs Yến</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ===================== VỊ TRÍ ===================== -->
+<section id="vi-tri">
+  <div class="wrap">
+    <div class="rule"></div>
+    <h2 class="section-title">Mời bạn đọc kỹ thông tin các vị trí ứng tuyển trước khi Đăng ký phỏng vấn:</h2>
+    <p class="section-note">Bấm vào từng vị trí để xem chi tiết.</p>
+    <div class="jobs" id="jobGrid"><!-- thẻ vị trí được dựng từ dữ liệu JOBS bên dưới --></div>
+  </div>
+</section>
+
+<!-- ===================== FORM ===================== -->
+<section id="dang-ky">
+  <div class="wrap narrow">
+    <div class="rule"></div>
+    <h2 class="section-title">Đăng ký phỏng vấn</h2>
+
+    <div class="form-card" id="formCard">
+      <form id="applyForm" novalidate>
+        <p class="req-note">* Câu hỏi bắt buộc</p>
+
+        <div class="field" data-required="text">
+          <label for="f-name">Họ và tên<span class="ast">*</span></label>
+          <input type="text" id="f-name" name="entry.1373034010" autocomplete="name" placeholder="Câu trả lời của bạn">
+          <div class="error">Bạn điền giúp họ và tên nhé.</div>
+        </div>
+
+        <div class="field" data-required="date">
+          <label for="f-dob">Ngày sinh<span class="ast">*</span></label>
+          <input type="date" id="f-dob" autocomplete="bday" min="1950-01-01">
+          <div class="error">Bạn chọn giúp ngày sinh nhé.</div>
+        </div>
+
+        <div class="field">
+          <label for="f-school">Trình độ học vấn (Trường bạn đã/đang theo học)</label>
+          <input type="text" id="f-school" name="entry.788253091" placeholder="Câu trả lời của bạn">
+        </div>
+
+        <div class="field">
+          <label for="f-location">Cơ sở bạn chọn ứng tuyển?</label>
+          <select id="f-location" name="entry.1363220015">
+            <option value="">Chọn</option>
+            <option>Hanoi Neighbors Warm Hands - 114 Tuệ Tĩnh, Hai Bà Trưng</option>
+            <option>Hanoi Neighbors Big Hugs - 8 Nguyễn Thiếp, Ba Đình</option>
+            <!-- LƯU Ý: Google Form cũng phải có lựa chọn này, viết y hệt từng ký tự -->
+            <option>Sincerely, Hanoi Neighbors - 131 Hoàng Cầu</option>
+          </select>
+        </div>
+
+        <fieldset class="field" data-required="radio" id="positionField">
+          <legend>Vị trí ứng tuyển<span class="ast">*</span></legend>
+          <div class="options">
+            <label class="opt"><input type="radio" name="entry.1595190573" value="QUẢN LÝ CỬA HÀNG"><span class="mark"></span><span class="opt-text">QUẢN LÝ CỬA HÀNG</span></label>
+            <label class="opt"><input type="radio" name="entry.1595190573" value="TRƯỞNG CA / TRỢ LÝ QUẢN LÝ"><span class="mark"></span><span class="opt-text">TRƯỞNG CA / TRỢ LÝ QUẢN LÝ</span></label>
+            <label class="opt"><input type="radio" name="entry.1595190573" value="BAR LEAD"><span class="mark"></span><span class="opt-text">BAR LEAD</span></label>
+            <label class="opt"><input type="radio" name="entry.1595190573" value="NHÂN VIÊN PHA CHẾ"><span class="mark"></span><span class="opt-text">NHÂN VIÊN PHA CHẾ</span></label>
+            <label class="opt"><input type="radio" name="entry.1595190573" value="NHÂN VIÊN BÀN - FULLTIME"><span class="mark"></span><span class="opt-text">NHÂN VIÊN BÀN - FULLTIME</span></label>
+            <label class="opt"><input type="radio" name="entry.1595190573" value="NHÂN VIÊN BÀN - PARTTIME"><span class="mark"></span><span class="opt-text">NHÂN VIÊN BÀN - PARTTIME</span></label>
+          </div>
+          <div class="error">Bạn chọn giúp một vị trí nhé.</div>
+        </fieldset>
+
+        <div class="field" data-required="text">
+          <label for="f-exp">Bạn đã từng đi làm thêm ở các vị trí tương tự chưa?<span class="ast">*</span></label>
+          <input type="text" id="f-exp" name="entry.1401774601" placeholder="Câu trả lời của bạn">
+          <div class="error">Bạn trả lời giúp câu này nhé.</div>
+        </div>
+
+        <fieldset class="field" data-required="checkbox">
+          <legend>Các khung làm việc bạn có thể làm?<span class="ast">*</span></legend>
+          <div class="options">
+            <label class="opt"><input type="checkbox" name="entry.635892757" value="Fulltime A (8:00 - 16:30)"><span class="mark"></span><span class="opt-text">Fulltime A (8:00 - 16:30)</span></label>
+            <label class="opt"><input type="checkbox" name="entry.635892757" value="Fulltime B (16:00 - 00:00)"><span class="mark"></span><span class="opt-text">Fulltime B (16:00 - 00:00)</span></label>
+            <label class="opt"><input type="checkbox" name="entry.635892757" value="Parttime 1 (08:00 - 12:30)"><span class="mark"></span><span class="opt-text">Parttime 1 (08:00 - 12:30)</span></label>
+            <label class="opt"><input type="checkbox" name="entry.635892757" value="Parttime 2 (12:00 - 18:30)"><span class="mark"></span><span class="opt-text">Parttime 2 (12:00 - 18:30)</span></label>
+            <label class="opt"><input type="checkbox" name="entry.635892757" value="Parttime 3 (18:00 - 00:00)"><span class="mark"></span><span class="opt-text">Parttime 3 (18:00 - 00:00)</span></label>
+          </div>
+          <div class="error">Bạn chọn giúp ít nhất một khung giờ nhé.</div>
+        </fieldset>
+
+        <div class="field" data-required="phone">
+          <label for="f-phone">Vui lòng để lại SĐT, Hanoi Neighbors sẽ liên hệ với bạn sớm nhất nhé.<span class="ast">*</span></label>
+          <input type="tel" id="f-phone" name="entry.925124213" autocomplete="tel" inputmode="tel" placeholder="Câu trả lời của bạn">
+          <div class="error">Số điện thoại chưa đúng, bạn kiểm tra lại giúp nhé.</div>
+        </div>
+
+        <!-- chống spam: người thật sẽ không thấy ô này -->
+        <div class="hp" aria-hidden="true"><label>Website <input type="text" id="f-website" tabindex="-1" autocomplete="off"></label></div>
+
+        <div class="actions">
+          <button type="submit" class="btn-submit" id="submitBtn">Gửi đăng ký</button>
+          <button type="button" class="btn-clear" id="clearBtn">Xóa hết câu trả lời</button>
+        </div>
+        <p class="form-error" id="formError">Chưa gửi được, bạn thử lại giúp nhé. Nếu vẫn lỗi, bạn gọi Hotline 093 663 2040 - Mrs Yến.</p>
+      </form>
+
+      <div class="thanks" role="status" aria-live="polite">
+        <svg width="54" height="54" viewBox="0 0 54 54" fill="none" aria-hidden="true"><circle cx="27" cy="27" r="25" stroke="currentColor" stroke-width="1.6"/><path d="M17 27.5l7 7 13-14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Hy vọng chúng ta sẽ về chung một nhà!</h3>
+        <p>Hanoi Neighbors sẽ liên hệ với bạn sớm nhất nhé.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="closing">
+  <img class="closing-logo" src="../images/logo-doc.png" alt="Hanoi Neighbors" width="440" height="559" loading="lazy">
+  <p>Hy vọng chúng ta sẽ về chung một nhà!</p>
+  <small>Hotline: <a href="tel:0936632040">093 663 2040</a> - Mrs Yến</small>
+  <small><a href="../">← Về trang chủ Hanoi Neighbors</a></small>
+</footer>
+
+<!-- ===================== POPUP VỊ TRÍ ===================== -->
+<div class="modal" id="jobModal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle" id="sheet" tabindex="-1">
+    <div class="sheet-bar">
+      <button type="button" class="close-btn" id="closeBtn" aria-label="Đóng">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   ẢNH (chỉ dùng bên trong popup vị trí, làm ảnh trang trí)
+   Ảnh dùng chung nằm ở thư mục /images/ của website (ngang hàng với /tuyendung/).
+   ===================================================================== */
+var IMAGES = {
+  facade_night:    "Mặt tiền Hanoi Neighbors lên đèn buổi tối",
+  sofa_skylight:   "Góc sofa dưới giếng trời",
+  facade_shutters: "Mặt tiền với cửa chớp và đèn treo",
+  bar_crowd:       "Hàng xóm quây quần bên quầy bar",
+  serving_sofa:    "Phục vụ khách ở góc sofa",
+  coffee_waffle:   "Ly cà phê, bánh waffle và tờ báo",
+  bar_counter:     "Quầy bar với máy pha cà phê",
+  cup_menu:        "Tách cà phê và thực đơn trên bàn gỗ",
+  courtyard:       "Sân trong nhìn từ trên cao",
+  staff_sunset:    "Một ca làm trong nắng chiều",
+  sofa_art:        "Góc sofa với tranh và gối"
+};
+function imgUrl(key){ return "../images/" + key + ".jpg"; }
+function imgAlt(key){ return IMAGES[key]; }
+
+/* =====================================================================
+   NỘI DUNG 6 VỊ TRÍ (giữ nguyên văn từ các trang Gamma)
+   t = tiêu đề mục, d = nội dung (cho phép <b> để in đậm)
+   ===================================================================== */
+var PLACES = ["114 Tuệ Tĩnh, Hai Bà Trưng, Hà Nội", "8 Nguyễn Thiếp, Ba Đình, Hà Nội"];
+var WHY_PHOTOS = ["bar_crowd", "serving_sofa"];
+
+var JOBS = [
+  {
+    value:"QUẢN LÝ CỬA HÀNG", title:"QUẢN LÝ CỬA HÀNG", count:"03",
+    pay:"10.000.000 – 15.000.000 VNĐ/ tháng", payNote:"(tuỳ năng lực)",
+    hero:"facade_night",
+    tasks:{ h:"Bạn sẽ làm gì tại Hanoi Neighbors?", items:[
+      {t:"Quản lý nhân sự", d:"Tuyển dụng, đào tạo và quản lý đội ngũ nhân sự."},
+      {t:"Điều phối công việc", d:"Sắp xếp lịch làm việc, tổ chức họp nhân viên định kỳ hàng tháng."},
+      {t:"Đảm bảo chất lượng", d:"Kiểm soát chất lượng dịch vụ, chăm sóc khách hàng."},
+      {t:"Quản lý vật liệu", d:"Theo dõi, kiểm soát nguyên vật liệu, tài sản và cơ sở vật chất của cửa hàng."},
+      {t:"Quản lý nhân viên", d:"Tính lương, chấm công, quản lý chế độ phúc lợi nhân viên."},
+      {t:"Hỗ trợ vận hành", d:"Hỗ trợ công việc vận hành khi đông khách."},
+      {t:"Xử lý vấn đề", d:"Xử lý các vấn đề phát sinh trong ca làm việc."},
+      {t:"Nhiệm vụ khác", d:"Thực hiện các nhiệm vụ khác theo yêu cầu từ Ban Quản Lý."}
+    ]},
+    reqs:{ h:"Bạn cần gì để ứng tuyển?", photo:"sofa_skylight", items:[
+      {t:"Kinh nghiệm quản lý", d:"Có kinh nghiệm điều hành nhân sự."},
+      {t:"Thời gian làm việc", d:"Tối thiểu <b>01 năm kinh nghiệm</b> ở vị trí tương đương."},
+      {t:"Kỹ năng lợi thế", d:"Biết và từng làm việc với kỹ năng <b>Barista hoặc Bartender</b>."},
+      {t:"Kỹ năng mềm", d:"Kỹ năng giao tiếp, xử lý tình huống, làm việc nhóm."},
+      {t:"Phẩm chất cá nhân", d:"Chủ động, trách nhiệm, tinh thần phục vụ khách hàng."}
+    ]},
+    perks:{ h:"Chính sách phúc lợi & đãi ngộ", groups:[{ items:[
+      {t:"Lương cứng", d:"10.000.000 – 15.000.000 VNĐ/ tháng (tuỳ năng lực).", feature:true},
+      {t:"Tăng lương", d:"Xét duyệt tăng lương định kỳ."},
+      {t:"Thưởng", d:"Thưởng KPI + Thưởng Lễ Tết."},
+      {t:"Hỗ trợ ăn uống", d:"Hỗ trợ tiền ăn: 30.000 VNĐ/ca."},
+      {t:"Phương tiện", d:"Hỗ trợ gửi xe hàng tháng."},
+      {t:"Làm thêm giờ", d:"Lương nhân đôi sau 23h."},
+      {t:"Môi trường", d:"Party nội bộ hàng tháng, môi trường vui vẻ, cởi mở."}
+    ]}]},
+    why:{ h:"Tại sao bạn nên gia nhập Hanoi Neighbors?", items:[
+      {t:"Không gian sáng tạo", d:"Được làm việc trong một không gian thân thiện, chuyên nghiệp và đầy cảm hứng."},
+      {t:"Văn hóa độc đáo", d:"Nơi bạn được sống đúng chất mình, chỉ cần có điểm chung: sự tử tế."},
+      {t:"Cơ hội phát triển", d:"Công việc vừa vui - vừa thử thách - vừa có cơ hội phát triển."},
+      {t:"Cộng đồng gắn kết", d:"Một cửa hàng tuyệt vời bắt đầu từ những người hàng xóm tuyệt vời."}
+    ]}
+  },
+  {
+    value:"TRƯỞNG CA / TRỢ LÝ QUẢN LÝ", title:"TRƯỞNG CA/TRỢ LÝ QUẢN LÝ", count:"03",
+    pay:"8.500.000 – 12.000.000 VNĐ/ tháng", payNote:"(tuỳ năng lực)",
+    hero:"facade_shutters",
+    tasks:{ h:"Bạn sẽ làm gì tại vị trí này?", items:[
+      {t:"Hỗ trợ Quản lý Cửa hàng", d:"Hỗ trợ Quản lý Cửa hàng trong công tác vận hành hàng ngày."},
+      {t:"Đào tạo và giám sát nhân viên", d:"Đào tạo, giám sát và hỗ trợ nhân viên trong ca làm việc."},
+      {t:"Kiểm soát vật liệu", d:"Theo dõi, kiểm soát nguyên vật liệu, cơ sở vật chất."},
+      {t:"Báo cáo định kỳ", d:"Duy trì báo cáo định kỳ với Quản lý cửa hàng."},
+      {t:"Chăm sóc khách hàng", d:"Chăm sóc khách hàng, đảm bảo trải nghiệm dịch vụ tốt nhất."},
+      {t:"Hỗ trợ vận hành", d:"Trực tiếp tham gia hỗ trợ vận hành quán khi đông khách."},
+      {t:"Xử lý tình huống", d:"Xử lý nhanh chóng các tình huống phát sinh trong ca."},
+      {t:"Công việc khác", d:"Thực hiện các công việc khác theo yêu cầu từ cấp trên."}
+    ]},
+    reqs:{ h:"Bạn cần gì để ứng tuyển?", items:[
+      {d:"Có kinh nghiệm quản lý hoặc điều hành nhân sự."},
+      {d:"Tối thiểu <b>06 tháng kinh nghiệm</b> ở vị trí tương đương."},
+      {d:"Biết kỹ năng <b>Barista hoặc Bartender</b>."},
+      {d:"Chủ động, tinh thần trách nhiệm, giao tiếp tốt."},
+      {d:"Sẵn sàng học hỏi và đồng hành lâu dài."}
+    ]},
+    perks:{ h:"Chính sách phúc lợi & đãi ngộ", groups:[
+      { label:"Lương thưởng hấp dẫn", items:[
+        {t:"Lương cứng:", d:"8.500.000 – 12.000.000 VNĐ/ tháng (tuỳ năng lực).", feature:true},
+        {d:"<b>Lương nhân đôi sau 23h.</b>"},
+        {d:"<b>Thưởng nhân viên xuất sắc hàng tháng.</b>"},
+        {d:"<b>Xét duyệt tăng lương định kỳ.</b>"},
+        {d:"<b>Thưởng Tết.</b>"}
+      ]},
+      { label:"Phúc lợi khác", items:[
+        {d:"<b>Hỗ trợ gửi xe hàng tháng.</b>"},
+        {d:"Party nội bộ hàng tháng, môi trường vui vẻ, gắn kết."}
+      ]}
+    ]},
+    why:{ h:"Tại sao bạn nên gia nhập Hanoi Neighbors?", items:[
+      {t:"Môi trường làm việc", d:"Ở Hanoi Neighbors, Trưởng ca không chỉ là người quản lý ca làm mà còn là <strong>người giữ lửa cho không khí quán mỗi ngày</strong>. Bạn sẽ được trao quyền để chủ động sắp xếp, vận hành và xây dựng trải nghiệm tốt nhất cho cả khách hàng và đồng đội – trong một môi trường luôn đề cao sự <strong>chân thành, tôn trọng và hỗ trợ lẫn nhau</strong>."},
+      {t:"Phát triển kỹ năng leader", d:"Bạn sẽ có cơ hội trau dồi kỹ năng quản lý, giao tiếp, xử lý tình huống và chăm sóc khách hàng chuyên nghiệp. Công việc tại Hanoi Neighbors không chỉ giúp bạn rèn luyện sự <strong>chủ động, linh hoạt và tinh tế</strong>, mà còn là bước đệm tuyệt vời nếu bạn muốn theo đuổi sự nghiệp trong ngành F&amp;B hoặc bất kỳ môi trường dịch vụ nào."}
+    ]}
+  },
+  {
+    value:"BAR LEAD", title:"BAR LEAD (Trưởng Bộ Phận Bar)", count:"03",
+    pay:"8.000.000 – 10.000.000 VNĐ/ tháng", payNote:"(tuỳ năng lực)",
+    hero:"coffee_waffle",
+    tasks:{ h:"Bạn sẽ làm gì tại vị trí này?", items:[
+      {t:"Đào tạo và hỗ trợ", d:"Đào tạo nhân viên mới và đồng hành, hỗ trợ nhân viên cũ nâng cao kỹ năng."},
+      {t:"Quản lý kho", d:"Kiểm soát kho nguyên vật liệu và cơ sở vật chất thuộc bộ phận Bar."},
+      {t:"Đảm bảo chất lượng", d:"Đảm bảo chất lượng đồ uống, kiểm soát thời gian phục vụ."},
+      {t:"Vệ sinh", d:"Duy trì vệ sinh quầy bar và khu vực làm việc."},
+      {t:"Tổ chức họp", d:"Tổ chức cuộc họp nội bộ Bar tối thiểu 1 lần/tháng."},
+      {t:"Phát triển sản phẩm", d:"Nghiên cứu, phát triển và đề xuất đồ uống mới."},
+      {t:"Báo cáo", d:"Làm báo cáo hàng tháng và chịu trách nhiệm toàn bộ hoạt động của bộ phận Bar."}
+    ]},
+    shifts:{ h:"Thời gian làm việc", items:[["Ca sáng","7:45 – 16:30"],["Ca tối","16:00 – 24:00"]], notes:["Full-time linh hoạt (26 công/tháng, ca 8 tiếng)"] },
+    reqs:{ h:"Bạn cần gì để ứng tuyển?", photo:"bar_counter", items:[
+      {t:"Kinh nghiệm", d:"Có tối thiểu <b>06 tháng kinh nghiệm</b> ở vị trí tương đương."},
+      {t:"Kỹ năng chuyên môn", d:"Thành thạo kỹ năng <b>Barista (có kinh nghiệm với cà phê máy) hoặc Bartender</b>."},
+      {t:"Phẩm chất cá nhân", d:"Nhanh nhẹn, thân thiện, giao tiếp tốt."},
+      {t:"Thái độ làm việc", d:"Chăm chỉ, trung thực, có tinh thần trách nhiệm cao."}
+    ]},
+    perks:{ h:"Chính sách phúc lợi & đãi ngộ", groups:[{ items:[
+      {t:"Lương cứng", d:"8.000.000 – 10.000.000 VNĐ/ tháng (tuỳ năng lực)", feature:true},
+      {t:"Lương sau 23h", d:"Lương nhân đôi sau 23h"},
+      {t:"Phúc lợi", d:"Hỗ trợ gửi xe, thưởng xuất sắc, party hàng tháng"},
+      {d:"<b>Thưởng nhân viên xuất sắc hàng tháng.</b>"},
+      {d:"<b>Party nội bộ hàng tháng, môi trường cởi mở, gắn kết.</b>"},
+      {d:"<b>Xét duyệt tăng lương định kỳ.</b>"},
+      {d:"Thưởng Tết."}
+    ]}]},
+    why:{ h:"Tại sao bạn nên gia nhập Hanoi Neighbors?", items:[
+      {t:"Không gian sáng tạo", d:"Được làm việc trong một không gian thân thiện, chuyên nghiệp và đầy cảm hứng."},
+      {t:"Văn hóa độc đáo", d:"Nơi bạn được sống đúng chất mình, chỉ cần có điểm chung: sự tử tế."},
+      {t:"Cơ hội phát triển", d:"Công việc vừa vui - vừa thử thách - vừa có cơ hội phát triển."},
+      {t:"Cộng đồng gắn kết", d:"Một cửa hàng tuyệt vời bắt đầu từ những người Hàng xóm tuyệt vời."}
+    ]}
+  },
+  {
+    value:"NHÂN VIÊN PHA CHẾ", title:"NHÂN VIÊN PHA CHẾ (FULL-TIME)", count:"05",
+    pay:"7.500.000 – 9.000.000 VNĐ/ tháng", payNote:"(tùy năng lực)",
+    hero:"cup_menu",
+    tasks:{ h:"Bạn sẽ làm gì?", photo:"coffee_waffle", items:[
+      {t:"Chuẩn bị nguyên vật liệu và dụng cụ", d:"Chuẩn bị nguyên vật liệu và dụng cụ quầy bar trước mỗi ca làm việc."},
+      {t:"Pha chế đồ uống", d:"Trực tiếp pha chế các món trong thực đơn, đảm bảo chất lượng &amp; thẩm mỹ."},
+      {t:"Vệ sinh an toàn", d:"Giữ gìn vệ sinh, đảm bảo an toàn thực phẩm tại quầy bar."},
+      {t:"Tư vấn khách hàng", d:"Gợi ý, tư vấn món cho khách khi cần."},
+      {t:"Phát triển menu", d:"Tham gia đóng góp ý tưởng, phát triển menu đồ uống mới."},
+      {t:"Hỗ trợ đồng đội", d:"Hỗ trợ đồng đội khi quán đông khách."},
+      {t:"Nhiệm vụ khác", d:"Thực hiện các nhiệm vụ khác theo yêu cầu từ Quản lý."}
+    ]},
+    reqs:{ h:"Bạn cần gì để ứng tuyển?", items:[
+      {t:"Kinh nghiệm", d:"Có kinh nghiệm pha chế từ <b>06 tháng trở lên</b>.<br>Biết pha cà phê máy là một lợi thế lớn."},
+      {t:"Kỹ năng", d:"Nhanh nhẹn, thân thiện, giao tiếp tốt."},
+      {t:"Phẩm chất", d:"Chăm chỉ, trung thực, linh hoạt và có trách nhiệm với công việc."}
+    ]},
+    shifts:{ h:"Thời gian làm việc", items:[["Ca sáng","7:45 – 16:30"],["Ca tối","16:00 – 24:00"]], notes:["<em>Lương nhân đôi từ 23h – 24h</em>","Full-time linh hoạt (26 công/tháng, ca 8 tiếng)"] },
+    perks:{ h:"Quyền lợi & Đãi ngộ", groups:[{ items:[
+      {t:"Lương cứng khởi điểm", d:"7.500.000 – 9.000.000 VNĐ/ tháng (tùy năng lực)", feature:true},
+      {t:"Lương nhân đôi", d:"Lương nhân đôi sau 23h"},
+      {t:"Công/tháng", d:"Full-time linh hoạt"},
+      {t:"Thưởng xuất sắc", d:"Thưởng nhân viên xuất sắc hàng tháng"},
+      {t:"Party nội bộ", d:"Party nội bộ hàng tháng – làm hết sức, quẩy hết mình"},
+      {t:"Tăng lương", d:"Xét duyệt tăng lương định kỳ"},
+      {t:"Thưởng Tết", d:"Thưởng Tết"}
+    ]}]},
+    order:["tasks","reqs","shifts","perks"],
+    why:{ h:"Tại sao bạn nên gia nhập Hanoi Neighbors?", items:[
+      {t:"Môi trường làm việc", d:"Tại Hanoi Neighbors, bạn không chỉ pha chế – bạn là <strong>người kể chuyện qua từng ly cà phê, tách trà và món cocktail</strong>. Chúng mình tin rằng từng hương vị đều có thể kết nối con người, và bạn chính là người góp phần tạo nên trải nghiệm đó. Môi trường làm việc thân thiện, sáng tạo và tràn đầy cảm hứng đang chờ bạn."},
+      {t:"Cơ hội phát triển", d:"Bạn sẽ được <strong>training bài bản về kỹ thuật pha chế, kiến thức đồ uống</strong> từ cà phê, trà đến cocktail. Không chỉ vậy, công việc còn giúp bạn rèn luyện tư duy dịch vụ, khả năng làm việc nhóm, xử lý áp lực và phát triển tư duy thẩm mỹ, sáng tạo trong từng chi tiết nhỏ. Đây sẽ là nền tảng vững chắc nếu bạn muốn theo đuổi nghề pha chế lâu dài."}
+    ]}
+  },
+  {
+    value:"NHÂN VIÊN BÀN - FULLTIME", title:"NHÂN VIÊN PHỤC VỤ (FULL-TIME)", count:"08",
+    pay:"7.000.000 – 8.000.000 VNĐ/ tháng", payNote:"(tuỳ năng lực)",
+    hero:"courtyard",
+    tasks:{ h:"Bạn sẽ làm gì ở vị trí này?", photo:"staff_sunset", items:[
+      {d:"Dọn dẹp, giữ gìn vệ sinh không gian quán"},
+      {d:"Đón tiếp và phục vụ khách hàng với thái độ thân thiện"},
+      {d:"Ghi nhận order đồ uống, món ăn và chuyển thông tin đến bộ phận Bar/Bếp"},
+      {d:"Phục vụ đồ ăn, thức uống đến bàn khách"},
+      {d:"Dọn dẹp bàn sau khi khách dùng xong"},
+      {d:"Thanh toán hóa đơn cho khách hàng"},
+      {d:"Hỗ trợ đồng đội trong giờ cao điểm"},
+      {d:"Thực hiện các công việc khác theo sự phân công của Quản lý"}
+    ]},
+    shifts:{ h:"Thời gian làm việc", lead:"Full-time linh hoạt (26 công/tháng, ca 8 tiếng)", items:[["Ca sáng","7:45 – 16:30"],["Ca tối","16:00 – 24:00"]], notes:[] },
+    reqs:{ h:"Bạn cần gì để ứng tuyển?", items:[
+      {d:"Yêu thích công việc dịch vụ"},
+      {d:"Nhanh nhẹn, thân thiện, giao tiếp tốt"},
+      {d:"Có kinh nghiệm phục vụ từ 06 tháng trở lên"}
+    ]},
+    perks:{ h:"Chính sách phúc lợi & đãi ngộ", groups:[{ items:[
+      {t:"Lương cứng hàng tháng", d:"7.000.000 – 8.000.000 VNĐ/ tháng (tuỳ năng lực)", feature:true},
+      {t:"Lương nhân đôi", d:"Sau 23h"},
+      {t:"Thưởng", d:"Thưởng Tết &amp; Tháng lương 13"},
+      {d:"Hỗ trợ gửi xe hàng tháng."},
+      {d:"Thưởng nhân viên xuất sắc hàng tháng."},
+      {d:"Party nội bộ hàng tháng, môi trường thân thiện, vui vẻ."},
+      {d:"Xét duyệt tăng lương định kỳ."}
+    ]}]},
+    why:{ h:"Tại sao bạn nên gia nhập Hanoi Neighbors?", items:[
+      {t:"Môi trường làm việc", d:"Tại Hanoi Neighbors, bạn không chỉ đơn giản là một nhân viên, bạn là một người hàng xóm thân thiết. Chúng mình tin vào sức mạnh của những kết nối nhỏ bé, mỗi ngày cùng nhau tạo ra một không gian dễ chịu, nơi ai cũng có thể là chính mình. Đây là nơi bạn có thể làm việc với nụ cười, được lắng nghe và phát triển trong một môi trường chân thành mà chuyên nghiệp."},
+      {t:"Cơ hội phát triển", d:"Công việc không chỉ gói gọn trong việc phục vụ bàn. Bạn sẽ được training đầy đủ về kỹ năng giao tiếp, chăm sóc khách hàng, vận hành quán cà phê, và hiểu sâu hơn về văn hóa dịch vụ. Đây là nơi tuyệt vời để bạn rèn luyện sự tỉ mỉ, linh hoạt và xây dựng tư duy phục vụ chuyên nghiệp – những kỹ năng hữu ích cho bất kỳ công việc nào sau này."}
+    ]}
+  },
+  {
+    value:"NHÂN VIÊN BÀN - PARTTIME", title:"NHÂN VIÊN PHỤC VỤ (PART-TIME)", count:"15",
+    pay:"22.000 – 30.000 VNĐ/giờ", payNote:"",
+    hero:"sofa_art",
+    tasks:{ h:'Bạn sẽ làm gì khi gia nhập "hàng xóm"?', items:[
+      {t:"Dọn dẹp, giữ không gian quán", d:"Dọn dẹp, giữ không gian quán luôn sạch đẹp, ấm cúng."},
+      {t:"Chào đón khách", d:"Chào đón khách bằng nụ cười tươi nhất."},
+      {t:"Nhận order", d:"Nhận order món ăn, đồ uống và chuyển cho bộ phận Bar/Bếp."},
+      {t:"Phục vụ món", d:"Phục vụ món lên bàn, đảm bảo khách luôn hài lòng."},
+      {t:"Dọn dẹp sau khi khách dùng xong", d:"Dọn dẹp sau khi khách dùng xong."},
+      {t:"Thanh toán hóa đơn", d:"Thanh toán hóa đơn."},
+      {t:"Hỗ trợ team", d:"Hỗ trợ team trong giờ cao điểm (vì hàng xóm tốt là hàng xóm biết giúp nhau!)."}
+    ]},
+    shifts:{ h:"Thời gian làm việc linh hoạt", items:[["Ca sáng","7:45 – 12:00"],["Ca chiều","12:00 – 18:00"],["Ca tối","18:00 – 24:00"]], notes:["<em>(Lương nhân đôi từ 23h – 24h)</em>","5 ca/tuần, ca 5 tiếng (tối thiểu)"] },
+    reqs:{ h:"Bạn cần gì để ứng tuyển?", photo:"serving_sofa", items:[
+      {t:"Tính cách", d:"Chỉ cần <b>nhanh nhẹn, vui vẻ, giao tiếp tốt</b>."},
+      {t:"Kinh nghiệm", d:"<b>Không yêu cầu kinh nghiệm</b> — bạn cứ tới, tụi mình sẽ chỉ bạn từ A tới Z!"},
+      {t:"Thái độ", d:"Thái độ <b>chăm chỉ, trung thực, linh hoạt</b>."}
+    ]},
+    perks:{ h:"Chính sách phúc lợi & đãi ngộ", groups:[{ items:[
+      {t:"Lương cứng:", d:"22.000 – 30.000 VNĐ/giờ", feature:true},
+      {d:"Lương nhân đôi sau 23h &amp; Hỗ trợ gửi xe hàng tháng"},
+      {d:"Thưởng Tết"},
+      {d:"Xét duyệt tăng lương định kỳ"},
+      {t:"Party nội bộ hàng tháng", d:"Quẩy hết mình cùng anh em hàng xóm"},
+      {d:"Thưởng nhân viên xuất sắc hàng tháng"}
+    ]}]},
+    why:{ h:"Tại sao bạn nên gia nhập Hanoi Neighbors?", items:[
+      {t:"Môi trường làm việc", d:"Tại Hanoi Neighbors, bạn không chỉ đơn giản là một nhân viên, bạn là <strong>một người hàng xóm thân thiết</strong>. Chúng mình tin vào sức mạnh của những kết nối nhỏ bé, mỗi ngày cùng nhau tạo ra một không gian dễ chịu, nơi ai cũng có thể là chính mình. Đây là nơi bạn có thể làm việc với nụ cười, được lắng nghe và phát triển trong một môi trường <strong>chân thành mà chuyên nghiệp.</strong>"},
+      {t:"Cơ hội phát triển", d:"Công việc không chỉ gói gọn trong việc phục vụ bàn. Bạn sẽ được training đầy đủ về <strong>kỹ năng giao tiếp, chăm sóc khách hàng, vận hành quán cà phê</strong>, và hiểu sâu hơn về <strong>văn hóa dịch vụ</strong>. Đây là nơi tuyệt vời để bạn rèn luyện sự <strong>tỉ mỉ, linh hoạt</strong> và xây dựng <strong>tư duy phục vụ chuyên nghiệp</strong> – những kỹ năng hữu ích cho bất kỳ công việc nào sau này."}
+    ]}
+  }
+];
+
+/* =====================================================================
+   BIỂU TƯỢNG
+   ===================================================================== */
+var ICON = {
+  pin:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+  arrow:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h11M9 4l4 4-4 4"/></svg>',
+  check:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  sun:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  sunset:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 18a5 5 0 0 0-10 0M12 9V2M4.2 10.2l1.4 1.4M1 18h2M21 18h2M18.4 11.6l1.4-1.4M23 22H1M16 5l-4-3-4 3"/></svg>',
+  moon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+  cash:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/></svg>',
+  trend:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+  gift:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>',
+  cup:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/></svg>',
+  bike:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6h2l3 11.5M5.5 17.5L9 9h6l-3 8.5H5.5"/></svg>',
+  party:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3L2 22l10.7-3.8"/><path d="M4 3h.01M22 8h.01M15 2h.01M22 20h.01M22 2l-2.2.7a3 3 0 0 0-2 3.3c.2 1-.5 2-1.6 2h-.4M22 13l-.8-.3a2 2 0 0 0-2.5 1l-.3.7"/><path d="M11 13c1.9 1.9 2.8 4.1 2 4.9-.8.8-3-.1-4.9-2-1.9-1.9-2.8-4.1-2-4.9.8-.8 3 .1 4.9 2z"/></svg>',
+  calendar:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  heart:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  star:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>'
+};
+function perkIcon(text){
+  var s = text.toLowerCase();
+  if (/nhân đôi|23h|làm thêm giờ/.test(s)) return ICON.moon;
+  if (/tăng lương/.test(s)) return ICON.trend;
+  if (/gửi xe|phương tiện/.test(s)) return ICON.bike;
+  if (/tiền ăn|ăn uống/.test(s)) return ICON.cup;
+  if (/party/.test(s)) return ICON.party;
+  if (/thưởng|tết/.test(s)) return ICON.gift;
+  if (/công\/tháng/.test(s)) return ICON.calendar;
+  if (/lương/.test(s)) return ICON.cash;
+  if (/môi trường/.test(s)) return ICON.heart;
+  return ICON.star;
+}
+function shiftIcon(label){
+  var s = label.toLowerCase();
+  if (s.indexOf("sáng") > -1) return ICON.sun;
+  if (s.indexOf("chiều") > -1) return ICON.sunset;
+  return ICON.moon;
+}
+
+/* =====================================================================
+   DỰNG THẺ VỊ TRÍ
+   ===================================================================== */
+function photo(key, w, cls, caption){
+  return '<figure class="polaroid ' + (cls||'') + '"><span class="tape"></span><img src="' + imgUrl(key) + '" alt="' + imgAlt(key) + '" loading="lazy" decoding="async">' +
+         (caption ? '<figcaption>' + caption + '</figcaption>' : '') + '</figure>';
+}
+
+// Biểu tượng nghề cho từng thẻ vị trí (thay cho ảnh)
+var ROLE_ICON = [
+  // Quản lý cửa hàng: mái nhà / cửa hàng
+  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L5 4h14l2 5.5"/><path d="M3 9.5a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M5 12v8h14v-8"/><path d="M10 20v-5h4v5"/></svg>',
+  // Trưởng ca: bảng phân ca
+  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 10l1.5 1.5L13 9M9 15.5l1.5 1.5L13 14.5M15 10.5h1M15 16h1"/></svg>',
+  // Bar Lead: bình lắc
+  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4l-.5 3h-3z"/><path d="M9 5h6l1 3H8z"/><path d="M8 8h8l-1.2 12.2a2 2 0 0 1-2 1.8h-1.6a2 2 0 0 1-2-1.8z"/><path d="M9 13h6"/></svg>',
+  // Pha chế: tách cà phê
+  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M3 21h14"/><path d="M8 3c-.6.8-.6 1.7 0 2.5M11.5 3c-.6.8-.6 1.7 0 2.5"/></svg>',
+  // Phục vụ full-time: khay phục vụ
+  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18"/><path d="M4.5 17a7.5 7.5 0 0 1 15 0"/><path d="M12 9.5V8M10.5 8h3"/><path d="M5 20h14"/></svg>',
+  // Phục vụ part-time: đồng hồ
+  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2h5M12 2v3"/></svg>'
+];
+
+var grid = document.getElementById("jobGrid");
+JOBS.forEach(function(job, i){
+  var b = document.createElement("button");
+  b.type = "button";
+  b.className = "job-card";
+  b.setAttribute("data-job", i);
+  b.innerHTML =
+    '<span class="top"><span class="no">' + (i+1) + '</span><span class="role-ic">' + ROLE_ICON[i] + '</span></span>' +
+    '<p class="name">' + job.value + '</p>' +
+    '<span class="meta"><span class="chip">Số lượng cần tuyển: ' + job.count + '</span><span class="chip pay">' + job.pay + '</span></span>' +
+    '<span class="more">Xem chi tiết ' + ICON.arrow + '</span>';
+  b.addEventListener("click", function(){ openJob(i, true); });
+  grid.appendChild(b);
+});
+
+/* =====================================================================
+   DỰNG NỘI DUNG POPUP
+   ===================================================================== */
+function sectionHead(n, h){
+  return '<div class="m-h rv"><span class="idx">0' + n + '</span><h3>' + h + '</h3></div>';
+}
+function renderTasks(sec){
+  var numbered = sec.items.some(function(x){ return x.t; });
+  var list = '<div class="tasks' + (sec.photo ? ' one' : '') + '">' + sec.items.map(function(x, k){
+    return '<div class="task rv' + (x.t ? '' : ' plain') + '"><span class="num">' + (k+1) + '</span>' +
+      (x.t ? '<strong>' + x.t + '</strong>' : '') + '<span>' + x.d + '</span></div>';
+  }).join('') + '</div>';
+  if (!sec.photo) return list;
+  return '<div class="split"><div>' + list + '</div><div class="side rv">' + photo(sec.photo, 700, '', imgAlt(sec.photo)) + '</div></div>';
+}
+function renderShifts(sec){
+  return (sec.lead ? '<p class="rv" style="margin:0 0 14px;font-weight:600">' + sec.lead + '</p>' : '') +
+    '<div class="shifts">' + sec.items.map(function(s){
+      return '<div class="shift rv"><span class="ic">' + shiftIcon(s[0]) + '</span><span><small>' + s[0] + '</small><b>' + s[1] + '</b></span></div>';
+    }).join('') + '</div>' +
+    (sec.notes && sec.notes.length ? '<ul class="shift-notes rv">' + sec.notes.map(function(n){ return '<li>' + n + '</li>'; }).join('') + '</ul>' : '');
+}
+function renderReqs(sec){
+  var list = '<ul class="checks">' + sec.items.map(function(x){
+    return '<li class="rv' + (x.t ? '' : ' plain') + '"><span class="ck">' + ICON.check + '</span><div>' +
+      (x.t ? '<strong>' + x.t + '</strong>' : '') + '<span>' + x.d + '</span></div></li>';
+  }).join('') + '</ul>';
+  if (!sec.photo) return list;
+  return '<div class="split rev"><div class="side rv">' + photo(sec.photo, 700, '', imgAlt(sec.photo)) + '</div><div>' + list + '</div></div>';
+}
+function renderPerks(sec){
+  return sec.groups.map(function(g){
+    return '<div class="perk-group">' + (g.label ? '<p class="perk-group-label rv">' + g.label + '</p>' : '') +
+      '<div class="perks">' + g.items.map(function(x){
+        var cls = 'perk rv' + (x.feature ? ' feature' : '') + (x.t ? '' : ' solo');
+        return '<div class="' + cls + '"><span class="ic">' + perkIcon((x.t||'') + ' ' + x.d) + '</span>' +
+          (x.feature ? '<div>' : '') +
+          (x.t ? '<strong>' + x.t + '</strong>' : '') + '<span>' + x.d + '</span>' +
+          (x.feature ? '</div>' : '') + '</div>';
+      }).join('') + '</div></div>';
+  }).join('');
+}
+function renderWhy(sec){
+  return '<div class="why-photos">' + WHY_PHOTOS.map(function(k){ return '<div class="rv">' + photo(k, 900, '', imgAlt(k)) + '</div>'; }).join('') + '</div>' +
+    '<div class="why">' + sec.items.map(function(x){
+      return '<div class="rv"><b>' + x.t + '</b><p>' + x.d + '</p></div>';
+    }).join('') + '</div>';
+}
+
+function renderJob(job, i){
+  var order = job.order || ["tasks","shifts","reqs","perks"];
+  var renderers = {tasks:renderTasks, shifts:renderShifts, reqs:renderReqs, perks:renderPerks};
+  var n = 0, body = '';
+  order.forEach(function(key){
+    if (!job[key]) return;
+    n++;
+    body += '<section class="m-sec">' + sectionHead(n, job[key].h) + renderers[key](job[key]) + '</section>';
+  });
+  n++;
+  body += '<section class="m-sec">' + sectionHead(n, job.why.h) + renderWhy(job.why) + '</section>';
+
+  return '' +
+    '<div class="m-hero">' +
+      '<img class="sheet-logo" src="../images/logo-ngang.png" alt="Hanoi Neighbors" width="760" height="252">' +
+      '<div class="photo rv">' + photo(job.hero, 1000, '', 'Hanoi Neighbors') + '</div>' +
+      '<div class="txt">' +
+        '<span class="m-eyebrow rv">Tuyển dụng · Vị trí ' + (i+1) + '/' + JOBS.length + '</span>' +
+        '<h2 class="m-title rv" id="mTitle"><small>VỊ TRÍ:</small>' + job.title + '</h2>' +
+        '<p class="rv" style="margin:0 0 10px;font-weight:700">Địa điểm làm việc:</p>' +
+        '<ul class="places rv">' + PLACES.map(function(p){ return '<li>' + ICON.pin + '<span>' + p + '</span></li>'; }).join('') + '</ul>' +
+        '<div class="stats rv">' +
+          '<div class="stat"><small>Số lượng cần tuyển</small><b>' + job.count + '</b></div>' +
+          '<div class="stat pay"><small>Lương cứng</small><b>' + job.pay + '</b>' + (job.payNote ? '<small style="color:#C8BFAF;letter-spacing:0;text-transform:none;font-weight:400">' + job.payNote + '</small>' : '') + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    body +
+    '<div class="sheet-cta"><div class="inner"><span class="lbl">Đăng ký ứng tuyển<b>' + job.value + '</b></span>' +
+      '<button type="button" class="apply-btn" data-apply="' + i + '">Đăng ký ứng tuyển ' + ICON.arrow + '</button></div></div>' +
+    '<p class="m-end">Hy vọng chúng ta sẽ về chung một nhà!</p>';
+}
+
+/* =====================================================================
+   MỞ / ĐÓNG POPUP
+   - Đóng bằng: nút X, phím Esc, bấm ra ngoài, hoặc nút Back của điện thoại
+   - Mỗi vị trí có link riêng: .../tuyen-dung.html#vi-tri-3
+   ===================================================================== */
+var modal = document.getElementById("jobModal");
+var sheet = document.getElementById("sheet");
+var sheetBody = document.getElementById("sheetBody");
+var closeBtn = document.getElementById("closeBtn");
+var current = -1, lastFocus = null, afterClose = null, observer = null;
+
+function openJob(i, push){
+  current = i;
+  lastFocus = document.activeElement;
+  sheetBody.innerHTML = renderJob(JOBS[i], i);
+  sheet.scrollTop = 0;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("locked");
+  if (push) history.pushState({hnbJob: i}, "", "#vi-tri-" + (i+1));
+  setTimeout(function(){ closeBtn.focus({preventScroll:true}); }, 50);
+
+  if (observer) observer.disconnect();
+  var els = sheetBody.querySelectorAll(".rv");
+  if ("IntersectionObserver" in window){
+    observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add("in"); observer.unobserve(e.target); }
+      });
+    }, {root: sheet, rootMargin: "0px 0px -6% 0px", threshold: 0.08});
+    els.forEach(function(el, k){
+      el.style.transitionDelay = Math.min((k % 6) * 60, 300) + "ms";
+      observer.observe(el);
+    });
+  } else {
+    els.forEach(function(el){ el.classList.add("in"); });
+  }
+}
+
+function doClose(){
+  if (current < 0) return;
+  current = -1;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("locked");
+  if (observer) observer.disconnect();
+  if (lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+  var fn = afterClose; afterClose = null;
+  if (fn) setTimeout(fn, 60);
+}
+
+function requestClose(then){
+  afterClose = then || null;
+  if (history.state && typeof history.state.hnbJob === "number") {
+    history.back(); // popstate sẽ gọi doClose
+  } else {
+    if (location.hash.indexOf("#vi-tri-") === 0) history.replaceState(null, "", location.pathname + location.search);
+    doClose();
+  }
+}
+
+window.addEventListener("popstate", function(){
+  var m = location.hash.match(/^#vi-tri-(\d)$/);
+  if (m && JOBS[m[1]-1]) { if (current !== m[1]-1) openJob(m[1]-1, false); }
+  else doClose();
+});
+
+closeBtn.addEventListener("click", function(){ requestClose(); });
+modal.querySelector("[data-close]").addEventListener("click", function(){ requestClose(); });
+document.addEventListener("keydown", function(e){
+  if (current < 0) return;
+  if (e.key === "Escape") { e.preventDefault(); requestClose(); }
+  if (e.key === "Tab") { // giữ phím Tab trong popup
+    var f = sheet.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length-1];
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+});
+
+// Nút "Đăng ký ứng tuyển" trong popup: đóng popup, chọn sẵn vị trí, cuộn tới form
+sheetBody.addEventListener("click", function(e){
+  var btn = e.target.closest("[data-apply]");
+  if (!btn) return;
+  var job = JOBS[+btn.getAttribute("data-apply")];
+  requestClose(function(){
+    var r = document.querySelector('input[name="entry.1595190573"][value="' + job.value + '"]');
+    if (r){ r.checked = true; document.getElementById("positionField").classList.remove("invalid"); }
+    var card = document.getElementById("formCard");
+    document.getElementById("dang-ky").scrollIntoView({behavior:"smooth"});
+    card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
+    setTimeout(function(){ document.getElementById("f-name").focus({preventScroll:true}); }, 700);
+  });
+});
+
+// Mở thẳng một vị trí nếu link có #vi-tri-N
+(function(){
+  var m = location.hash.match(/^#vi-tri-(\d)$/);
+  if (m && JOBS[m[1]-1]) openJob(m[1]-1, false);
+})();
+
+/* =====================================================================
+   FORM: gửi thẳng vào Google Form gốc, câu trả lời vẫn đổ về Google Sheet cũ
+   ===================================================================== */
+(function(){
+  var FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeyfA6ZGsqPMbRZbO2drSw0wOHY54GD2IWFonVqWfbqLgudlQ/formResponse";
+  var DOB_ENTRY   = "entry.1331518805";
+
+  var form   = document.getElementById("applyForm");
+  var card   = document.getElementById("formCard");
+  var btn    = document.getElementById("submitBtn");
+  var errBox = document.getElementById("formError");
+  var dob    = document.getElementById("f-dob");
+
+  dob.max = new Date().toISOString().slice(0,10);
+
+  function isValidPhone(v){
+    var digits = v.replace(/[^\d]/g, "");
+    return /^[+\d\s().-]+$/.test(v.trim()) && digits.length >= 9 && digits.length <= 12;
+  }
+
+  function validate(){
+    var ok = true, first = null;
+    form.querySelectorAll(".field[data-required]").forEach(function(f){
+      var type = f.getAttribute("data-required"), valid = true;
+      if (type === "text"){ valid = f.querySelector("input").value.trim() !== ""; }
+      else if (type === "date"){ valid = !!dob.value && dob.value <= dob.max; }
+      else if (type === "phone"){ valid = isValidPhone(f.querySelector("input").value); }
+      else { valid = !!f.querySelector("input:checked"); }
+      f.classList.toggle("invalid", !valid);
+      if (!valid){ ok = false; if (!first) first = f; }
+    });
+    if (first){ first.scrollIntoView({behavior:"smooth", block:"center"}); }
+    return ok;
+  }
+
+  function clearInvalid(e){
+    var f = e.target.closest(".field");
+    if (f && f.classList.contains("invalid")) f.classList.remove("invalid");
+  }
+  form.addEventListener("input", clearInvalid);
+  form.addEventListener("change", clearInvalid);
+
+  document.getElementById("clearBtn").addEventListener("click", function(){
+    form.reset();
+    form.querySelectorAll(".invalid").forEach(function(f){ f.classList.remove("invalid"); });
+  });
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    errBox.style.display = "none";
+    if (!validate()) return;
+
+    if (document.getElementById("f-website").value){ card.classList.add("done"); return; }
+
+    var data = new URLSearchParams();
+    form.querySelectorAll("input[name], select[name]").forEach(function(el){
+      if ((el.type === "radio" || el.type === "checkbox") && !el.checked) return;
+      var v = el.value.trim();
+      if (v !== "") data.append(el.name, v);
+    });
+    var parts = dob.value.split("-");
+    data.append(DOB_ENTRY + "_year",  parts[0]);
+    data.append(DOB_ENTRY + "_month", String(parseInt(parts[1],10)));
+    data.append(DOB_ENTRY + "_day",   String(parseInt(parts[2],10)));
+
+    btn.disabled = true; btn.textContent = "Đang gửi...";
+
+    fetch(FORM_ACTION, { method:"POST", mode:"no-cors", body:data })
+      .then(function(){
+        card.classList.add("done");
+        card.scrollIntoView({behavior:"smooth", block:"center"});
+      })
+      .catch(function(){ errBox.style.display = "block"; })
+      .finally(function(){ btn.disabled = false; btn.textContent = "Gửi đăng ký"; });
+  });
+})();
+</script>
+</body>
+</html>
