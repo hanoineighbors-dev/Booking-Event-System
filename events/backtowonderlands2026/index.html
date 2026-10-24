@@ -79,7 +79,7 @@ a{color:var(--gold)}
 .skip:hover{border-color:var(--pink);color:#fff}
 .skip{transition:opacity .35s,transform .35s,border-color .2s}
 .skip.hide{opacity:0;transform:translateY(-8px);pointer-events:none}
-.skipbig{position:absolute;left:50%;bottom:clamp(96px,13vh,140px);transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:3px;border:0;cursor:pointer;padding:clamp(14px,1.4vw,19px) clamp(28px,3.2vw,44px);width:max-content;max-width:calc(100% - 32px);font-family:Montserrat,sans-serif;text-align:center;transition:scale .25s,opacity .4s,visibility 0s;animation:skipIn .8s .6s backwards,skipGlow 2.6s 1.4s ease-in-out infinite}
+.skipbig{position:absolute;right:var(--pad);bottom:clamp(18px,4vh,40px);z-index:4;display:flex;flex-direction:column;align-items:center;gap:3px;border:0;cursor:pointer;padding:clamp(14px,1.4vw,19px) clamp(28px,3.2vw,44px);width:max-content;max-width:calc(100% - 32px);font-family:Montserrat,sans-serif;text-align:center;transition:scale .25s,opacity .4s,visibility 0s;animation:skipIn .8s .6s backwards,skipGlow 2.6s 1.4s ease-in-out infinite}
 .skipbig b{font-size:clamp(17px,calc(1vw + 12px),24px);font-weight:900;letter-spacing:.05em;text-transform:uppercase;line-height:1.1}
 .skipbig small{font-size:clamp(11px,calc(.35vw + 9px),14px);font-weight:700;opacity:.82;letter-spacing:.02em}
 .skipbig:hover{scale:1.04}
@@ -100,7 +100,11 @@ a{color:var(--gold)}
 #s1{background:radial-gradient(ellipse 70% 55% at 50% 52%,#25112f 0%,#0e0a13 48%,var(--black) 78%)}
 #s1 .line{opacity:0;margin:0 auto}
 #s1 .l1{display:flex;flex-direction:column;align-items:center;gap:12px;font-size:clamp(12px,3.4vw,15px);letter-spacing:.3em;text-transform:uppercase;color:#d7d7d7}
-#s1 .l1 img{height:clamp(40px,9vw,64px);width:auto}
+#s1 .duo{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2.4vw,22px);max-width:100%}
+#s1 .duo img{width:auto;max-width:none}
+#s1 .duo .hnb{height:clamp(34px,7.4vw,60px)}
+#s1 .duo .ler{height:clamp(24px,5.4vw,44px)}
+#s1 .duo i{font-style:normal;font-size:clamp(18px,3.6vw,28px);letter-spacing:0;opacity:.6}
 #s1 .l2{font-size:clamp(42px,10.5vw,108px);line-height:1.02;margin-top:26px}
 #s1 .l3{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:clamp(11px,3vw,14px);letter-spacing:.26em;text-transform:uppercase;color:#cfcfcf}
 #s1 .l3 img{height:clamp(30px,7vw,46px);width:auto}
@@ -131,12 +135,12 @@ a{color:var(--gold)}
 
 /* 3 · rơi */
 #s3{background:var(--black)}
-.tunnel{position:absolute;inset:-10%;isolation:isolate}
+.tunnel{position:absolute;left:50%;top:50%;width:150vmax;height:150vmax;margin:-75vmax 0 0 -75vmax;isolation:isolate}
 .tunnel .a,.tunnel .b,.tunnel .c,.tunnel .d{position:absolute;inset:0}
 .tunnel .a{background:repeating-conic-gradient(from 0deg at 50% 50%,var(--teal-b) 0 11.25deg,var(--black) 11.25deg 22.5deg);animation:spin 28s linear infinite}
 .tunnel .b{background:repeating-radial-gradient(circle at 50% 50%,transparent 0 var(--o),rgba(5,6,8,.78) var(--o) calc(var(--o) + 5vmax),transparent calc(var(--o) + 5vmax) 10vmax);animation:fall 1.6s linear infinite}
-.tunnel .c{background:radial-gradient(circle at 50% 50%,#f4f24a 0,#86d168 14%,#21ba9e 30%,#a052c0 62%,#4a1260 100%);mix-blend-mode:multiply}
-.tunnel .d{background:radial-gradient(circle at 50% 50%,#000 0 5%,rgba(0,0,0,.8) 10%,rgba(0,0,0,.12) 36%,rgba(0,0,0,.62) 74%,#000 100%)}
+.tunnel .c{background:radial-gradient(circle at 50% 50%,#f4f24a 0,#86d168 9.5%,#21ba9e 20%,#a052c0 41%,#4a1260 67%);mix-blend-mode:multiply}
+.tunnel .d{background:radial-gradient(circle at 50% 50%,#000 0 3.4%,rgba(0,0,0,.8) 6.7%,rgba(0,0,0,.12) 24%,rgba(0,0,0,.62) 50%,#000 67%)}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fall{from{--o:0vmax}to{--o:10vmax}}
 .floaters{position:absolute;inset:0;z-index:1;pointer-events:none}
@@ -161,32 +165,40 @@ a{color:var(--gold)}
 #s4 .lead b.r{color:var(--red-hi)}
 #s4 .lead b.w{color:#fff}
 .duel{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
-.duel::after{content:"";position:absolute;left:50%;top:22%;bottom:0;width:2px;margin-left:-1px;background:linear-gradient(transparent,var(--gold) 35%,var(--gold-lo));opacity:.55;z-index:2}
-.side{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 12px clamp(20px,5vh,48px)}
-.side::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(var(--c1) 0 25%,var(--c2) 0 50%) 0 0/clamp(48px,8vw,96px) clamp(48px,8vw,96px);-webkit-mask:linear-gradient(transparent 18%,#000 75%);mask:linear-gradient(transparent 18%,#000 75%)}
-.side.red{--c1:#35070b;--c2:#150305;background:radial-gradient(ellipse 90% 55% at 50% 100%,rgba(181,32,37,.6),transparent 72%),var(--black)}
-.side.white{--c1:#1d2024;--c2:#0b0c0f;background:radial-gradient(ellipse 90% 55% at 50% 100%,rgba(255,255,255,.2),transparent 72%),var(--black)}
-.side .suitbg{position:absolute;left:0;right:0;margin:0 auto;top:26%;width:82%;max-width:500px;aspect-ratio:1;height:auto}
-.side.red .suitbg{fill:url(#gRed);opacity:.3}
-.side.white .suitbg{fill:url(#gSilver);opacity:.16}
-.side .queen{width:min(340px,92%);margin-bottom:8px;position:relative;z-index:1;mix-blend-mode:lighten}
-.side .who{position:relative;z-index:2;text-align:center;max-width:300px}
-.side .who .alice{font-size:clamp(26px,6vw,46px);line-height:1}
+.dfloor{position:absolute;left:-45%;right:-45%;bottom:-2%;height:62%;z-index:0;transform:perspective(620px) rotateX(56deg);transform-origin:50% 100%;-webkit-mask:linear-gradient(transparent 4%,#000 46%);mask:linear-gradient(transparent 4%,#000 46%);pointer-events:none}
+.dfloor,.dfloor i{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Crect width='240' height='240' fill='%23050608'/%3E%3Cg%3E%3Crect x='3' y='3' width='54' height='54' rx='4' fill='%23d83eb6'/%3E%3Crect x='63' y='3' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='123' y='3' width='54' height='54' rx='4' fill='%2321ba9e'/%3E%3Crect x='183' y='3' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='3' y='63' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='63' y='63' width='54' height='54' rx='4' fill='%23f2c75c'/%3E%3Crect x='123' y='63' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='183' y='63' width='54' height='54' rx='4' fill='%23a052c0'/%3E%3Crect x='3' y='123' width='54' height='54' rx='4' fill='%2386d168'/%3E%3Crect x='63' y='123' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='123' y='123' width='54' height='54' rx='4' fill='%23b52025'/%3E%3Crect x='183' y='123' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='3' y='183' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='63' y='183' width='54' height='54' rx='4' fill='%2321ba9e'/%3E%3Crect x='123' y='183' width='54' height='54' rx='4' fill='%23141018'/%3E%3Crect x='183' y='183' width='54' height='54' rx='4' fill='%23d83eb6'/%3E%3C/g%3E%3C/svg%3E") 50% 100%/clamp(120px,14vw,200px) clamp(120px,14vw,200px)}
+.dfloor i{position:absolute;inset:0;background-position:calc(50% + clamp(30px,3.5vw,50px)) 100%;filter:hue-rotate(140deg) brightness(1.2);animation:floorBlink 1.8s steps(1) infinite}
+.dfloor::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 30% 60% at 32% 100%,rgba(255,80,90,.35),transparent 70%),radial-gradient(ellipse 30% 60% at 68% 100%,rgba(255,255,255,.28),transparent 70%),linear-gradient(transparent 30%,rgba(5,6,8,.35))}
+@keyframes floorBlink{0%{opacity:0}50%{opacity:.75}}
+.side{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 12px clamp(14px,4.5vh,44px)}
+.side.red{background:radial-gradient(ellipse 80% 45% at 50% 100%,rgba(181,32,37,.32),transparent 72%)}
+.side.white{background:radial-gradient(ellipse 80% 45% at 50% 100%,rgba(255,255,255,.12),transparent 72%)}
+.side .suitbg{position:absolute;left:0;right:0;margin:0 auto;top:30%;width:72%;max-width:440px;aspect-ratio:1;height:auto;z-index:0}
+.side.red .suitbg{fill:url(#gRed);opacity:.24}
+.side.red .queen{-webkit-mask:linear-gradient(90deg,transparent,#000 14%);mask:linear-gradient(90deg,transparent,#000 14%)}
+.side.white .suitbg{fill:url(#gSilver);opacity:.13}
+.side .queen{position:relative;z-index:1;height:min(44svh,470px);width:auto;max-width:94%;object-fit:contain;filter:drop-shadow(0 14px 10px rgba(0,0,0,.65))}
+.side .who{position:relative;z-index:2;order:-1;text-align:center;max-width:320px;margin-bottom:clamp(8px,2vh,18px)}
+.side .who .alice{font-size:clamp(26px,4.4vw,46px);line-height:1}
 .side.red .who .alice{color:var(--red-hi);text-shadow:0 2px 0 #000,0 0 18px rgba(181,32,37,.5)}
 .side.white .who .alice{color:#fff;text-shadow:0 2px 0 #000,0 0 18px rgba(255,255,255,.3)}
 .side .who .vn{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.8;margin-top:4px}
-.side .who .tr{font-weight:800;margin-top:10px;font-size:clamp(13px,3.4vw,16px)}
+.side .who .tr{font-weight:800;margin-top:8px;font-size:clamp(13px,1.6vw,16px)}
 .side.red .who .tr{color:#ff9aa0}
 .side.white .who .tr{color:#e9e6dc}
-.side .who q{display:block;margin-top:6px;font-style:italic;font-size:clamp(12px,3.2vw,15px);color:#e9e9e9}
+.side .who q{display:block;margin-top:4px;font-style:italic;font-size:clamp(12px,1.4vw,15px);color:#e9e9e9}
 @media (max-width:640px){
-  .duel{grid-template-columns:1fr;grid-template-rows:1fr 1fr;top:clamp(150px,30vh,240px)}
-  .duel::after{left:8%;right:8%;top:50%;bottom:auto;width:auto;height:2px;margin:-1px 0 0;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold) 70%,transparent)}
-  .side{flex-direction:row;justify-content:center;gap:8px;padding:0 10px;align-items:flex-end}
-  .side .queen{width:44%;margin:0}
-  .side .who{width:52%;padding-bottom:18px;text-align:left}
-  .side .suitbg{width:58%;top:10%;margin:0 0 0 2%}
+  .duel{top:clamp(150px,26svh,220px)}
+  .dfloor{height:42%;left:-90%;right:-90%}
+  .side{padding:0 6px clamp(10px,3svh,28px)}
+  .side .queen{height:min(34svh,300px)}
+  .side .who .alice{font-size:clamp(22px,6.4vw,30px)}
+  .side .who .vn{font-size:10px;letter-spacing:.14em}
+  .side .who .tr{font-size:12.5px;line-height:1.35}
+  .side .who q{font-size:11.5px;line-height:1.35}
+  .side .suitbg{width:88%;top:34%}
 }
+@media (max-width:640px) and (max-height:700px){.side .who q{display:none}}
 
 /* 5 · trò chơi: bộ lá bài */
 #s5{background:radial-gradient(ellipse 80% 50% at 50% 0%,#1f0c29,var(--black) 70%)}
@@ -217,7 +229,11 @@ a{color:var(--gold)}
 .djhole .hole{position:absolute;inset:0;overflow:hidden;-webkit-mask:var(--kh-mask) center/100% 100% no-repeat;mask:var(--kh-mask) center/100% 100% no-repeat;background:radial-gradient(circle at 16% 30%,rgba(122,37,150,.95),transparent 52%),radial-gradient(circle at 88% 34%,rgba(47,154,70,.8),transparent 48%),radial-gradient(circle at 50% 44%,rgba(240,166,58,.85),transparent 36%),linear-gradient(transparent 56%,var(--purple) 56%,#4d1265),#07060b}
 .djhole .hole img{position:absolute;bottom:-2%;left:50%;width:118%;max-width:none;transform:translateX(-50%)}
 .djhole .frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.watch{width:clamp(90px,20vw,190px)}
+.tg{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;font-weight:900;text-transform:uppercase;letter-spacing:.05em;line-height:1;white-space:nowrap;animation:tgBob 3s ease-in-out infinite}
+.tg1{left:calc(100% - 18%);top:20%;padding:.42em .9em .38em;font-size:clamp(24px,3.3vw,40px);rotate:-7deg}
+.tg1 small{font-size:.42em;letter-spacing:.32em;margin:0 0 .18em .32em;opacity:.85}
+.tg2{right:calc(100% - 16%);bottom:16%;padding:.6em 1.05em;font-size:clamp(15px,1.9vw,23px);letter-spacing:.1em;rotate:6deg;animation-delay:-1.4s}
+@keyframes tgBob{50%{translate:0 -7px}}
 #s6 h2{font-size:clamp(42px,10vw,90px);line-height:.95;margin-bottom:clamp(10px,2vh,18px)}
 #s6 .lines{margin-top:clamp(14px,3vh,26px);font-size:clamp(15px,4vw,21px)}
 #s6 .lines p{opacity:0}
@@ -227,7 +243,7 @@ a{color:var(--gold)}
 .eq i{width:5px;background:var(--g-gold);border-radius:2px;animation:eq .9s ease-in-out infinite alternate}
 .eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.45s}.eq i:nth-child(4){animation-delay:.1s}.eq i:nth-child(5){animation-delay:.35s}.eq i:nth-child(6){animation-delay:.6s}.eq i:nth-child(7){animation-delay:.25s}
 @keyframes eq{from{height:4px}to{height:28px}}
-@media (max-width:640px){.stage{grid-template-columns:1fr}.watch{position:absolute;right:-6px;top:-10px;width:86px}}
+@media (max-width:640px){.stage{grid-template-columns:1fr;justify-items:center}.tg1{left:calc(100% - 34%);font-size:clamp(20px,6.2vw,26px)}.tg2{right:calc(100% - 30%);font-size:clamp(12px,3.6vw,15px)}}
 
 /* 7 · aura */
 #s7{background:radial-gradient(ellipse at 50% 120%,#4a1460 0%,#1b0824 38%,var(--black) 66%)}
@@ -451,9 +467,10 @@ footer .suits4{margin:14px 0}
   .tunnel .a,.tunnel .b,.eq i,.sparks i,.paid,.hint i,.skipbig{animation:none!important}
 }
 /* nút Bỏ qua intro: cân cho màn thấp (điện thoại nhỏ, điện thoại xoay ngang) */
-#s1 .inner{padding-bottom:clamp(80px,14vh,150px)}
-@media (max-height:620px){#s1 .skipbig{bottom:58px;padding:12px 26px}#s1 .hint{bottom:12px}#s1 .hint i{height:20px}}
-@media (max-height:500px){#s1 .inner{margin-top:-40px;padding-bottom:0}#s1 .l1 img{height:30px}#s1 .l1{gap:4px;font-size:11px}#s1 .l2{font-size:clamp(28px,8.5vh,52px);margin-top:10px}#s1 .l3{margin-top:10px;gap:4px}#s1 .l3 img{height:22px}#s1 .skipbig{bottom:16px;padding:10px 22px}#s1 .skipbig small{display:none}#s1 .hint{display:none}}
+#s1 .inner{padding-bottom:clamp(40px,8vh,90px)}
+@media (max-width:640px){#s1 .skipbig{padding:12px 20px}#s1 .hint{left:var(--pad);transform:none;align-items:flex-start}}
+@media (max-height:620px){#s1 .skipbig{bottom:14px;padding:11px 20px}#s1 .hint{bottom:12px}#s1 .hint i{height:20px}}
+@media (max-height:500px){#s1 .inner{margin-top:-40px;padding-bottom:0}#s1 .duo .hnb{height:28px}#s1 .duo .ler{height:21px}#s1 .l1{gap:4px;font-size:11px}#s1 .l2{font-size:clamp(28px,8.5vh,52px);margin-top:10px}#s1 .l3{margin-top:10px;gap:4px}#s1 .skipbig{bottom:16px;padding:10px 22px}#s1 .skipbig small{display:none}#s1 .hint{display:none}}
 </style>
 </head>
 <body>
@@ -481,15 +498,28 @@ footer .suits4{margin:14px 0}
   </defs>
 </svg>
 
+<div hidden aria-hidden="true">
+<svg class="watch" id="watch" viewBox="0 0 200 230" aria-hidden="true">
+          <circle cx="100" cy="16" r="12" fill="none" stroke="url(#gGold)" stroke-width="6"/>
+          <rect x="90" y="24" width="20" height="16" rx="4" fill="url(#gGold)"/>
+          <circle cx="100" cy="130" r="92" fill="url(#gGold)"/>
+          <circle cx="100" cy="130" r="80" fill="#fdf8ec"/>
+          <g stroke="#2b1b0a" stroke-linecap="round">
+            <g id="ticks"></g>
+          </g>
+          <g id="hHour"><line x1="100" y1="130" x2="100" y2="88" stroke="#2b1b0a" stroke-width="6" stroke-linecap="round"/></g>
+          <g id="hMin"><line x1="100" y1="130" x2="100" y2="66" stroke="#B52025" stroke-width="4" stroke-linecap="round"/></g>
+          <circle cx="100" cy="130" r="6" fill="#2b1b0a"/>
+        </svg>
+</div>
 <main id="intro" aria-label="Giới thiệu">
   <!-- 1 · credit -->
   <section class="scene" id="s1">
     <div class="inner">
-      <div class="line l1"><img src="assets/logo-hnb-white.png" alt="Hanoi Neighbors"><span>giới thiệu</span></div>
+      <div class="line l1"><div class="duo"><img class="hnb" src="assets/logo-hnb-white.png" alt="Hanoi Neighbors"><i>×</i><img class="ler" src="assets/logo-lermalermer-wordmark-white.png" alt="Lermalermer"></div><span>giới thiệu</span></div>
       <h1 class="line l2 alice pearl">Halloween<br>House Party 2026</h1>
       <div class="line l3">
         <div class="suitsrow" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#suit-co" fill="url(#gAura)"/></svg><svg viewBox="0 0 100 100"><use href="#suit-ro" fill="url(#gAura)"/></svg><svg viewBox="0 0 100 100"><use href="#suit-tep" fill="url(#gAura)"/></svg><svg viewBox="0 0 100 100"><use href="#suit-bich" fill="url(#gAura)"/></svg></div>
-        <span>đồng tổ chức cùng</span><img src="assets/logo-lermalermer-wordmark-white.png" alt="Lermalermer">
       </div>
     </div>
     <button class="skipbig holo" id="skipBig" type="button"><b>Bỏ qua intro ↓</b><small>Đến thẳng phần nhận chìa khoá</small></button>
@@ -573,20 +603,21 @@ footer .suits4{margin:14px 0}
   <!-- 4 · hai phe -->
   <section class="scene" id="s4">
     <div class="duel">
+      <div class="dfloor" id="dfloor" aria-hidden="true"><i></i></div>
       <div class="side red" id="sideRed">
         <svg class="suitbg" viewBox="0 0 100 100" aria-hidden="true"><use href="#suit-co"/></svg>
-        <img class="queen" src="assets/queen-red.webp" alt="Nữ hoàng Đỏ" loading="lazy">
+        <img class="queen" src="assets/queen-red-cut.webp" alt="Nữ hoàng Đỏ" loading="lazy">
         <div class="who"><div class="alice">Queen of Hearts</div><div class="vn">Nữ hoàng Đỏ</div><div class="tr">Táo bạo, kiêu hãnh, thích phá luật.</div><q>Không ai bảo được chúng ta phải làm gì.</q></div>
       </div>
       <div class="side white" id="sideWhite">
         <svg class="suitbg" viewBox="0 0 100 100" aria-hidden="true"><use href="#suit-bich"/></svg>
-        <img class="queen" src="assets/queen-white.webp" alt="Nữ hoàng Trắng" loading="lazy">
+        <img class="queen" src="assets/queen-white-cut.webp" alt="Nữ hoàng Trắng" loading="lazy">
         <div class="who"><div class="alice">White Queen</div><div class="vn">Nữ hoàng Trắng</div><div class="tr">Thanh lịch, bí ẩn, nhiều mưu mẹo.</div><q>Không cần ồn ào để chiến thắng.</q></div>
       </div>
     </div>
     <div class="head">
       <h2 class="alice goldtext">House Games</h2>
-      <p class="lead" id="lead4">Wonderland vẫn bị phân đôi, bạn sẽ thuộc đội <b class="r">Nữ hoàng Đỏ</b> hay <b class="w">Nữ hoàng Trắng</b>?<br>Nhập cuộc và chiến cùng đồng đội.</p>
+      <p class="lead" id="lead4">Khách tham dự sẽ được chia làm 2 đội<br>để tham gia các trò chơi warm up</p>
     </div>
   </section>
 
@@ -613,23 +644,12 @@ footer .suits4{margin:14px 0}
       <div class="stage">
         <div class="djhole" id="djhole">
           <div class="hole"><img src="assets/ashley.webp" alt="DJ Ashley"></div>
+          <span class="tg holo tg1"><small>DJ</small>Ashley</span>
+          <span class="tg holo tg2">Tech House</span>
           <svg class="frame" viewBox="0 0 100 170" aria-hidden="true"><path d="M 2.01 169.99 L 97.98 169.99 L 73.15 93.05 C 72.97 92.39 73.24 91.69 73.86 91.38 C 89.99 82.85 100 66.47 100 48.65 C 100 21.8 77.58 -0.01 50.01 -0.01 C 22.44 -0.01 -0.01 21.8 -0.01 48.65 C -0.01 66.47 10.03 82.85 26.13 91.38 C 26.75 91.69 27.05 92.39 26.87 93.05 Z M 2.01 169.99" fill="none" stroke="#0b2a1a" stroke-width="5.6" stroke-linejoin="round"/><path d="M 2.01 169.99 L 97.98 169.99 L 73.15 93.05 C 72.97 92.39 73.24 91.69 73.86 91.38 C 89.99 82.85 100 66.47 100 48.65 C 100 21.8 77.58 -0.01 50.01 -0.01 C 22.44 -0.01 -0.01 21.8 -0.01 48.65 C -0.01 66.47 10.03 82.85 26.13 91.38 C 26.75 91.69 27.05 92.39 26.87 93.05 Z M 2.01 169.99" fill="none" stroke="url(#grassPat)" stroke-width="4.4" stroke-linejoin="round"/><path d="M 2.01 169.99 L 97.98 169.99 L 73.15 93.05 C 72.97 92.39 73.24 91.69 73.86 91.38 C 89.99 82.85 100 66.47 100 48.65 C 100 21.8 77.58 -0.01 50.01 -0.01 C 22.44 -0.01 -0.01 21.8 -0.01 48.65 C -0.01 66.47 10.03 82.85 26.13 91.38 C 26.75 91.69 27.05 92.39 26.87 93.05 Z M 2.01 169.99" fill="none" stroke="url(#gRim)" stroke-width="4.4" stroke-linejoin="round"/></svg>
         </div>
-        <svg class="watch" id="watch" viewBox="0 0 200 230" aria-hidden="true">
-          <circle cx="100" cy="16" r="12" fill="none" stroke="url(#gGold)" stroke-width="6"/>
-          <rect x="90" y="24" width="20" height="16" rx="4" fill="url(#gGold)"/>
-          <circle cx="100" cy="130" r="92" fill="url(#gGold)"/>
-          <circle cx="100" cy="130" r="80" fill="#fdf8ec"/>
-          <g stroke="#2b1b0a" stroke-linecap="round">
-            <g id="ticks"></g>
-          </g>
-          <g id="hHour"><line x1="100" y1="130" x2="100" y2="88" stroke="#2b1b0a" stroke-width="6" stroke-linecap="round"/></g>
-          <g id="hMin"><line x1="100" y1="130" x2="100" y2="66" stroke="#B52025" stroke-width="4" stroke-linecap="round"/></g>
-          <circle cx="100" cy="130" r="6" fill="#2b1b0a"/>
-        </svg>
       </div>
       <div class="lines float"><p>Đừng bận tâm đồng hồ đang chỉ mấy giờ.</p><p>Đêm nay, cứ theo nhịp của DJ Ashley.</p></div>
-      <div class="tags"><span class="t holo">DJ Ashley</span><span class="t holo">Tech House</span></div>
       <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </div>
   </section>
@@ -648,8 +668,8 @@ footer .suits4{margin:14px 0}
         <circle cx="58" cy="140" r="6" fill="#088380"/><circle cx="162" cy="140" r="6" fill="#088380"/><circle cx="110" cy="140" r="6" fill="#d83eb6"/>
       </svg>
       <h2 class="alice goldtext">Aura Battle</h2>
-      <p class="sub" id="sub7">Một đêm để trở thành bất kỳ ai.<br>Một cơ hội để trở thành nhân vật nổi bật nhất Wonderland.</p>
-      <div class="prize" id="prize"><small>Giải thưởng trị giá</small><div class="num goldtext">1.000.000đ</div></div>
+      <p class="sub" id="sub7">Người có trang phục ấn tượng nhất đêm sẽ được vinh danh<br>và nhận giải thưởng trị giá</p>
+      <div class="prize" id="prize"><div class="num goldtext">1.000.000Đ</div></div>
     </div>
   </section>
 
@@ -863,6 +883,7 @@ if(!reduce&&window.gsap&&window.ScrollTrigger){
     .to('#lead4',{opacity:1,duration:.5})
     .from('#sideRed',{xPercent:-100,duration:1,ease:'power3.out'},'<.2')
     .from('#sideWhite',{xPercent:100,duration:1,ease:'power3.out'},'<')
+    .from('#dfloor',{opacity:0,yPercent:25,duration:.8},'<')
     .from('#s4 .who',{opacity:0,y:30,stagger:.2,duration:.6})
     .from('#s4 .suitbg',{scale:.4,opacity:0,stagger:.1,duration:.8},'<')
     .to({},{duration:.8});
@@ -875,16 +896,13 @@ if(!reduce&&window.gsap&&window.ScrollTrigger){
     .to('#tag5',{opacity:1,duration:.5})
     .to({},{duration:.6});
 
-  // 6 · âm nhạc: kim đồng hồ quay loạn
+  // 6 · âm nhạc
   gsap.timeline({scrollTrigger:pin('#s6','200%')})
     .from('#s6 h2',{opacity:0,scale:.8,duration:.5})
     .from('#djhole',{scale:.3,opacity:0,duration:.8,ease:'back.out(1.2)'},'<.1')
-    .from('#watch',{x:120,opacity:0,rotation:40,duration:.8},'<.2')
     .to('#s6 .lines p',{opacity:1,stagger:.5,duration:.5})
-    .from('#s6 .tags .t',{scale:0,stagger:.15,duration:.4},'<.4')
+    .from('#s6 .tg',{scale:0,opacity:0,stagger:.2,duration:.5,ease:'back.out(2)'},'<.2')
     .to({},{duration:.6});
-  gsap.to('#hMin',{rotation:1440,svgOrigin:'100 130',ease:'none',scrollTrigger:{trigger:'#s6',start:'top top',end:'+=200%',scrub:.3}});
-  gsap.to('#hHour',{rotation:-480,svgOrigin:'100 130',ease:'none',scrollTrigger:{trigger:'#s6',start:'top top',end:'+=200%',scrub:.3}});
 
   // 7 · vương miện dưới đèn
   gsap.timeline({scrollTrigger:pin('#s7','200%')})
