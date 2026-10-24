@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chìa khoá · Back to the Rabbit Hole</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#050608">
+<link rel="icon" href="assets/favicon.png">
+<style>
+@font-face{font-family:Alice;src:url(fonts/alice.woff2) format('woff2');font-display:swap}
+@font-face{font-family:Float;src:url(fonts/dfvn-float.woff2) format('woff2');font-display:swap}
+@font-face{font-family:Montserrat;src:url(fonts/montserrat.woff2) format('woff2');font-weight:100 900;font-display:swap}
+:root{--black:#050608;--red:#B52025;--teal:#088380;--mint:#21ba9e;--gold2:#f2c75c;--gold:linear-gradient(180deg,#fff6cf 0%,#f6d77a 35%,#c9952f 62%,#f7e09a 82%,#9c6a1c 100%)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--black);color:#f4efe6;font-family:Montserrat,system-ui,sans-serif;line-height:1.5}
+body{min-height:100svh;background:radial-gradient(ellipse at 50% 0%,rgba(33,186,158,.18),transparent 60%),repeating-conic-gradient(rgba(33,186,158,.06) 0 25%,transparent 0 50%) 0 0/56px 56px,var(--black);padding:24px 16px 48px}
+.wrap{width:min(460px,100%);margin:0 auto}
+.title{width:min(300px,76%);margin:0 auto 18px;display:block}
+.card{border:3px solid var(--c);border-radius:24px;background:linear-gradient(170deg,#0b0c10 50%,var(--bgc));padding:20px;text-align:center;position:relative;overflow:hidden}
+.card[data-phe=do]{--c:var(--red);--bgc:#2a0608;--tc:#ff8a8f}
+.card[data-phe=trang]{--c:#e9f5f3;--bgc:#062624;--tc:#7fe0d6}
+.art svg{width:100%;height:auto;display:block}
+.phe{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--tc);margin-top:8px;font-weight:800}
+.nm{font-family:Float;font-size:clamp(28px,8vw,38px);line-height:1.15;margin-top:4px}
+.eat{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:99px;background:#d83eb6;color:#fff;font-weight:800;font-size:12px;letter-spacing:.06em}
+.qr{width:min(240px,70%);margin:18px auto 0;background:#fff;border-radius:16px;padding:12px}
+.qr canvas{width:100%;height:auto;display:block;image-rendering:pixelated}
+.id{margin-top:10px;font-size:13px;color:#bdbdbd}
+.id b{color:#fff;letter-spacing:.06em}
+.st{margin-top:14px;font-weight:700;padding:10px;border-radius:12px;background:rgba(255,255,255,.06)}
+.st.used{color:#ffb3b7}.st.ok{color:var(--mint)}.st.wait{color:var(--gold2)}
+.used .qr{opacity:.25;filter:grayscale(1)}
+.info{margin-top:18px;font-size:14px;color:#d8d8d8;text-align:left;background:#0f1015;border:1px solid #23252d;border-radius:18px;padding:16px}
+.info b{color:var(--gold2);display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:10px}
+.info b:first-child{margin-top:0}
+.save{display:block;width:100%;margin-top:16px;border:0;border-radius:14px;padding:15px;font-weight:900;font-size:16px;color:var(--black);background:var(--gold);cursor:pointer}
+.msg{text-align:center;margin-top:40px;color:#cfcfcf}
+.foot{text-align:center;margin-top:22px;color:#8d8d8d;font-size:12px;font-family:Float}
+.dim .art{filter:grayscale(1) brightness(.5)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="title" src="assets/title.webp" alt="Back to the Rabbit Hole">
+  <div id="out"><p class="msg">Đang tìm chìa khoá...</p></div>
+  <p class="foot">"Ở đây ai cũng hơi điên một chút."</p>
+</div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/keyart.js"></script>
+<script src="js/vendor/qrcode.js"></script>
+<script>
+(function(){
+var out=document.getElementById('out'),t=new URLSearchParams(location.search).get('t')||'';
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function drawQr(canvas,text,size){
+  var qr=qrcode(0,'M');qr.addData(text);qr.make();var n=qr.getModuleCount(),q=2,cell=Math.floor(size/(n+q*2));
+  canvas.width=canvas.height=cell*(n+q*2);var c=canvas.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,canvas.width,canvas.height);c.fillStyle='#050608';
+  for(var r=0;r<n;r++)for(var k=0;k<n;k++)if(qr.isDark(r,k))c.fillRect((k+q)*cell,(r+q)*cell,cell,cell);
+  return canvas;
+}
+if(!t){out.innerHTML='<p class="msg">Đường link chìa khoá chưa đúng. Bạn mở lại từ email giúp nhé.</p>';return}
+RH_API.get({action:'key',t:t}).then(function(r){
+  if(!r||!r.ok){out.innerHTML='<p class="msg">'+esc((r&&r.error)||'Không tìm thấy chìa khoá')+'</p>';return}
+  var k=r.key,e=r.event||{},phe=k.phe==='trang'?'Trắng':'Đỏ';
+  var st=k.status==='Đã dùng'?'<div class="st used">Chìa này đã mở cửa lúc '+esc(k.checkinAt)+'</div>':
+         k.status==='Hợp lệ'?'<div class="st ok">Đưa mã này cho nhân viên ở Cửa gương</div>':
+         k.status==='Chờ'?'<div class="st wait">Chìa đang được rèn, sẽ dùng được khi đơn được xác nhận</div>':'<div class="st used">Chìa đã bị huỷ</div>';
+  out.innerHTML='<div class="card '+(k.status==='Đã dùng'?'used':'')+(k.status==='Chờ'?' dim':'')+'" data-phe="'+k.phe+'">'+
+    '<div class="art">'+keyArt(k.phe)+'</div><div class="phe">Phe '+phe+(k.phe==='do'?' ♥':' ♠')+'</div><div class="nm">'+esc(k.name)+'</div>'+
+    (k.eatMe?'<span class="eat">+ EAT ME</span>':'')+'<div class="qr"><canvas id="qr"></canvas></div><div class="id">Mã chìa <b>'+esc(k.id)+'</b></div>'+st+'</div>'+
+    '<div class="info"><b>Khi nào</b>'+esc(e.when)+'<b>Ở đâu</b>'+esc(e.where)+'<b>Dress code</b>'+esc(e.dress)+'</div>'+
+    (k.status==='Hợp lệ'?'<button class="save" id="save" type="button">Lưu ảnh chìa khoá</button>':'');
+  drawQr(document.getElementById('qr'),'RH1:'+k.token,480);
+  var sv=document.getElementById('save');if(sv)sv.addEventListener('click',function(){saveImg(k)});
+}).catch(function(){out.innerHTML='<p class="msg">Mạng chập chờn, bạn tải lại trang giúp nhé.</p>'});
+
+function saveImg(k){
+  var W=1080,H=1600,c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');
+  var red=k.phe==='do',col=red?'#B52025':'#e9f5f3';
+  x.fillStyle='#050608';x.fillRect(0,0,W,H);
+  var g=x.createLinearGradient(0,0,0,H);g.addColorStop(.45,'#0b0c10');g.addColorStop(1,red?'#2a0608':'#062624');
+  x.fillStyle=g;rr(x,40,40,W-80,H-80,56);x.fill();x.lineWidth=10;x.strokeStyle=col;x.stroke();
+  var imgs=[load('assets/title-email.png'),load('assets/key-'+k.phe+'.png')];
+  Promise.all(imgs).then(function(a){
+    var t=a[0],tw=640;x.drawImage(t,(W-tw)/2,100,tw,tw*t.height/t.width);
+    var kk=a[1],kw=820;x.drawImage(kk,(W-kw)/2,400,kw,kw*kk.height/kk.width);
+    x.textAlign='center';x.fillStyle=red?'#ff8a8f':'#7fe0d6';x.font='800 34px Montserrat';x.fillText('PHE '+(red?'ĐỎ ♥':'TRẮNG ♠'),W/2,760);
+    x.fillStyle='#fff';x.font='64px Float, Montserrat';x.fillText(k.name,W/2,840);
+    var q=drawQr(document.createElement('canvas'),'RH1:'+k.token,520);x.fillStyle='#fff';rr(x,(W-560)/2,890,560,560,28);x.fill();x.drawImage(q,(W-520)/2,910,520,520);
+    x.fillStyle='#cfcfcf';x.font='600 30px Montserrat';x.fillText('Mã chìa '+k.id+(k.eatMe?' · EAT ME':''),W/2,1500);
+    x.fillStyle='#8d8d8d';x.font='26px Montserrat';x.fillText('31.10 · Cửa hang mở 20:30 · Tầng 6, 131 Hoàng Cầu',W/2,1546);
+    c.toBlob(function(b){var a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download=k.id+'.png';document.body.appendChild(a2);a2.click();setTimeout(function(){URL.revokeObjectURL(a2.href);a2.remove()},1500)},'image/png');
+  });
+}
+function load(src){return new Promise(function(res,rej){var i=new Image();i.onload=function(){res(i)};i.onerror=rej;i.src=src})}
+function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+})();
+</script>
+</body>
+</html>
