@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanoi Neighbors - Sự kiện</title>
+<meta name="description" content="Những buổi hẹn ở nhà Hàng xóm: tiệc, brunch, chiếu phim và những đêm hơi điên một chút.">
+<meta property="og:title" content="Hanoi Neighbors - Sự kiện">
+<meta property="og:description" content="Những buổi hẹn ở nhà Hàng xóm. Chọn một cánh cửa và bước vào.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://hanoineighbors.com/events/backtowonderlands2026/assets/og.jpg">
+<meta property="og:url" content="https://hanoineighbors.com/events/">
+<meta name="theme-color" content="#1A1A18">
+<link rel="icon" type="image/png" href="../images/logo-doc.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,600&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1A1A18;--cream:#FAF7F2;--gold:#D4B282;--terracotta:#B85C38;--moss:#5C6B4A;--stone:#C8BFAF;
+    --paper:#FFFDF9;--ink-soft:#57524A;--line:#E6DDCF;
+    --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+    --sans:"Be Vietnam Pro","Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--charcoal);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  .hero{position:relative;background:var(--charcoal);color:var(--cream);overflow:hidden;padding:56px 0 64px}
+  .hero::before{content:"";position:absolute;inset:-40% -10% auto auto;width:640px;height:640px;background:radial-gradient(circle,rgba(212,178,130,.26) 0%,rgba(212,178,130,0) 65%);pointer-events:none}
+  .hero .wrap{position:relative}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:44px}
+  .brand img{width:190px;height:auto}
+  .home{font-size:14px;color:var(--stone);text-decoration:none;border:1px solid rgba(212,178,130,.4);border-radius:999px;padding:8px 16px;transition:border-color .2s,color .2s}
+  .home:hover{border-color:var(--gold);color:var(--cream)}
+  .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(40px,7vw,72px);line-height:1.04;margin:0 0 20px;letter-spacing:-.01em}
+  h1 em{font-style:italic;font-weight:500;color:var(--gold)}
+  .lead{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.4vw,21px);line-height:1.55;color:#E9E3D8;max-width:640px;margin:0}
+
+  .list{padding:56px 0 24px;display:grid;gap:28px}
+  .ev{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;text-decoration:none;transition:transform .25s,box-shadow .25s}
+  .ev:hover{transform:translateY(-3px);box-shadow:0 18px 40px -22px rgba(26,26,24,.45)}
+  .ev .pic{position:relative;background:var(--charcoal);min-height:260px}
+  .ev .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .ev .tag{position:absolute;left:14px;top:14px;font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 12px;border-radius:999px;background:var(--cream);color:var(--charcoal)}
+  .ev .tag.live{background:var(--terracotta);color:#fff}
+  .ev .tag.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;margin-right:7px;vertical-align:1px;animation:blink 1.6s ease-in-out infinite}
+  @keyframes blink{50%{opacity:.25}}
+  .ev .body{padding:28px 30px 30px;display:flex;flex-direction:column}
+  .ev .when{font-size:14px;font-weight:600;color:var(--terracotta);letter-spacing:.02em}
+  .ev h2{font-family:var(--serif);font-weight:700;font-size:clamp(26px,3.4vw,34px);line-height:1.15;margin:6px 0 4px}
+  .ev .sub{font-family:var(--serif);font-style:italic;color:var(--ink-soft);margin:0 0 14px}
+  .ev p{margin:0 0 16px;color:var(--ink-soft)}
+  .ev .where{font-size:14px;color:var(--ink-soft);display:flex;gap:8px;align-items:flex-start;margin-bottom:22px}
+  .ev .where svg{flex:none;margin-top:3px;color:var(--moss)}
+  .ev .cta{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:15px;padding:12px 20px;border-radius:999px;background:var(--charcoal);color:var(--cream);transition:background .2s}
+  .ev:hover .cta{background:var(--terracotta)}
+  .ev .cta span{transition:transform .2s}
+  .ev:hover .cta span{transform:translateX(4px)}
+  @media (max-width:760px){
+    .ev{grid-template-columns:1fr}
+    .ev .pic{min-height:0;aspect-ratio:4/3}
+    .ev .body{padding:22px 20px 24px}
+    .top{margin-bottom:32px}
+    .brand img{width:150px}
+  }
+  .note{color:var(--ink-soft);font-family:var(--serif);font-style:italic;text-align:center;padding:12px 0 56px;margin:0}
+  footer{background:var(--charcoal);color:var(--stone);padding:28px 0;font-size:14px}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="../"><img src="../images/logo-white-ngang.png" alt="Hanoi Neighbors"></a>
+      <a class="home" href="../">Về trang chủ</a>
+    </div>
+    <p class="eyebrow">Sự kiện</p>
+    <h1>Những buổi hẹn<br>ở nhà <em>Hàng xóm</em></h1>
+    <p class="lead">Có đêm thì ồn ào, có buổi thì chậm rãi. Chọn một cánh cửa, rồi bước vào như về nhà.</p>
+  </div>
+</header>
+
+<main class="wrap list">
+  <a class="ev" href="backtowonderlands2026/">
+    <div class="pic">
+      <img src="backtowonderlands2026/assets/poster-main.webp" alt="Poster Back to the Rabbit Hole, Halloween House Party 2026" loading="lazy">
+      <span class="tag live">Đang nhận chìa khoá</span>
+    </div>
+    <div class="body">
+      <div class="when">Thứ Bảy 31.10.2026 · Cửa hang mở 20:30</div>
+      <h2>Back to the Rabbit Hole</h2>
+      <div class="sub">Halloween House Party 2026 · cùng Lermalermer</div>
+      <p>Wonderland vẫn bị phân đôi. Chọn phe Nữ hoàng Đỏ hay Nữ hoàng Trắng, chơi House Games, lạc vào nhạc của DJ Ashley và tranh ngôi ở Aura Battle.</p>
+      <div class="where"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Sincerely, Hanoi Neighbors · Tầng 6, 131 Hoàng Cầu</div>
+      <span class="cta">Nhận chìa khoá <span>→</span></span>
+    </div>
+  </a>
+
+  <a class="ev" href="../event/">
+    <div class="pic">
+      <img src="../images/bar_crowd.jpg" alt="Một buổi tiệc ở Hanoi Neighbors" loading="lazy">
+      <span class="tag">Đặt chỗ theo buổi</span>
+    </div>
+    <div class="body">
+      <div class="when">Brunch cuối tuần</div>
+      <h2>Dập Dìu Drag Brunch</h2>
+      <div class="sub">Những Bà Nội Trợ Kiểu Áaa · cùng Dập Dìu Drag Haus</div>
+      <p>Một bữa brunch rộn ràng với những màn diễn drag, đồ ăn ngon và tiếng cười kéo dài tới tận chiều.</p>
+      <div class="where"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Hanoi Neighbors - Big Hug · 8 Nguyễn Thiếp</div>
+      <span class="cta">Xem và đặt chỗ <span>→</span></span>
+    </div>
+  </a>
+</main>
+<p class="note">Sự kiện mới sẽ được treo lên đây. Hẹn bạn ở buổi tiếp theo.</p>
+
+<footer>
+  <div class="wrap">
+    <span>Hanoi Neighbors · Tự nhiên như ở nhà</span>
+    <a href="../">hanoineighbors.com</a>
+  </div>
+</footer>
+</body>
+</html>
