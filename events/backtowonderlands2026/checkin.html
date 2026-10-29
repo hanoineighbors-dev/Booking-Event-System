@@ -218,7 +218,7 @@ function onCode(text){
   ticket(null);
   API.get({action:'key',t:m[1]}).then(function(r){
     if(!busy)return;
-    if(!r||!r.ok){ticket(null,(r&&r.error)||'Không tìm thấy chìa này.');return}
+    if(!r||!r.ok){ticket(null,(r&&r.error)||'Không tìm thấy chìa này.',r&&r.code==='REVOKED');return}
     cur=r.key;ticket(cur);loadBuyer(cur);
   }).catch(function(){if(busy)ticket(null,'Mạng chập chờn, quét lại nhé.')});
 }
@@ -231,11 +231,11 @@ function loadBuyer(k){
   }).catch(function(){});
 }
 /* Thẻ vé: k = null & msg trống → đang tra; k = null & msg → không tìm thấy */
-function ticket(k,msg){
+function ticket(k,msg,revoked){
   clearTimeout(closeT);
   var sh=$('#sheet');sh.className='sheet on';
   if(!k){
-    sh.innerHTML=msg?'<div class="tk"><div class="ban bad">KHÔNG TÌM THẤY</div><div class="bd"><p class="meta" style="font-size:15px;margin:10px 0">'+esc(msg)+'<br>Thử tìm theo tên ở tab Tìm.</p></div></div><div class="acts"><button class="btn ghost" data-a="close">Quét tiếp</button></div>'
+    sh.innerHTML=msg?'<div class="tk"><div class="ban '+(revoked?'used':'bad')+'">'+(revoked?'QR ĐÃ HUỶ · KHÔNG CHO VÀO':'KHÔNG TÌM THẤY')+'</div><div class="bd"><p class="meta" style="font-size:15px;margin:10px 0">'+esc(msg)+'<br>'+(revoked?'Người đang giữ vé đã nhận mã QR mới qua email.':'Thử tìm theo tên ở tab Tìm.')+'</p></div></div><div class="acts"><button class="btn ghost" data-a="close">Quét tiếp</button></div>'
       :'<div class="tk"><div class="ban load">ĐANG TRA CHÌA…</div><div class="bd"><div class="spin"></div><p class="meta">Giữ máy một chút</p></div></div><div class="acts"><button class="btn ghost" data-a="close">Huỷ</button></div>';
     if(msg)vib([200,100,200]);
     return;
