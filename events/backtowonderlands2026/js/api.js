@@ -17,7 +17,7 @@
   // ───────────── Backend giả ─────────────
   var KEY = 'rh_demo_db_v1';
   var CFG = { GIA_ONLINE: 250000, GIA_TAI_CUA: 300000, GIA_EAT_ME: 100000, TRAN: { do: 40, trang: 40 }, MAX: 6, HOLD_H: 24,
-    LOCK: '2026-10-31T00:00:00+07:00', CUT: '2026-10-31T12:00:00+07:00', PIN: '2026',
+    LOCK: '2026-10-31T00:00:00+07:00', CUT: '2026-10-31T12:00:00+07:00', PIN: '2026', ADMIN_PIN: '9999',
     BANK: { name: 'VPBank', bin: '970432', account: '112469834', holder: '' } };
   function db() {
     try { var d = JSON.parse(localStorage.getItem(KEY)); if (d) return d; } catch (e) { }
@@ -55,6 +55,7 @@
       maxPerOrder: CFG.MAX, bank: CFG.BANK, serverTime: new Date().toISOString(), demo: true };
   }
   function fmt(d) { var t = new Date(d); return ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2) + ' ' + ('0' + t.getDate()).slice(-2) + '/' + ('0' + (t.getMonth() + 1)).slice(-2) + '/' + t.getFullYear(); }
+  function passOut(x, tok) { var o = { kind: 'pass', id: x.id, name: x.name, role: x.role, note: x.note || '', status: x.status, scans: x.scans || 0, lastScan: x.lastScan ? fmt(x.lastScan) : '', drink: !!x.drink }; if (tok) o.token = x.token; return o; }
   function keyOut(k) { return { id: k.id, order: k.order, name: k.name, phe: k.phe, eatMe: k.eatMe, status: k.status, checkinAt: k.checkinAt ? fmt(k.checkinAt) : '', token: k.token }; }
   function plain(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase(); }
 
@@ -92,11 +93,26 @@
       r = o3 ? { ok: true, orderId: o3.id, status: (o3.status === 'Chờ chuyển khoản' && o3.hold < Date.now()) ? 'Đã huỷ' : o3.status, holdUntil: new Date(o3.hold).toISOString(), amount: o3.total,
         keys: o3.status === 'Đã xác nhận' ? d.keys.filter(function (k) { return k.order === o3.id; }).map(keyOut) : undefined } : { ok: false, error: 'Không tìm thấy đơn' };
     } else if (act === 'key') {
+      var ap = (d.passes || []).filter(function (x) { return x.token === (p.token || p.t); })[0];
       var k = d.keys.filter(function (x) { return x.token === (p.token || p.t); })[0];
-      r = k ? { ok: true, key: keyOut(k), event: { name: 'Back to the Rabbit Hole', when: 'Thứ Bảy 31.10.2026 · Cửa hang mở 20:30', where: 'Sincerely, Hanoi Neighbors · Tầng 6, 131 Hoàng Cầu, Hà Nội', dress: 'Đỏ · Đen · Trắng' } } : { ok: false, error: 'Không tìm thấy chìa' };
+      if (ap) k = null;
+      r = ap ? { ok: true, pass: passOut(ap, true), event: { when: 'Thứ Bảy 31.10.2026 · Cửa hang mở 20:30', where: 'Sincerely, Hanoi Neighbors · Tầng 6, 131 Hoàng Cầu, Hà Nội' } } : k ? { ok: true, key: keyOut(k), event: { name: 'Back to the Rabbit Hole', when: 'Thứ Bảy 31.10.2026 · Cửa hang mở 20:30', where: 'Sincerely, Hanoi Neighbors · Tầng 6, 131 Hoàng Cầu, Hà Nội', dress: 'Đỏ · Đen · Trắng' } } : { ok: false, error: 'Không tìm thấy chìa' };
     } else if (act === 'staff') {
-      if (String(p.pin) !== CFG.PIN) r = { ok: false, code: 'PIN', error: 'Sai mã PIN (bản thử: 2026)' };
-      else if (p.op === 'login') r = { ok: true };
+      var adm = String(p.pin) === CFG.ADMIN_PIN; d.passes = d.passes || [];
+      if (String(p.pin) !== CFG.PIN && !adm) r = { ok: false, code: 'PIN', error: 'Sai mã PIN (bản thử: 2026, quản lý 9999)' };
+      else if (p.op === 'login') r = { ok: true, admin: adm };
+      else if (/^pass(Create|List|Cancel)$/.test(p.op) && !adm) r = { ok: false, code: 'ADMIN', error: 'Chỉ người giữ PIN quản lý mới làm được việc này' };
+      else if (p.op === 'passCreate') {
+        if (!String(p.name || '').trim()) r = { ok: false, error: 'Nhập tên artist' };
+        else { var np = { id: 'AP-' + rid().slice(3, 7), name: String(p.name).trim(), role: p.role || 'Artist', note: p.note || '', status: 'Hợp lệ', token: tok(), scans: 0 }; d.passes.push(np); save(d); r = { ok: true, pass: passOut(np, true) }; }
+      } else if (p.op === 'passList') r = { ok: true, items: d.passes.slice().reverse().map(function (x) { return passOut(x, true); }) };
+      else if (p.op === 'passCancel') { var pc = d.passes.filter(function (x) { return x.id === p.id; })[0]; if (pc) { pc.status = 'Huỷ'; save(d); } r = pc ? { ok: true, pass: passOut(pc) } : { ok: false, error: 'Không thấy pass' }; }
+      else if (p.op === 'passScan') {
+        var ps = d.passes.filter(function (x) { return x.id === p.id; })[0];
+        if (!ps) r = { ok: true, result: 'notfound' };
+        else if (ps.status === 'Huỷ') r = { ok: true, result: 'cancelled', pass: passOut(ps) };
+        else { var dr = !ps.drink; ps.scans = (ps.scans || 0) + 1; ps.lastScan = Date.now(); if (dr) ps.drink = Date.now(); save(d); r = { ok: true, result: 'ok', pass: passOut(ps), drink: dr }; }
+      }
       else if (p.op === 'scan' || p.op === 'checkin') {
         var t = String(p.code || '').replace(/^RH1:/, ''), kk = d.keys.filter(function (x) { return p.op === 'scan' ? x.token === t : x.id === p.id; })[0];
         if (!kk) r = { ok: true, result: 'notfound' };
@@ -107,7 +123,8 @@
       } else if (p.op === 'search') {
         var q = plain(p.q);
         r = { ok: true, items: q.length < 2 ? [] : d.keys.filter(function (x) { var o4 = d.orders[x.order] || {}; return plain([x.id, x.name, o4.name, o4.phone, o4.email].join(' ')).indexOf(q) >= 0; })
-          .slice(0, 30).map(function (x) { var ko = keyOut(x); delete ko.token; ko.buyer = (d.orders[x.order] || {}).name; ko.phone = (d.orders[x.order] || {}).phone; return ko; }) };
+          .slice(0, 30).map(function (x) { var ko = keyOut(x); delete ko.token; ko.buyer = (d.orders[x.order] || {}).name; ko.phone = (d.orders[x.order] || {}).phone; return ko; })
+          .concat(q.length < 2 ? [] : d.passes.filter(function (x) { return plain([x.id, x.name, x.role].join(' ')).indexOf(q) >= 0; }).map(function (x) { return passOut(x); })) };
       } else if (p.op === 'door') {
         var s2 = stats(d), nd = { do: 0, trang: 0 }; p.keys.forEach(function (k) { nd[k.phe]++; });
         if (nd.do > s2.do.left || nd.trang > s2.trang.left) r = { ok: false, code: 'FULL', stats: s2, error: 'Phe ' + (nd.do > s2.do.left ? 'Đỏ' : 'Trắng') + ' đã đủ quân. Mời khách chọn phe còn lại.' };
@@ -125,6 +142,7 @@
           if (x.kenh === 'Tại cửa') det.door++;
           if (x.status === 'Chờ' && holds(x, d)) det.pending++;
         });
+        det.artist = { total: d.passes.filter(function (x) { return x.status !== 'Huỷ'; }).length, inside: d.passes.filter(function (x) { return x.status !== 'Huỷ' && x.scans; }).length };
         r = { ok: true, stats: stats(d), detail: det };
       } else r = { ok: false, error: 'Không rõ thao tác' };
     } else r = { ok: false, error: 'Không rõ yêu cầu' };
