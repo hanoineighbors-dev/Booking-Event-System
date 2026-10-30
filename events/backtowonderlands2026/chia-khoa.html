@@ -38,6 +38,10 @@ body{min-height:100svh;background:radial-gradient(ellipse at 50% 0%,rgba(33,186,
 .msg{text-align:center;margin-top:40px;color:#cfcfcf}
 .foot{text-align:center;margin-top:22px;color:#8d8d8d;font-size:12px;font-family:Float}
 .dim .art{filter:grayscale(1) brightness(.5)}
+.card.pass{--c:#b07ad0;--bgc:#24102f;--tc:#e7c9ff}
+.pass .star{font-size:72px;line-height:1;color:#e7c9ff;text-shadow:0 0 30px rgba(176,122,208,.75);margin-top:6px}
+.pass .apl{display:inline-block;margin-top:10px;font-weight:900;font-size:13px;letter-spacing:.22em;padding:6px 16px;border-radius:99px;background:var(--gold);color:#1a1205}
+.pass .role{display:inline-block;margin-top:8px;font-weight:800;font-size:14px;padding:5px 14px;border-radius:99px;background:#2a1636;color:#e7c9ff}
 </style>
 </head>
 <body>
@@ -63,6 +67,13 @@ function drawQr(canvas,text,size){
 if(!t){out.innerHTML='<p class="msg">Đường link chìa khoá chưa đúng. Bạn mở lại từ email giúp nhé.</p>';return}
 RH_API.get({action:'key',t:t}).then(function(r){
   if(!r||!r.ok){out.innerHTML='<p class="msg">'+esc((r&&r.error)||'Không tìm thấy chìa khoá')+'</p>';return}
+  if(r.pass){var p=r.pass,ev=r.event||{},on=p.status!=='Huỷ';
+    document.title='Artist Pass · Back to the Rabbit Hole';
+    out.innerHTML='<div class="card pass'+(on?'':' used')+'"><div class="star">★</div><span class="apl">ARTIST PASS</span><div class="nm">'+esc(p.name)+'</div><span class="role">'+esc(p.role||'Artist')+'</span>'+
+      '<div class="qr"><canvas id="qr"></canvas></div><div class="id">Mã pass <b>'+esc(p.id)+'</b></div>'+
+      (on?'<div class="st ok">Đưa mã này cho nhân viên ở tầng hầm. Pass dùng được nhiều lần trong đêm.</div>':'<div class="st used">Pass này đã bị huỷ</div>')+'</div>'+
+      '<div class="info"><b>Khi nào</b>'+esc(ev.when)+'<b>Ở đâu</b>'+esc(ev.where)+'<b>Lưu ý</b>Chụp màn hình trang này để dùng khi mạng yếu.</div>';
+    drawQr(document.getElementById('qr'),'RH1:'+p.token,480);return}
   var k=r.key,e=r.event||{},phe=k.phe==='trang'?'Trắng':'Đỏ';
   var st=k.status==='Đã dùng'?'<div class="st used">Chìa này đã mở cửa lúc '+esc(k.checkinAt)+'</div>':
          k.status==='Hợp lệ'?'<div class="st ok">Đưa mã này cho nhân viên ở Cửa gương</div>':

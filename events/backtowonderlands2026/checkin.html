@@ -18,9 +18,10 @@ button,input{font:inherit;color:inherit}
 header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #1d1f26}
 header h1{font-family:Float;font-weight:400;font-size:20px}
 header small{color:#9a9a9a;font-size:12px}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #1d1f26;position:sticky;bottom:0;background:#0b0c10;padding-bottom:env(safe-area-inset-bottom)}
+.tabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border-top:1px solid #1d1f26;position:sticky;bottom:0;background:#0b0c10;padding-bottom:env(safe-area-inset-bottom)}
 .tabs button{background:none;border:0;padding:12px 4px;font-size:12px;font-weight:700;color:#9a9a9a;cursor:pointer}
 .tabs button.on{color:var(--gold2)}
+.tabs button[hidden]{display:none}
 .tabs button span{display:block;font-size:20px;line-height:1.1}
 main{flex:1;padding:16px}
 .pane{display:none}.pane.on{display:block}
@@ -61,6 +62,26 @@ input.f:focus{border-color:var(--gold2)}
 @keyframes glow{to{box-shadow:0 0 0 14px rgba(33,186,158,0)}}
 .spin{width:44px;height:44px;margin:22px auto 8px;border-radius:50%;border:4px solid #2b2e37;border-top-color:var(--gold2);animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+.tk[data-kind=pass]{--c:#b07ad0}
+.tk .apl{display:inline-block;font-weight:900;font-size:13px;letter-spacing:.18em;padding:6px 14px;border-radius:99px;background:linear-gradient(180deg,#f6e3a1,#c9952f);color:#1a1205}
+.tk .role{display:inline-block;margin-top:6px;font-weight:800;font-size:14px;padding:5px 12px;border-radius:99px;background:#2a1636;color:#e7c9ff}
+.tk .star{font-size:64px;line-height:1;margin:18px 0 0;color:#e7c9ff;text-shadow:0 0 24px rgba(176,122,208,.7)}
+.ban.pass{background:#2a1636;color:#e7c9ff}
+.pform{background:#101116;border:1px solid #23252d;border-radius:16px;padding:14px}
+.pform h3,.ph3{font-family:Float;font-weight:400;font-size:20px;margin:0 0 10px}
+.ph3{margin:20px 0 4px}
+.roles{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.roles button{border:1.5px solid #2b2e37;background:#15161c;border-radius:99px;padding:8px 14px;font-weight:700;cursor:pointer;color:#bbb}
+.roles button.on{border-color:#b07ad0;color:#e7c9ff;background:#2a1636}
+.pdone{margin-top:12px;background:#1b1024;border:1.5px solid #b07ad0;border-radius:16px;padding:14px}
+.pdone .lk{font-size:12px;word-break:break-all;color:#cbb6dc;background:#0b0c10;border-radius:10px;padding:8px 10px;margin:8px 0}
+.pdone .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pdone .row2 .btn{padding:12px;font-size:14px}
+.item[data-kind=pass]{--c:#b07ad0}
+.item .mini2{display:flex;gap:6px}
+.item .mini2 button{padding:8px 10px;font-size:12px}
+.item .mini2 button.x{background:#3a1d22;color:#ffb3b7}
+.item.off{opacity:.5}
 .ok-big{font-size:clamp(40px,12vw,60px);font-weight:900;text-align:center;line-height:1;margin-top:auto}
 .ok-nm{font-family:Float;font-size:clamp(28px,8vw,40px);text-align:center;margin:12px 0 4px;word-break:break-word}
 .give{max-width:440px;width:100%;margin:18px auto 0;background:rgba(0,0,0,.25);border-radius:16px;padding:14px 16px;font-size:16px;line-height:1.7}
@@ -138,6 +159,20 @@ td.n{text-align:right;font-weight:800;font-size:18px}
       <button class="btn" id="dGo">Đã thu tiền · Tạo vé & cho vào</button>
       <div class="err" id="dErr"></div>
     </section>
+    <section class="pane" id="pPass">
+      <div class="pform">
+        <h3>Tạo Artist Pass</h3>
+        <input class="f" id="pName" placeholder="Tên (ví dụ: DJ Ashley)" maxlength="60" autocomplete="off">
+        <div class="roles" id="pRole"><button type="button" class="on" data-v="Artist">Artist</button><button type="button" data-v="DJ">DJ</button><button type="button" data-v="Drag">Drag</button><button type="button" data-v="MC">MC</button><button type="button" data-v="Crew">Crew</button></div>
+        <input class="f" id="pNote" placeholder="Ghi chú (không bắt buộc)" maxlength="200" autocomplete="off">
+        <button class="btn" id="pGo">Tạo Pass</button>
+        <div class="err" id="pErr"></div>
+        <div id="pDone"></div>
+      </div>
+      <h3 class="ph3">Pass đã tạo</h3>
+      <p class="hint" style="text-align:left;margin:0 0 6px">Pass ra vào nhiều lần, không tính vào số khách. Lần quét đầu tiên nhắc phát 1 ly Drink Me.</p>
+      <div class="list" id="pList"></div>
+    </section>
     <section class="pane" id="pStats">
       <table><thead><tr><th></th><th>Đỏ ♥</th><th>Trắng ♠</th></tr></thead><tbody id="stBody"></tbody></table>
       <button class="btn ghost" id="stRefresh" style="margin-top:14px">Cập nhật</button>
@@ -148,6 +183,7 @@ td.n{text-align:right;font-weight:800;font-size:18px}
     <button data-p="pFind"><span>⌕</span>Tìm</button>
     <button data-p="pDoor"><span>＋</span>Bán tại cửa</button>
     <button data-p="pStats"><span>▤</span>Số liệu</button>
+    <button data-p="pPass" id="tabPass" hidden><span>★</span>Pass</button>
   </nav>
 </div>
 <div class="sheet" id="sheet"></div>
@@ -159,7 +195,7 @@ td.n{text-align:right;font-weight:800;font-size:18px}
 <script>
 (function(){
 var $=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
-var API=RH_API,PHE={do:'Đỏ',trang:'Trắng'},S={pin:'',staff:'',price:{door:300000,eatMe:100000},stats:null};
+var API=RH_API,PHE={do:'Đỏ',trang:'Trắng'},S={pin:'',staff:'',admin:false,price:{door:300000,eatMe:100000},stats:null};
 function money(n){return Number(n||0).toLocaleString('vi-VN').replace(/,/g,'.')+'đ'}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function call(op,extra){var b={action:'staff',op:op,pin:S.pin,staff:S.staff};for(var k in extra)b[k]=extra[k];return API.post(b)}
@@ -173,13 +209,14 @@ function login(){
   call('login').then(function(r){
     if(!r||!r.ok){$('#loginErr').textContent=(r&&r.error)||'Không vào được';return}
     try{localStorage.setItem('rh_staff',JSON.stringify({staff:S.staff,pin:S.pin}))}catch(e){}
-    $('#who').textContent='Giữ cửa: '+S.staff;$('#tabs').style.display='';$('#logout').style.display='';show('pScan');refreshStats();startCam();
+    S.admin=!!r.admin;$('#tabPass').hidden=!S.admin;if(S.admin)loadPasses();
+    $('#who').textContent='Giữ cửa: '+S.staff+(S.admin?' · Quản lý':'');$('#tabs').style.display='';$('#logout').style.display='';show('pScan');refreshStats();startCam();
     API.get({action:'stats'}).then(function(i){if(i&&i.ok){S.price=i.price;renderDoor()}});
   }).catch(function(){$('#loginErr').textContent='Mạng chập chờn, thử lại nhé'}).then(function(){$('#loginBtn').disabled=false});
 }
 $('#logout').addEventListener('click',function(){try{localStorage.removeItem('rh_staff')}catch(e){}location.reload()});
 function show(id){$$('.pane').forEach(function(p){p.classList.toggle('on',p.id===id)});$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.p===id)});
-  if(id!=='pScan')stopCam();else if(S.pin)startCam();if(id==='pStats'||id==='pDoor')refreshStats();if(id==='pFind')setTimeout(function(){$('#q').focus()},50)}
+  if(id!=='pScan')stopCam();else if(S.pin)startCam();if(id==='pStats'||id==='pDoor')refreshStats();if(id==='pFind')setTimeout(function(){$('#q').focus()},50);if(id==='pPass')loadPasses()}
 $('#tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)show(b.dataset.p)});
 
 /* ─── Quét ─── */
@@ -219,6 +256,7 @@ function onCode(text){
   API.get({action:'key',t:m[1]}).then(function(r){
     if(!busy)return;
     if(!r||!r.ok){ticket(null,(r&&r.error)||'Không tìm thấy chìa này.',r&&r.code==='REVOKED');return}
+    if(r.pass){cur=r.pass;passTicket(cur);return}
     cur=r.key;ticket(cur);loadBuyer(cur);
   }).catch(function(){if(busy)ticket(null,'Mạng chập chờn, quét lại nhé.')});
 }
@@ -251,6 +289,23 @@ function ticket(k,msg,revoked){
     (k.eatMe?'<div class="eat">+ EAT ME</div>':'')+(note?'<p class="meta" style="margin-top:12px;color:#ddd">'+note+'</p>':'')+'</div></div>'+
     '<div class="acts">'+acts+'</div>';
 }
+function passTicket(p){
+  clearTimeout(closeT);
+  var sh=$('#sheet'),ok=p.status!=='Huỷ';sh.className='sheet on';
+  sh.innerHTML='<div class="tk'+(ok?'':' dim')+'" data-kind="pass"><div class="ban '+(ok?'pass':'used')+'">'+(ok?'ARTIST PASS · RA VÀO NHIỀU LẦN':'PASS ĐÃ HUỶ · KHÔNG CHO VÀO')+'</div>'+
+    '<div class="bd"><div class="star">★</div><span class="apl">ARTIST PASS</span><div class="nm">'+esc(p.name)+'</div><span class="role">'+esc(p.role||'Artist')+'</span>'+
+    '<div class="meta" style="margin-top:10px">Mã pass <b>'+esc(p.id)+'</b>'+(p.scans?'<br>Đã vào '+p.scans+' lần'+(p.lastScan?' · gần nhất '+esc(p.lastScan.slice(0,5)):''):'<br>Chưa vào lần nào')+(p.note?'<br>'+esc(p.note):'')+'</div></div></div>'+
+    '<div class="acts">'+(ok?'<button class="btn go" data-a="go">Cho vào ✓</button>':'')+'<button class="btn ghost" data-a="close">'+(fromFind?'Đóng':'Quét tiếp')+'</button></div>';
+  if(!ok)vib([200,100,200]);
+}
+function passDone(p,drink){
+  var sh=$('#sheet');sh.className='sheet on done';vib(90);
+  sh.innerHTML='<div class="ok-big">CHO VÀO ✓</div><div class="ok-nm">'+esc(p.name)+'</div><p style="text-align:center;font-weight:800">Artist Pass · '+esc(p.role||'Artist')+' · lần '+p.scans+'</p>'+
+    '<div class="give"><b>'+(drink?'Phát cho artist':'Lưu ý')+'</b>'+(drink?'1 ly Drink Me':'Đã nhận Drink Me ở lần vào trước')+'<br>Không phát phụ kiện phe</div>'+
+    '<div class="acts"><button class="btn" data-a="close">Quét tiếp</button></div>';
+  closeT=setTimeout(closeSheet,drink?6000:4000);
+  refreshStats();if($('#pPass').classList.contains('on'))loadPasses();
+}
 function doneScreen(k){
   var sh=$('#sheet');sh.className='sheet on done';vib(90);
   sh.innerHTML='<div class="ok-big">ĐÃ SOÁT ✓</div><div class="ok-nm">'+esc(k.name)+'</div><p style="text-align:center;font-weight:800">Phe '+PHE[k.phe]+(k.phe==='do'?' ♥':' ♠')+' · '+esc(k.id)+'</p>'+
@@ -264,6 +319,15 @@ $('#sheet').addEventListener('click',function(e){
   if($('#sheet').classList.contains('done')){closeSheet();return}
   var b=e.target.closest('button[data-a]');if(!b)return;
   if(b.dataset.a==='close'){closeSheet();return}
+  if(b.dataset.a==='go'&&cur&&cur.kind==='pass'){
+    var pp=cur;b.disabled=true;b.textContent='Đang ghi…';
+    call('passScan',{id:pp.id}).then(function(r){
+      if(cur!==pp)return;
+      if(!r||!r.ok){b.disabled=false;b.textContent='Cho vào ✓';alertLine((r&&r.error)||'Không ghi được, thử lại');return}
+      if(r.result==='ok')passDone(r.pass,r.drink);else if(r.result==='cancelled'){cur=r.pass;passTicket(r.pass)}else ticket(null,'Không tìm thấy pass này.');
+    }).catch(function(){b.disabled=false;b.textContent='Cho vào ✓';alertLine('Mạng chập chờn, bấm lần nữa')});
+    return;
+  }
   if(b.dataset.a==='go'&&cur){
     var k=cur;b.disabled=true;b.textContent='Đang soát…';
     call('checkin',{id:k.id}).then(function(r){
@@ -286,12 +350,48 @@ function search(v){
   call('search',{q:v}).then(function(r){
     if(!r||!r.ok)return;
     found=r.items;$('#found').innerHTML=r.items.length?r.items.map(function(k){
+      if(k.kind==='pass')return '<div class="item'+(k.status==='Huỷ'?' off':'')+'" data-kind="pass"><div class="t"><b>★ '+esc(k.name)+'</b><small>Artist Pass · '+esc(k.role)+' · '+esc(k.id)+(k.scans?' · đã vào '+k.scans+' lần':'')+'</small></div><button data-id="'+esc(k.id)+'">'+(k.status==='Huỷ'?'Đã huỷ':'Xem pass')+'</button></div>';
       var act=k.status==='Hợp lệ'?'<button data-id="'+esc(k.id)+'">Xem vé</button>':'<button data-id="'+esc(k.id)+'" style="background:#23252d;color:#ddd">'+esc(k.status==='Đã dùng'?'Đã vào '+(k.checkinAt||'').slice(0,5):k.status)+'</button>';
       return '<div class="item" data-phe="'+k.phe+'"><div class="t"><b>'+esc(k.name)+(k.eatMe?' · <span style="color:#d83eb6">Eat Me</span>':'')+'</b><small>'+esc(k.id)+' · đặt bởi '+esc(k.buyer)+' '+esc(k.phone||'')+'</small></div>'+act+'</div>'}).join(''):'<p class="hint">Không thấy ai khớp.</p>';
   });
 }
 $('#found').addEventListener('click',function(e){var b=e.target.closest('button[data-id]');if(!b)return;
-  var k=found.filter(function(x){return x.id===b.dataset.id})[0];if(!k)return;busy=true;fromFind=true;cur=k;ticket(k)});
+  var k=found.filter(function(x){return x.id===b.dataset.id})[0];if(!k)return;busy=true;fromFind=true;cur=k;if(k.kind==='pass')passTicket(k);else ticket(k)});
+
+/* ─── Artist Pass (chỉ PIN quản lý) ─── */
+var role='Artist',passes=[];
+function passLink(t){return new URL('chia-khoa.html?t='+t,location.href).href}
+$('#pRole').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;role=b.dataset.v;$$('#pRole button').forEach(function(x){x.classList.toggle('on',x===b)})});
+$('#pGo').addEventListener('click',function(){
+  var name=$('#pName').value.trim();$('#pErr').textContent='';
+  if(!name){$('#pErr').textContent='Nhập tên artist';return}
+  var b=this;b.disabled=true;
+  call('passCreate',{name:name,role:role,note:$('#pNote').value.trim()}).then(function(r){
+    if(!r||!r.ok){$('#pErr').textContent=(r&&r.error)||'Không tạo được';return}
+    var p=r.pass,l=passLink(p.token);
+    $('#pDone').innerHTML='<div class="pdone"><b>Đã tạo pass cho '+esc(p.name)+'</b> · '+esc(p.role)+' · '+esc(p.id)+'<div class="lk">'+esc(l)+'</div><div class="row2"><button class="btn" type="button" data-copy="'+esc(l)+'">Sao chép link</button><button class="btn ghost" type="button" data-share="'+esc(l)+'" data-name="'+esc(p.name)+'">Gửi qua…</button></div></div>';
+    $('#pName').value='';$('#pNote').value='';loadPasses();
+  }).catch(function(){$('#pErr').textContent='Mạng chập chờn, xem danh sách bên dưới trước khi bấm lại để tránh tạo trùng'}).then(function(){b.disabled=false});
+});
+function loadPasses(){
+  if(!S.admin)return;
+  call('passList').then(function(r){
+    if(!r||!r.ok)return;passes=r.items;
+    $('#pList').innerHTML=passes.length?passes.map(function(p){var off=p.status==='Huỷ';
+      return '<div class="item'+(off?' off':'')+'" data-kind="pass"><div class="t"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+' · '+esc(p.id)+' · '+(off?'đã huỷ':(p.scans?'đã vào '+p.scans+' lần':'chưa vào'))+'</small></div>'+
+        (off?'':'<div class="mini2"><button type="button" data-copy="'+esc(passLink(p.token))+'">Link</button><button type="button" class="x" data-cancel="'+esc(p.id)+'">Huỷ</button></div>')+'</div>'}).join(''):'<p class="hint">Chưa có pass nào.</p>';
+  });
+}
+document.addEventListener('click',function(e){
+  var c=e.target.closest('[data-copy]');
+  if(c){var t=c.dataset.copy,done=function(){var o=c.textContent;c.textContent='Đã chép ✓';setTimeout(function(){c.textContent=o},1500)};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,function(){prompt('Sao chép link:',t)});else prompt('Sao chép link:',t);return}
+  var sh=e.target.closest('[data-share]');
+  if(sh){var u=sh.dataset.share;if(navigator.share)navigator.share({title:'Artist Pass · Back to the Rabbit Hole',text:'Pass vào cửa cho '+sh.dataset.name+'. Đưa mã QR trong link cho nhân viên ở tầng hầm.',url:u}).catch(function(){});else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u);sh.textContent='Đã chép link ✓'}else prompt('Sao chép link:',u);return}
+  var x=e.target.closest('[data-cancel]');
+  if(x){if(x.dataset.sure!=='1'){x.dataset.sure='1';x.textContent='Chắc chưa?';setTimeout(function(){if(x.isConnected){x.dataset.sure='';x.textContent='Huỷ'}},3000);return}
+    x.disabled=true;call('passCancel',{id:x.dataset.cancel}).then(function(){loadPasses()})}
+});
 
 /* ─── Bán tại cửa ─── */
 var D=[{name:'',phe:'',eatMe:false}],method='Tiền mặt';
@@ -330,7 +430,8 @@ function refreshStats(){
     $('#lDo').textContent=r.stats.do.left;$('#lTr').textContent=r.stats.trang.left;
     $('#stBody').innerHTML=[['Đã vào hang',d.do.inside,d.trang.inside],['Chìa hợp lệ (đã trả tiền)',d.do.sold,d.trang.sold],['Chưa tới',d.do.sold-d.do.inside,d.trang.sold-d.trang.inside],['Eat Me',d.do.eat,d.trang.eat],['Chỗ còn lại',r.stats.do.left,r.stats.trang.left]]
       .map(function(x){return '<tr><td>'+x[0]+'</td><td class="n">'+x[1]+'</td><td class="n">'+x[2]+'</td></tr>'}).join('')+
-      '<tr><td>Bán tại cửa (tổng)</td><td class="n" colspan="2">'+d.door+'</td></tr><tr><td>Đơn online đang chờ</td><td class="n" colspan="2">'+d.pending+'</td></tr>';
+      '<tr><td>Bán tại cửa (tổng)</td><td class="n" colspan="2">'+d.door+'</td></tr><tr><td>Đơn online đang chờ</td><td class="n" colspan="2">'+d.pending+'</td></tr>'+
+      (d.artist?'<tr><td>Artist đã vào / có pass</td><td class="n" colspan="2">'+d.artist.inside+' / '+d.artist.total+'</td></tr>':'');
     renderDoor();
   });
 }
