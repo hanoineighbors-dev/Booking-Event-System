@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="vi">
+<head>
+{% include head.html %}
+</head>
+<body class="page-{{ page.body_class | default: 'default' }}">
+{% include header.html %}
+<main id="main">
+{{ content }}
+</main>
+{% include footer.html %}
+<script src="{{ '/assets/js/site.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+{% for js in page.js %}<script src="{{ '/assets/js/' | append: js | append: '.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+{% endfor %}</body>
+</html>

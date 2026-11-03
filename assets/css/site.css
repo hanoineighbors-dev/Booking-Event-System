@@ -1,0 +1,140 @@
+/* =====================================================================
+   site.css: phần dùng chung cho mọi trang chính (trang chủ, sự kiện,
+   tuyển dụng, 404). CSS riêng từng trang nằm ở assets/css/<trang>.css.
+   Trang event riêng (events/<slug>/) tự mang giao diện của mình.
+   ===================================================================== */
+
+:root{
+  --charcoal:#1A1A18; --cream:#FAF7F2; --gold:#D4B282; --terracotta:#B85C38;
+  --moss:#5C6B4A; --stone:#C8BFAF; --paper:#FFFDF9; --ink-soft:#57524A; --line:#E6DDCF;
+  --tint-gold:#F4EADB; --tint-moss:#E7EADF; --tint-terra:#F5E3DA;
+  --serif:"Playfair Display", Georgia, "Times New Roman", serif;
+  --sans:"Be Vietnam Pro", "Segoe UI", Roboto, Arial, sans-serif;
+  --header-h:92px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--charcoal);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- Bỏ qua tới nội dung (cho người dùng bàn phím) ---------- */
+.skip-link{position:absolute;left:12px;top:-60px;z-index:50;background:var(--cream);color:var(--charcoal);padding:10px 16px;border-radius:999px;font-weight:600;text-decoration:none;transition:top .2s}
+.skip-link:focus{top:12px}
+
+/* ---------- HEADER: nằm đè lên phần hero tối màu của mỗi trang ---------- */
+.site-header{position:absolute;top:0;left:0;right:0;z-index:10}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:22px;padding-bottom:22px}
+.site-logo{flex:none}
+.site-logo img{width:150px}
+.site-header ul{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:4px}
+.nav-link{display:inline-block;padding:9px 14px;border-radius:999px;color:var(--cream);text-decoration:none;font-size:14.5px;font-weight:500;white-space:nowrap;transition:background .2s,color .2s}
+.nav-link:hover{background:rgba(250,247,242,.12)}
+.nav-link[aria-current="page"]{box-shadow:inset 0 0 0 1.5px rgba(212,178,130,.6)}
+.nav-link.cta{background:var(--cream);color:var(--charcoal);font-weight:600}
+.nav-link.cta:hover{background:var(--gold)}
+.nav-link.cta[aria-current="page"]{background:var(--gold);box-shadow:none}
+
+/* ---------- Tiêu đề mục ---------- */
+.kicker{display:flex;align-items:baseline;gap:14px;margin:0 0 10px}
+.kicker .idx{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:22px}
+.kicker .lbl{font-size:12.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--terracotta)}
+.h2{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1.15;margin:0 0 14px}
+.sub{color:var(--ink-soft);max-width:640px;margin:0 0 36px;font-size:17px}
+.sub a,.note a{color:var(--terracotta);font-weight:600;text-underline-offset:3px}
+.note{margin:16px 4px 0;color:var(--ink-soft);font-size:14.5px}
+
+/* ---------- Nút ---------- */
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 24px;border-radius:999px;font:600 15px/1 var(--sans);text-decoration:none;transition:transform .2s,background .2s,border-color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:var(--terracotta);color:#fff}
+.btn.primary:hover{background:#9E4C2D}
+.btn.dark{background:var(--charcoal);color:var(--cream)}
+.btn.dark:hover{background:#000}
+.btn.ghost{border:1.5px solid rgba(212,178,130,.55);color:var(--cream)}
+.btn.ghost:hover{border-color:var(--gold);background:rgba(212,178,130,.1)}
+.more-link{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--terracotta);text-decoration:none}
+.more-link:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- Thẻ sự kiện (dùng ở trang chủ và /events/) ---------- */
+.ev-list{display:grid;gap:28px}
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+.ev{display:grid;background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;color:inherit;text-decoration:none;transition:transform .25s,box-shadow .25s}
+.ev:hover{transform:translateY(-3px);box-shadow:0 18px 40px -22px rgba(26,26,24,.45)}
+.ev--row{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.ev-pic{position:relative;background:var(--charcoal);min-height:260px}
+.ev-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ev--tile .ev-pic{min-height:0;aspect-ratio:4/3}
+.ev-tag{position:absolute;left:14px;top:14px;font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 12px;border-radius:999px;background:var(--cream);color:var(--charcoal)}
+.ev-tag.live{background:var(--terracotta);color:#fff}
+.ev-tag.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;margin-right:7px;vertical-align:1px;animation:ev-blink 1.6s ease-in-out infinite}
+.ev-tag.done{background:var(--stone);color:var(--charcoal)}
+@keyframes ev-blink{50%{opacity:.25}}
+.ev-body{padding:28px 30px 30px;display:flex;flex-direction:column}
+.ev--tile .ev-body{padding:22px 22px 24px}
+.ev-when{font-size:14px;font-weight:600;color:var(--terracotta);letter-spacing:.02em}
+.ev-title{font-family:var(--serif);font-weight:700;font-size:clamp(24px,3.2vw,32px);line-height:1.15;margin:6px 0 4px}
+.ev--tile .ev-title{font-size:24px}
+.ev-sub{font-family:var(--serif);font-style:italic;color:var(--ink-soft);margin:0 0 14px}
+.ev-sum{margin:0 0 16px;color:var(--ink-soft)}
+.ev-where{font-size:14px;color:var(--ink-soft);display:flex;gap:8px;align-items:flex-start;margin-bottom:22px}
+.ev-where svg{flex:none;margin-top:4px;color:var(--moss)}
+.ev-cta{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:15px;padding:12px 20px;border-radius:999px;background:var(--charcoal);color:var(--cream);transition:background .2s}
+.ev-cta b{font-weight:inherit}
+.ev:hover .ev-cta{background:var(--terracotta)}
+.ev-cta > span{transition:transform .2s}
+.ev:hover .ev-cta > span{transform:translateX(4px)}
+.ev.is-past .ev-pic img{filter:grayscale(.55) brightness(.9)}
+.ev.is-past .ev-when{color:var(--ink-soft)}
+.ev-empty{color:var(--ink-soft);font-family:var(--serif);font-style:italic;text-align:center;padding:28px 16px;margin:0;border:1px dashed var(--line);border-radius:20px}
+.ev-empty[hidden],[data-ev-section][hidden]{display:none}
+
+/* ---------- FOOTER ---------- */
+.site-footer{margin-top:110px;background:var(--charcoal);color:#D9D2C6;padding:64px 0 40px}
+.site-footer .wrap{display:grid;grid-template-columns:1.3fr 1fr .8fr;gap:40px 48px}
+.site-footer a{color:inherit;text-decoration:none}
+.site-footer a:hover{color:var(--gold)}
+.sf-brand img{width:150px}
+.sf-tag{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--cream);margin:18px 0 0}
+.sf-tag small{display:block;font-family:var(--sans);font-style:normal;font-size:14px;color:var(--gold);margin-top:4px;letter-spacing:.04em}
+.sf-social{display:flex;gap:16px;margin:18px 0 0;font-size:14.5px;font-weight:600}
+.sf-h{font-size:12.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:6px 0 14px}
+.sf-list{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:15px}
+.sf-list b{color:var(--cream);font-weight:600}
+.sf-copy{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.1);padding-top:22px;margin:6px 0 0;font-size:13px;color:#9C958A}
+
+/* ---------- Hiệu ứng hiện dần khi cuộn ---------- */
+/* Chỉ ẩn khi có JS (class "js" do head.html gắn), để trang không bị trống nếu JS lỗi */
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:920px){
+  .site-footer .wrap{grid-template-columns:1fr 1fr}
+  .sf-brand{grid-column:1/-1}
+}
+@media (max-width:760px){
+  .ev--row{grid-template-columns:1fr}
+  .ev--row .ev-pic{min-height:0;aspect-ratio:4/3}
+  .ev-body{padding:22px 20px 24px}
+}
+@media (max-width:600px){
+  :root{--header-h:76px}
+  .wrap{padding:0 16px}
+  .site-header .wrap{padding-top:16px;padding-bottom:16px;gap:8px}
+  .site-logo img{width:104px}
+  .site-header ul{gap:0}
+  .nav-link{padding:8px 10px;font-size:13.5px}
+  .btn{width:100%;justify-content:center}
+  .site-footer{margin-top:80px;padding-top:48px}
+  .site-footer .wrap{grid-template-columns:1fr;gap:32px}
+}
+@media (max-width:360px){
+  .site-logo img{width:92px}
+  .nav-link{padding:7px 8px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  .js .rv{opacity:1;transform:none}
+}

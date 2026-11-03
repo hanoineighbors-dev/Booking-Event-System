@@ -1,0 +1,51 @@
+# Cấu hình chung của hanoineighbors.com
+# GitHub Pages tự build site bằng Jekyll mỗi khi có thay đổi trên nhánh main.
+# Hướng dẫn thêm sự kiện, trang mới: xem README.md
+
+title: Hanoi Neighbors
+tagline: Tự nhiên như ở nhà
+description: >-
+  Hanoi Neighbors không chỉ là quán cà phê - đó là những "hood" nhỏ giữa lòng Hà Nội,
+  nơi tụi mình tin vào sự tử tế, chân thành và những cuộc gặp gỡ đáng nhớ.
+url: https://hanoineighbors.com
+baseurl: ""
+lang: vi_VN
+timezone: Asia/Ho_Chi_Minh
+
+# Ảnh chia sẻ mặc định nằm ở `defaults` bên dưới (trang nào có `image:` riêng thì dùng ảnh đó)
+image: /images/facade_night.jpg
+logo: /images/logo-doc.png
+
+# Mạng xã hội: điền link vào là tự hiện ở chân trang (để trống thì ẩn)
+social:
+  facebook: ""
+  instagram: ""
+  tiktok: ""
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Không đưa lên site
+exclude:
+  - README.md
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+
+twitter:
+  card: summary_large_image
+
+defaults:
+  # Mọi trang có front matter mặc định dùng khung chung và ảnh chia sẻ chung
+  - scope: { path: "" }
+    values:
+      layout: default
+      image: /images/facade_night.jpg
+  # Trang nội bộ và trang chuyển hướng: không đưa vào sitemap
+  - scope: { path: "events/backtowonderlands2026/checkin.html" }
+    values: { sitemap: false }
+  - scope: { path: "events/backtowonderlands2026/chia-khoa.html" }
+    values: { sitemap: false }
+  - scope: { path: "event" }
+    values: { sitemap: false }

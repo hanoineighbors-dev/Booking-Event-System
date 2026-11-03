@@ -1,0 +1,19 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.className += " js";</script>
+{% if page.legacy_code_redirect %}<script>
+  // Link cũ dạng hanoineighbors.com/?code=DD-XXXXX (trang đặt chỗ Dập Dìu từng nằm ở trang chủ)
+  // -> chuyển thẳng sang trang Drag Brunch, giữ nguyên mã.
+  if (/[?&]code=/.test(location.search)) location.replace("/events/dragbrunch/" + location.search + location.hash);
+</script>
+{% endif %}{% if page.noindex %}<meta name="robots" content="noindex">
+{% endif %}{% seo %}
+<meta name="theme-color" content="#1A1A18">
+<link rel="icon" type="image/png" href="{{ '/images/logo-doc.png' | relative_url }}">
+<link rel="apple-touch-icon" href="{{ '/images/logo-doc.png' | relative_url }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,600&display=swap&subset=vietnamese" rel="stylesheet">
+<link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+{% for css in page.css %}<link rel="stylesheet" href="{{ '/assets/css/' | append: css | append: '.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+{% endfor %}

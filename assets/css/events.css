@@ -1,0 +1,15 @@
+/* Trang /events/ và các trang có phần đầu tối giản (404...) */
+
+.page-hero{position:relative;background:var(--charcoal);color:var(--cream);overflow:hidden;padding:calc(var(--header-h) + 48px) 0 64px}
+.page-hero::before{content:"";position:absolute;inset:-40% -10% auto auto;width:640px;height:640px;background:radial-gradient(circle,rgba(212,178,130,.26) 0%,rgba(212,178,130,0) 65%);pointer-events:none}
+.page-hero .wrap{position:relative}
+.page-hero .eyebrow{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.page-hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(40px,7vw,72px);line-height:1.04;margin:0 0 20px;letter-spacing:-.01em}
+.page-hero h1 em{font-style:italic;font-weight:500;color:var(--gold)}
+.page-hero .lead{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.4vw,21px);line-height:1.55;color:#E9E3D8;max-width:640px;margin:0}
+.page-hero .btns{margin-top:30px}
+
+.ev-section{padding-top:56px}
+.ev-section + .ev-section{padding-top:64px}
+.ev-h{font-family:var(--serif);font-weight:700;font-size:clamp(24px,3vw,30px);margin:0 0 20px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.ev-h small{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--terracotta)}

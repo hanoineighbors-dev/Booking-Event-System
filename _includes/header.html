@@ -1,0 +1,15 @@
+<a class="skip-link" href="#main">Bỏ qua, tới nội dung chính</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-logo" href="{{ '/' | relative_url }}" aria-label="Hanoi Neighbors - Trang chủ"><img src="{{ '/images/logo-white-ngang.png' | relative_url }}" alt="Hanoi Neighbors" width="760" height="252"></a>
+    <nav aria-label="Menu chính">
+      <ul>
+        {%- for item in site.data.navigation %}
+        {%- assign len = item.url | size %}
+        {%- assign head = page.url | slice: 0, len %}
+        <li><a class="nav-link{% if item.cta %} cta{% endif %}" href="{{ item.url | relative_url }}"{% if head == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>

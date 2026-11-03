@@ -1,0 +1,25 @@
+# Các cơ sở Hanoi Neighbors. Trang chủ, chân trang và thẻ sự kiện đều đọc từ đây.
+# Mở cơ sở mới = thêm một mục. `id` dùng để sự kiện trỏ tới (events.yml -> location).
+- id: warm-hands
+  name: Hanoi Neighbors Warm Hands
+  title_html: Hanoi Neighbors<br>Warm Hands
+  short: Warm Hands
+  street: 114 Tuệ Tĩnh
+  district: Hai Bà Trưng
+  map: https://www.google.com/maps/search/?api=1&query=Hanoi+Neighbors+114+Tu%E1%BB%87+T%C4%A9nh+Hai+B%C3%A0+Tr%C6%B0ng+H%C3%A0+N%E1%BB%99i
+
+- id: big-hug
+  name: Hanoi Neighbors Big Hug
+  title_html: Hanoi Neighbors<br>Big Hug
+  short: Big Hug
+  street: 8 Nguyễn Thiếp
+  district: Ba Đình
+  map: https://www.google.com/maps/search/?api=1&query=Hanoi+Neighbors+8+Nguy%E1%BB%85n+Thi%E1%BA%BFp+Ba+%C4%90%C3%ACnh+H%C3%A0+N%E1%BB%99i
+
+- id: sincerely
+  name: Sincerely, Hanoi Neighbors
+  title_html: Sincerely,<br>Hanoi Neighbors
+  short: Sincerely
+  street: 131 Hoàng Cầu
+  district: ""
+  map: https://www.google.com/maps/search/?api=1&query=Hanoi+Neighbors+131+Ho%C3%A0ng+C%E1%BA%A7u+H%C3%A0+N%E1%BB%99i

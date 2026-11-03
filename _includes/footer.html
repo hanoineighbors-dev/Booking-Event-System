@@ -1,0 +1,35 @@
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="sf-brand">
+      <a href="{{ '/' | relative_url }}" aria-label="Hanoi Neighbors - Trang chủ"><img src="{{ '/images/logo-white-ngang.png' | relative_url }}" alt="Hanoi Neighbors" width="760" height="252" loading="lazy"></a>
+      <p class="sf-tag">{{ site.tagline }}.<small>Make yourself at home.</small></p>
+      {%- assign has_social = false %}
+      {%- for s in site.social %}{% if s[1] != "" %}{% assign has_social = true %}{% endif %}{% endfor %}
+      {%- if has_social %}
+      <p class="sf-social">
+        {%- if site.social.facebook != "" %}<a href="{{ site.social.facebook }}" target="_blank" rel="noopener">Facebook</a>{% endif %}
+        {%- if site.social.instagram != "" %}<a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+        {%- if site.social.tiktok != "" %}<a href="{{ site.social.tiktok }}" target="_blank" rel="noopener">TikTok</a>{% endif %}
+      </p>
+      {%- endif %}
+    </div>
+    <div class="sf-col">
+      <h2 class="sf-h">Cơ sở</h2>
+      <ul class="sf-list">
+        {%- for loc in site.data.locations %}
+        <li><a href="{{ loc.map }}" target="_blank" rel="noopener"><b>{{ loc.short }}</b> · {{ loc.street }}{% if loc.district != "" %}, {{ loc.district }}{% endif %}</a></li>
+        {%- endfor %}
+      </ul>
+    </div>
+    <nav class="sf-col" aria-label="Liên kết cuối trang">
+      <h2 class="sf-h">Khám phá</h2>
+      <ul class="sf-list">
+        <li><a href="{{ '/' | relative_url }}">Trang chủ</a></li>
+        {%- for item in site.data.navigation %}
+        <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+    <p class="sf-copy">© {{ site.time | date: '%Y' }} Hanoi Neighbors · Hà Nội</p>
+  </div>
+</footer>

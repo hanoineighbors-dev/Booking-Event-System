@@ -1,0 +1,35 @@
+{%- comment -%}
+  Thẻ một sự kiện. Dùng:
+  {% include event-card.html event=e past=false variant="row" h=2 %}
+  variant: "row" (trang /events/, ảnh trái chữ phải) hoặc "tile" (trang chủ, ảnh trên).
+  site.js đọc data-ends để tự chuyển thẻ sang "Đã diễn ra" khi qua giờ kết thúc,
+  và data-live để đọc lịch thật (vd Drag Brunch lấy từ Google Sheet).
+{%- endcomment -%}
+{%- assign e = include.event -%}
+{%- assign loc = site.data.locations | where: "id", e.location | first -%}
+{%- assign variant = include.variant | default: "row" -%}
+{%- assign h = include.h | default: 3 -%}
+<a class="ev ev--{{ variant }}{% if include.past %} is-past{% endif %}" href="{{ e.url | relative_url }}"
+   {%- if e.end %} data-ends="{{ e.end | date_to_xmlschema }}"{% endif %}
+   {%- if e.live and include.past != true %} data-live="{{ e.live }}"{% endif %}>
+  <div class="ev-pic">
+    <img src="{{ e.poster | relative_url }}" alt="{{ e.poster_alt | escape }}" loading="lazy"{% if e.poster_position %} style="object-position:{{ e.poster_position }}"{% endif %}>
+    {%- if include.past %}
+    <span class="ev-tag done" data-role="tag">Đã diễn ra</span>
+    {%- else %}
+    <span class="ev-tag{% if e.kind == 'one-off' %} live{% endif %}" data-role="tag">{{ e.tag }}</span>
+    {%- endif %}
+  </div>
+  <div class="ev-body">
+    <div class="ev-when" data-role="when">{% if include.past and e.start %}{{ e.start | date: "%d.%m.%Y" }}{% else %}{{ e.when }}{% endif %}</div>
+    <h{{ h }} class="ev-title">{{ e.title }}</h{{ h }}>
+    <div class="ev-sub">{{ e.subtitle }}</div>
+    {%- if variant == "row" %}
+    <p class="ev-sum">{{ e.summary }}</p>
+    {%- endif %}
+    {%- if loc %}
+    <div class="ev-where"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>{{ loc.name }}{% if e.venue_note %} · {{ e.venue_note }}{% endif %}, {{ loc.street }}</div>
+    {%- endif %}
+    <span class="ev-cta"><b data-role="cta">{% if include.past %}Xem lại{% else %}{{ e.cta }}{% endif %}</b> <span aria-hidden="true">→</span></span>
+  </div>
+</a>

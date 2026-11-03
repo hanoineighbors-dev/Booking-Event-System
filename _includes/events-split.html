@@ -1,0 +1,15 @@
+{%- comment -%}
+  Chia site.data.events thành `upcoming` và `past` theo thời điểm build.
+  (site.js chia lại theo giờ thật khi khách mở trang, vì site chỉ build lại khi có thay đổi.)
+{%- endcomment -%}
+{%- assign now_s = site.time | date: "%s" | plus: 0 -%}
+{%- assign upcoming = "" | split: "" -%}
+{%- assign past = "" | split: "" -%}
+{%- for e in site.data.events -%}
+  {%- assign is_past = false -%}
+  {%- if e.end -%}
+    {%- assign end_s = e.end | date: "%s" | plus: 0 -%}
+    {%- if end_s < now_s %}{% assign is_past = true %}{% endif -%}
+  {%- endif -%}
+  {%- if is_past %}{% assign past = past | push: e %}{% else %}{% assign upcoming = upcoming | push: e %}{% endif -%}
+{%- endfor -%}
