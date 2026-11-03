@@ -1,0 +1,9 @@
+---
+layout: null
+sitemap: false
+---
+User-agent: *
+Disallow: /events/backtowonderlands2026/checkin.html
+Disallow: /events/backtowonderlands2026/chia-khoa.html
+
+Sitemap: {{ '/sitemap.xml' | absolute_url }}

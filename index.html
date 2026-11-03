@@ -1,201 +1,10 @@
-<!doctype html>
-<html lang="vi">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-  // Giữ cho link cũ còn chạy: trước đây trang đặt chỗ Dập Dìu nằm ở trang chủ,
-  // khách có thể đang giữ link dạng hanoineighbors.com/?code=DD-XXXXX
-  // -> chuyển thẳng sang trang event, giữ nguyên mã.
-  if (/[?&]code=/.test(location.search)) {
-    location.replace("events/dragbrunch/" + location.search + location.hash);
-  }
-</script>
-<title>Hanoi Neighbors - Tự nhiên như ở nhà</title>
-<meta name="description" content="Hanoi Neighbors không chỉ là quán cà phê - đó là những &quot;hood&quot; nhỏ giữa lòng Hà Nội, nơi tụi mình tin vào sự tử tế, chân thành và những cuộc gặp gỡ đáng nhớ.">
-<meta property="og:title" content="Hanoi Neighbors - Tự nhiên như ở nhà">
-<meta property="og:description" content="Những &quot;hood&quot; nhỏ giữa lòng Hà Nội. Make yourself at home.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://hanoineighbors.com/">
-<meta property="og:image" content="https://hanoineighbors.com/images/facade_night.jpg">
-<meta name="theme-color" content="#1A1A18">
-<link rel="icon" type="image/png" href="images/logo-doc.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,600&display=swap&subset=vietnamese" rel="stylesheet">
-<style>
-  :root{
-    --charcoal:#1A1A18; --cream:#FAF7F2; --gold:#D4B282; --terracotta:#B85C38;
-    --moss:#5C6B4A; --stone:#C8BFAF; --paper:#FFFDF9; --ink-soft:#57524A; --line:#E6DDCF;
-    --tint-gold:#F4EADB; --tint-moss:#E7EADF; --tint-terra:#F5E3DA;
-    --drag-red:#7a0000; --drag-cream:#ffebb8; --drag-mint:#1feab0;
-    --serif:"Playfair Display", Georgia, "Times New Roman", serif;
-    --sans:"Be Vietnam Pro", "Segoe UI", Roboto, Arial, sans-serif;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--cream);color:var(--charcoal);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
-  a{color:inherit}
-  img{max-width:100%;height:auto;display:block}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-
-  /* ---------- NAV ---------- */
-  .nav{position:absolute;top:0;left:0;right:0;z-index:10}
-  .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:22px;padding-bottom:22px}
-  .nav .logo img{width:150px;height:auto}
-  .nav ul{list-style:none;margin:0;padding:0;display:flex;gap:6px}
-  .nav a.link{display:inline-block;padding:9px 14px;border-radius:999px;color:var(--cream);text-decoration:none;font-size:14.5px;font-weight:500;transition:background .2s}
-  .nav a.link:hover{background:rgba(250,247,242,.12)}
-  .nav a.link.cta{background:var(--cream);color:var(--charcoal);font-weight:600}
-  .nav a.link.cta:hover{background:var(--gold)}
-
-  /* ---------- HERO ---------- */
-  .hero{position:relative;background:var(--charcoal);color:var(--cream);overflow:hidden;padding:150px 0 96px}
-  .hero::before{content:"";position:absolute;right:-12%;top:-30%;width:780px;height:780px;background:radial-gradient(circle, rgba(212,178,130,.26) 0%, rgba(212,178,130,0) 64%);pointer-events:none}
-  .hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
-  .eyebrow{font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 16px}
-  .hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(46px,7.4vw,88px);line-height:1.02;margin:0 0 28px;letter-spacing:-.01em}
-  .hero h1 em{font-style:italic;font-weight:500;color:var(--gold)}
-  .hero .lead{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.55;color:#EDE6DA;max-width:560px;margin:0 0 34px}
-  .btns{display:flex;flex-wrap:wrap;gap:12px}
-  .btn{display:inline-flex;align-items:center;gap:10px;padding:15px 24px;border-radius:999px;font:600 15px/1 var(--sans);text-decoration:none;transition:transform .2s, background .2s, border-color .2s}
-  .btn:hover{transform:translateY(-2px)}
-  .btn.primary{background:var(--terracotta);color:#fff}
-  .btn.primary:hover{background:#9E4C2D}
-  .btn.ghost{border:1.5px solid rgba(212,178,130,.55);color:var(--cream)}
-  .btn.ghost:hover{border-color:var(--gold);background:rgba(212,178,130,.1)}
-
-  .polaroid{position:relative;margin:0;background:#fff;padding:12px 12px 14px;border-radius:4px;box-shadow:0 30px 50px -28px rgba(0,0,0,.6),0 2px 6px rgba(0,0,0,.1)}
-  .polaroid img{width:100%;object-fit:cover;background:var(--stone)}
-  .polaroid figcaption{padding:12px 6px 2px;text-align:center;font-family:var(--serif);font-style:italic;color:var(--ink-soft);font-size:15px;line-height:1.35}
-  .tape{position:absolute;width:min(110px,42%);height:28px;background:rgba(212,178,130,.6);top:-12px;left:50%;transform:translateX(-50%) rotate(3deg);z-index:1}
-  .hero .polaroid{transform:rotate(3deg);max-width:420px;margin-left:auto}
-  .hero .polaroid img{aspect-ratio:4/5}
-
-  /* ---------- SECTIONS ---------- */
-  section{padding:88px 0 0}
-  .kicker{display:flex;align-items:baseline;gap:14px;margin:0 0 10px}
-  .kicker .idx{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:22px}
-  .kicker span.lbl{font-size:12.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--terracotta)}
-  .h2{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1.15;margin:0 0 14px}
-  .sub{color:var(--ink-soft);max-width:640px;margin:0 0 36px;font-size:17px}
-
-  /* ---------- EVENT FEATURE ---------- */
-  .event{position:relative;display:grid;grid-template-columns:1.2fr .8fr;border-radius:28px;overflow:hidden;background:var(--drag-red);color:var(--drag-cream);text-decoration:none;
-    box-shadow:0 30px 60px -36px rgba(122,0,0,.7);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
-  .event:hover{transform:translateY(-6px)}
-  .event::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 20% 0%, rgba(255,235,184,.18), transparent 55%);pointer-events:none}
-  .event .txt{padding:48px 48px 44px;position:relative;z-index:1}
-  .event .tag{display:inline-block;background:var(--drag-mint);color:#003b2a;font-weight:700;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;padding:7px 14px;border-radius:999px;margin-bottom:22px}
-  .event h3{font-family:"Anton", Impact, "Arial Narrow Bold", sans-serif;font-weight:400;font-size:clamp(38px,5.4vw,64px);line-height:1;letter-spacing:.01em;margin:0;text-transform:uppercase}
-  .event .script{display:block;font-family:var(--serif);font-style:italic;font-weight:600;color:var(--drag-mint);font-size:clamp(46px,6vw,72px);line-height:1.05;margin:6px 0 18px}
-  .event .by{font-family:var(--serif);font-style:italic;font-size:18px;margin:0 0 6px;opacity:.95}
-  .event .where{display:flex;align-items:center;gap:8px;font-size:15px;margin:0 0 30px;opacity:.9}
-  .event .go{display:inline-flex;align-items:center;gap:10px;background:var(--drag-cream);color:var(--drag-red);font-weight:700;padding:15px 24px;border-radius:999px;font-size:15px}
-  .event .go svg{transition:transform .25s}
-  .event:hover .go svg{transform:translateX(4px)}
-  .event .art{position:relative;z-index:1;display:grid;place-items:center;padding:30px 40px 30px 0}
-  .event .art .stamp{width:min(300px,100%);aspect-ratio:1;border-radius:50%;border:2px dashed rgba(255,235,184,.5);display:grid;place-items:center;text-align:center;transform:rotate(-8deg)}
-  .event .art .stamp b{display:block;font-family:"Anton", Impact, sans-serif;font-weight:400;font-size:44px;line-height:1;letter-spacing:.04em}
-  .event .art .stamp i{display:block;font-family:var(--serif);color:var(--drag-mint);font-size:56px;line-height:1;margin-top:6px}
-  .event .art .stamp small{display:block;margin-top:12px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;opacity:.85}
-  .note{margin:16px 4px 0;color:var(--ink-soft);font-size:14.5px}
-
-  /* ---------- CAREERS ---------- */
-  .careers{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:48px}
-  .careers .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px}
-  .careers .chip{font-size:13.5px;padding:7px 13px;border-radius:999px;background:var(--cream);border:1px solid var(--line);font-weight:500}
-  .careers .btn.primary{background:var(--charcoal)}
-  .careers .btn.primary:hover{background:#000}
-  .stack{position:relative;height:380px}
-  .stack .polaroid{position:absolute;width:58%}
-  .stack .polaroid img{aspect-ratio:4/5}
-  .stack .p1{left:2%;top:18px;transform:rotate(-6deg)}
-  .stack .p2{right:2%;top:0;transform:rotate(5deg)}
-
-  /* ---------- LOCATIONS ---------- */
-  .places{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .place{position:relative;border-radius:22px;padding:28px 26px 26px;overflow:hidden;background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;gap:8px;min-height:230px}
-  .place::before{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;background:var(--tint)}
-  .place:nth-child(1){--tint:var(--tint-gold)} .place:nth-child(2){--tint:var(--tint-moss)} .place:nth-child(3){--tint:var(--tint-terra)}
-  .place > *{position:relative}
-  .place .num{font-family:var(--serif);font-style:italic;font-size:44px;line-height:1;color:var(--gold)}
-  .place h3{font-family:var(--serif);font-weight:700;font-size:23px;line-height:1.25;margin:8px 0 0}
-  .place p{margin:0;color:var(--ink-soft)}
-  .place a.map{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;color:var(--terracotta);text-decoration:none}
-  .place a.map:hover{text-decoration:underline;text-underline-offset:3px}
-
-  /* ---------- GALLERY ---------- */
-  .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding:8px 6px}
-  .gallery .polaroid img{aspect-ratio:1}
-  .gallery .polaroid:nth-child(odd){transform:rotate(-2.5deg)}
-  .gallery .polaroid:nth-child(even){transform:rotate(2deg) translateY(14px)}
-
-  /* ---------- FOOTER ---------- */
-  footer{margin-top:110px;background:var(--charcoal);color:#D9D2C6;padding:64px 0 44px}
-  footer .wrap{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:center}
-  footer img{width:150px;height:auto}
-  footer .tag{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--cream);margin:0}
-  footer .tag small{display:block;font-family:var(--sans);font-style:normal;font-size:14px;color:var(--gold);margin-top:4px;letter-spacing:.04em}
-  footer nav{display:flex;flex-direction:column;gap:8px;text-align:right}
-  footer nav a{text-decoration:none;font-size:15px}
-  footer nav a:hover{color:var(--gold)}
-  footer .copy{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.1);padding-top:22px;margin-top:6px;font-size:13px;color:#9C958A}
-
-  /* ---------- REVEAL ---------- */
-  .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1)}
-  .rv.in{opacity:1;transform:none}
-  .hero .polaroid.rv.in{transform:rotate(3deg)}
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:920px){
-    .hero{padding:130px 0 72px}
-    .hero .wrap{grid-template-columns:1fr;gap:44px}
-    .hero .polaroid{margin:0 auto;max-width:340px}
-    .event{grid-template-columns:1fr}
-    .event .art{display:none}
-    .careers{grid-template-columns:1fr;padding:34px 26px}
-    .stack{height:320px;max-width:440px;width:100%;margin:0 auto}
-    .places{grid-template-columns:1fr}
-    .place{min-height:0}
-    .gallery{grid-template-columns:repeat(2,1fr)}
-    footer .wrap{grid-template-columns:1fr;text-align:center;justify-items:center}
-    footer nav{text-align:center}
-  }
-  @media (max-width:600px){
-    .wrap{padding:0 16px}
-    .nav .wrap{padding-top:16px}
-    .nav .logo img{width:120px}
-    .nav ul li.hide-sm{display:none}
-    .nav a.link{padding:8px 12px;font-size:14px}
-    .hero .lead{font-size:18.5px}
-    .btn{width:100%;justify-content:center}
-    section{padding-top:68px}
-    .event .txt{padding:34px 24px 30px}
-    .event .go{width:100%;justify-content:center}
-    .stack{height:270px}
-    .polaroid figcaption{font-size:13.5px;padding-top:9px}
-  }
-  @media (prefers-reduced-motion:reduce){
-    *{transition:none!important;scroll-behavior:auto!important}
-    .rv{opacity:1;transform:none}
-  }
-</style>
-</head>
-<body>
-
-<header class="nav">
-  <div class="wrap">
-    <a class="logo" href="./" aria-label="Hanoi Neighbors - Trang chủ"><img src="images/logo-white-ngang.png" alt="Hanoi Neighbors" width="760" height="252"></a>
-    <ul>
-      <li class="hide-sm"><a class="link" href="#co-so">Cơ sở</a></li>
-      <li><a class="link" href="events/">Sự kiện</a></li>
-      <li><a class="link cta" href="tuyendung/">Tuyển dụng</a></li>
-    </ul>
-  </div>
-</header>
-
-<main>
+---
+# Trang chủ. Nội dung sự kiện lấy từ _data/events.yml, cơ sở lấy từ _data/locations.yml.
+body_class: home
+css: [home]
+legacy_code_redirect: true
+---
+{% include events-split.html %}
 <!-- ===================== HERO ===================== -->
 <div class="hero">
   <div class="wrap">
@@ -204,40 +13,39 @@
       <h1 class="rv">Tự nhiên<br><em>như ở nhà</em></h1>
       <p class="lead rv">Hanoi Neighbors không chỉ là quán cà phê - đó là những "hood" nhỏ giữa lòng Hà Nội, nơi tụi mình tin vào sự tử tế, chân thành và những cuộc gặp gỡ đáng nhớ.</p>
       <div class="btns rv">
-        <a class="btn primary" href="events/">Xem các sự kiện
+        <a class="btn primary" href="{{ '/events/' | relative_url }}">Xem các sự kiện
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-        <a class="btn ghost" href="tuyendung/">Trở thành Hàng xóm</a>
+        <a class="btn ghost" href="{{ '/tuyendung/' | relative_url }}">Trở thành Hàng xóm</a>
       </div>
     </div>
-    <figure class="polaroid rv"><span class="tape"></span><img src="images/facade_night.jpg" alt="Mặt tiền Hanoi Neighbors lên đèn buổi tối" width="1000" height="750"><figcaption>Hanoi Neighbors</figcaption></figure>
+    <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/facade_night.jpg' | relative_url }}" alt="Mặt tiền Hanoi Neighbors lên đèn buổi tối" width="1000" height="750"><figcaption>Hanoi Neighbors</figcaption></figure>
   </div>
 </div>
 
-<!-- ===================== EVENT ===================== -->
-<section id="event">
+<!-- ===================== SỰ KIỆN ===================== -->
+<section id="su-kien">
   <div class="wrap">
-    <div class="kicker rv"><span class="idx">01</span><span class="lbl">Event</span></div>
-    <h2 class="h2 rv">Ở nhà hàng xóm, cuối tuần không bao giờ buồn</h2>
-    <p class="sub rv">Lịch các buổi sắp tới và những đêm đã qua đều nằm ở <a href="events/">trang Sự kiện</a>.</p>
-
-    <a class="event rv" href="events/dragbrunch/">
-      <div class="txt">
-        <span class="tag">Drag Brunch</span>
-        <h3>Những bà<br>nội trợ kiểu</h3>
-        <span class="script">Áaa</span>
-        <p class="by">by Hanoi Neighbors × Dập Dìu Drag Haus</p>
-        <p class="where">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>
-          8 Nguyễn Thiếp · Hanoi
-        </p>
-        <span class="go">Xem lịch &amp; đặt chỗ
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span>
+    <div class="kicker rv"><span class="idx">01</span><span class="lbl">Sự kiện</span></div>
+    <div class="sec-head">
+      <div>
+        <h2 class="h2 rv">Ở nhà hàng xóm, cuối tuần không bao giờ buồn</h2>
+        <p class="sub rv">Tiệc, brunch và những đêm hơi điên một chút. Chọn một cánh cửa, rồi bước vào như về nhà.</p>
       </div>
-      <div class="art" aria-hidden="true">
-        <div class="stamp"><div><b>DẬP DÌU</b><i>Áaa</i><small>Drag Haus</small></div></div>
+      <a class="more-link rv" href="{{ '/events/' | relative_url }}">Tất cả sự kiện <span aria-hidden="true">→</span></a>
+    </div>
+    <div>
+      {%- comment -%} Tối đa 3 thẻ: ưu tiên sự kiện sắp diễn ra, còn chỗ thì lấy những đêm gần nhất đã qua. {%- endcomment -%}
+      {%- assign fill = 3 | minus: upcoming.size %}
+      <div class="ev-grid" data-ev-list="upcoming" data-on-past="mark">
+        {%- for e in upcoming limit: 3 %}
+        {% include event-card.html event=e variant="tile" h=3 %}
+        {%- endfor %}
+        {%- if fill > 0 %}{% for e in past limit: fill %}
+        {% include event-card.html event=e past=true variant="tile" h=3 %}
+        {%- endfor %}{% endif %}
       </div>
-    </a>
-    <p class="note rv">Đã có mã đặt chỗ Drag Brunch? Vào <a href="events/dragbrunch/">trang Drag Brunch</a>, nhập mã ở mục "Kiểm tra trạng thái đặt chỗ".</p>
+      <p class="ev-empty" data-ev-empty{% if upcoming.size > 0 %} hidden{% endif %}>Sự kiện mới sẽ được treo lên sớm. Hẹn bạn ở buổi tiếp theo.</p>
+    </div>
   </div>
 </section>
 
@@ -257,12 +65,12 @@
           <span class="chip">Nhân viên bàn full-time</span>
           <span class="chip">Nhân viên bàn part-time</span>
         </div>
-        <a class="btn primary" href="tuyendung/">Xem vị trí &amp; ứng tuyển
+        <a class="btn dark" href="{{ '/tuyendung/' | relative_url }}">Xem vị trí &amp; ứng tuyển
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
       </div>
       <div class="stack" aria-hidden="true">
-        <figure class="polaroid p1"><span class="tape"></span><img src="images/bar_counter.jpg" alt="" loading="lazy" width="1000" height="1000"></figure>
-        <figure class="polaroid p2"><span class="tape"></span><img src="images/serving_sofa.jpg" alt="" loading="lazy" width="1000" height="1778"><figcaption>Một ca làm</figcaption></figure>
+        <figure class="polaroid p1"><span class="tape"></span><img src="{{ '/images/bar_counter.jpg' | relative_url }}" alt="" loading="lazy" width="1000" height="1000"></figure>
+        <figure class="polaroid p2"><span class="tape"></span><img src="{{ '/images/serving_sofa.jpg' | relative_url }}" alt="" loading="lazy" width="1000" height="1778"><figcaption>Một ca làm</figcaption></figure>
       </div>
     </div>
   </div>
@@ -272,27 +80,17 @@
 <section id="co-so">
   <div class="wrap">
     <div class="kicker rv"><span class="idx">03</span><span class="lbl">Cơ sở</span></div>
-    <h2 class="h2 rv">Ba căn nhà, một khu phố</h2>
+    <h2 class="h2 rv">{% case site.data.locations.size %}{% when 2 %}Hai{% when 3 %}Ba{% when 4 %}Bốn{% when 5 %}Năm{% else %}{{ site.data.locations.size }}{% endcase %} căn nhà, một khu phố</h2>
     <p class="sub rv">Ghé bất cứ "hood" nào gần bạn nhất.</p>
     <div class="places">
+      {%- for loc in site.data.locations %}
       <article class="place rv">
-        <span class="num">1</span>
-        <h3>Hanoi Neighbors<br>Warm Hands</h3>
-        <p>114 Tuệ Tĩnh, Hai Bà Trưng</p>
-        <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Hanoi+Neighbors+114+Tu%E1%BB%87+T%C4%A9nh+Hai+B%C3%A0+Tr%C6%B0ng+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Chỉ đường →</a>
+        <span class="num">{{ forloop.index }}</span>
+        <h3>{{ loc.title_html }}</h3>
+        <p>{{ loc.street }}{% if loc.district != "" %}, {{ loc.district }}{% endif %}</p>
+        <a class="map" href="{{ loc.map }}" target="_blank" rel="noopener">Chỉ đường <span aria-hidden="true">→</span></a>
       </article>
-      <article class="place rv">
-        <span class="num">2</span>
-        <h3>Hanoi Neighbors<br>Big Hugs</h3>
-        <p>8 Nguyễn Thiếp, Ba Đình</p>
-        <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Hanoi+Neighbors+8+Nguy%E1%BB%85n+Thi%E1%BA%BFp+Ba+%C4%90%C3%ACnh+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Chỉ đường →</a>
-      </article>
-      <article class="place rv">
-        <span class="num">3</span>
-        <h3>Sincerely,<br>Hanoi Neighbors</h3>
-        <p>131 Hoàng Cầu</p>
-        <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Hanoi+Neighbors+131+Ho%C3%A0ng+C%E1%BA%A7u+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Chỉ đường →</a>
-      </article>
+      {%- endfor %}
     </div>
   </div>
 </section>
@@ -301,38 +99,11 @@
 <section aria-label="Một chút Hàng xóm">
   <div class="wrap">
     <div class="gallery">
-      <figure class="polaroid rv"><span class="tape"></span><img src="images/bar_crowd.jpg" alt="Hàng xóm quây quần bên quầy bar" loading="lazy" width="1000" height="1334"><figcaption>Hàng xóm</figcaption></figure>
-      <figure class="polaroid rv"><span class="tape"></span><img src="images/cup_menu.jpg" alt="Tách cà phê và thực đơn trên bàn gỗ" loading="lazy" width="1000" height="1334"><figcaption>Một tách chiều</figcaption></figure>
-      <figure class="polaroid rv"><span class="tape"></span><img src="images/courtyard.jpg" alt="Sân trong nhìn từ trên cao" loading="lazy" width="1000" height="1334"><figcaption>Sân trong</figcaption></figure>
-      <figure class="polaroid rv"><span class="tape"></span><img src="images/sofa_skylight.jpg" alt="Góc sofa dưới giếng trời" loading="lazy" width="1000" height="1334"><figcaption>Giếng trời</figcaption></figure>
+      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/bar_crowd.jpg' | relative_url }}" alt="Hàng xóm quây quần bên quầy bar" loading="lazy" width="1000" height="1334"><figcaption>Hàng xóm</figcaption></figure>
+      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/cup_menu.jpg' | relative_url }}" alt="Tách cà phê và thực đơn trên bàn gỗ" loading="lazy" width="1000" height="1334"><figcaption>Một tách chiều</figcaption></figure>
+      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/courtyard.jpg' | relative_url }}" alt="Sân trong nhìn từ trên cao" loading="lazy" width="1000" height="1334"><figcaption>Sân trong</figcaption></figure>
+      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/sofa_skylight.jpg' | relative_url }}" alt="Góc sofa dưới giếng trời" loading="lazy" width="1000" height="1334"><figcaption>Giếng trời</figcaption></figure>
     </div>
   </div>
 </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <img src="images/logo-white-ngang.png" alt="Hanoi Neighbors" width="760" height="252" loading="lazy">
-    <p class="tag">Tự nhiên như ở nhà.<small>Make yourself at home.</small></p>
-    <nav aria-label="Liên kết cuối trang">
-      <a href="events/">Sự kiện</a>
-      <a href="events/dragbrunch/">Dập Dìu Drag Brunch</a>
-      <a href="tuyendung/">Tuyển dụng</a>
-      <a href="#co-so">Cơ sở</a>
-    </nav>
-    <p class="copy">© Hanoi Neighbors · Hà Nội</p>
-  </div>
-</footer>
-
-<script>
-  (function(){
-    var els = document.querySelectorAll(".rv");
-    if (!("IntersectionObserver" in window)) { els.forEach(function(e){ e.classList.add("in"); }); return; }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
-    }, {rootMargin:"0px 0px -6% 0px", threshold:.08});
-    els.forEach(function(e, k){ e.style.transitionDelay = Math.min((k % 4) * 80, 240) + "ms"; io.observe(e); });
-  })();
-</script>
-</body>
-</html>
+{% include schema-locations.html %}

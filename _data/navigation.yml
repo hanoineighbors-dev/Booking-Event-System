@@ -1,0 +1,9 @@
+# Menu trên cùng (và chân trang) của mọi trang chính.
+# Thêm một mục mới = thêm một dòng. `cta: true` hiện thành nút nổi bật.
+- title: Sự kiện
+  url: /events/
+- title: Cơ sở
+  url: /#co-so
+- title: Tuyển dụng
+  url: /tuyendung/
+  cta: true

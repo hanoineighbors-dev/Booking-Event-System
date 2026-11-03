@@ -1,0 +1,40 @@
+# Danh sách sự kiện. Trang chủ (mục "Sự kiện") và trang /events/ đều đọc từ đây.
+#
+# Thêm sự kiện mới: chép một mục bên dưới, sửa nội dung, đặt lên ĐẦU danh sách.
+# - kind: one-off  -> sự kiện một đêm. BẮT BUỘC có `end` (giờ kết thúc).
+#                     Qua giờ `end`, sự kiện tự chuyển sang mục "Đã diễn ra".
+# - kind: series   -> đặt chỗ theo buổi, không có ngày kết thúc cố định.
+#                     `live: dragbrunch` = đọc lịch thật từ Google Sheet để báo còn buổi hay không.
+# - location: id trong _data/locations.yml
+# - Giờ luôn ghi kèm +07:00 (giờ Hà Nội).
+
+- slug: dragbrunch
+  kind: series
+  title: Dập Dìu Drag Brunch
+  subtitle: Những Bà Nội Trợ Kiểu Áaa · cùng Dập Dìu Drag Haus
+  summary: Một bữa brunch rộn ràng với những màn diễn drag, đồ ăn ngon và tiếng cười kéo dài tới tận chiều.
+  when: Brunch cuối tuần
+  location: big-hug
+  url: /events/dragbrunch/
+  poster: /events/dragbrunch/poster.webp
+  poster_position: 50% 18%
+  poster_alt: Poster Những Bà Nội Trợ Kiểu Áaa, Drag Brunch cùng Dập Dìu Drag Haus
+  tag: Đặt chỗ theo buổi
+  cta: Xem và đặt chỗ
+  live: dragbrunch
+
+- slug: backtowonderlands2026
+  kind: one-off
+  title: Back to the Rabbit Hole
+  subtitle: Halloween House Party 2026 · cùng Lermalermer
+  summary: Wonderland vẫn bị phân đôi. Chọn phe Nữ hoàng Đỏ hay Nữ hoàng Trắng, chơi House Games, lạc vào nhạc của DJ Ashley và tranh ngôi ở Aura Battle.
+  start: 2026-10-31T20:30:00+07:00
+  end: 2026-11-01T03:00:00+07:00
+  when: Thứ Bảy 31.10.2026 · Cửa hang mở 20:30
+  location: sincerely
+  venue_note: Tầng 6
+  url: /events/backtowonderlands2026/
+  poster: /events/backtowonderlands2026/assets/poster-main.webp
+  poster_alt: Poster Back to the Rabbit Hole, Halloween House Party 2026
+  tag: Đang nhận chìa khoá
+  cta: Nhận chìa khoá
