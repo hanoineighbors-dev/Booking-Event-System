@@ -193,6 +193,7 @@
     layout(); heroSlot.style.opacity = 1;
     world.getAnimations().forEach(function (a) { a.cancel(); });
     rig.getAnimations().forEach(function (a) { a.cancel(); });
+    rig.style.transform = "none";
     world.style.transform = overview();
   });
 
