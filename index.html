@@ -1,109 +1,552 @@
----
-# Trang chủ. Nội dung sự kiện lấy từ _data/events.yml, cơ sở lấy từ _data/locations.yml.
-body_class: home
-css: [home]
-legacy_code_redirect: true
----
-{% include events-split.html %}
-<!-- ===================== HERO ===================== -->
-<div class="hero">
-  <div class="wrap">
-    <div>
-      <p class="eyebrow rv">Make yourself at home.</p>
-      <h1 class="rv">Tự nhiên<br><em>như ở nhà</em></h1>
-      <p class="lead rv">Hanoi Neighbors không chỉ là quán cà phê - đó là những "hood" nhỏ giữa lòng Hà Nội, nơi tụi mình tin vào sự tử tế, chân thành và những cuộc gặp gỡ đáng nhớ.</p>
-      <div class="btns rv">
-        <a class="btn primary" href="{{ '/events/' | relative_url }}">Xem các sự kiện
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-        <a class="btn ghost" href="{{ '/tuyendung/' | relative_url }}">Trở thành Hàng xóm</a>
-      </div>
-    </div>
-    <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/facade_night.jpg' | relative_url }}" alt="Mặt tiền Hanoi Neighbors lên đèn buổi tối" width="1000" height="750"><figcaption>Hanoi Neighbors</figcaption></figure>
-  </div>
-</div>
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<script>
+  // Link cũ dạng hanoineighbors.com/?code=DD-XXXXX -> chuyển sang trang Drag Brunch, giữ nguyên mã.
+  if (/[?&]code=/.test(location.search)) location.replace("/events/dragbrunch/" + location.search + location.hash);
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hanoi Neighbors | Tự nhiên như ở nhà</title>
+<meta name="description" content="Ba căn nhà nhỏ giữa lòng Hà Nội: Warm Hands ở 114 Tuệ Tĩnh, Big Hug ở 8 Nguyễn Thiếp, Sincerely ở 131 Hoàng Cầu. Tự nhiên như ở nhà.">
+<link rel="canonical" href="https://hanoineighbors.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hanoi Neighbors">
+<meta property="og:title" content="Hanoi Neighbors | Tự nhiên như ở nhà">
+<meta property="og:description" content="Ba căn nhà nhỏ giữa lòng Hà Nội: Warm Hands ở 114 Tuệ Tĩnh, Big Hug ở 8 Nguyễn Thiếp, Sincerely ở 131 Hoàng Cầu. Tự nhiên như ở nhà.">
+<meta property="og:url" content="https://hanoineighbors.com/">
+<meta property="og:image" content="https://hanoineighbors.com/images/facade_night.jpg">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1A1A18">
+<link rel="icon" type="image/png" href="/images/logo-doc.png">
+<link rel="apple-touch-icon" href="/images/logo-doc.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&display=swap&subset=vietnamese" rel="stylesheet">
+<link rel="preload" as="image" href="/assets/home/pho.jpg" media="(max-width: 760px)">
+<link rel="preload" as="image" href="/assets/home/pho-lon.jpg" media="(min-width: 761px)">
+<link rel="stylesheet" href="/assets/css/scrollcraft.css">
+<style>
+:root{
+  --charcoal:#1A1A18; --cream:#FAF7F2; --gold:#D4B282; --terra:#B85C38; --moss:#5C6B4A; --mist:#C8BFAF;
+  --sc-canvas:#141311; --sc-surface:#1f1d1a; --sc-ink:#FAF7F2; --sc-ink-soft:#d9d1c4;
+  --sc-accent:#D4B282; --sc-accent-ink:#1A1A18;
+  --sc-font-display:"Playfair Display", Georgia, serif;
+  --sc-font-text:"DM Sans", system-ui, sans-serif;
+  --warm:0; --cold:1; --night:0;
+  --tone: color-mix(in oklab, var(--gold) calc(var(--warm) * 100%), var(--mist));
+  --gutter: clamp(16px, 5vw, 72px);
+}
+html{ background:var(--sc-canvas) }
+body{ background:var(--sc-canvas); color:var(--sc-ink); font-family:var(--sc-font-text); margin:0; -webkit-font-smoothing:antialiased }
+a{ color:inherit }
+.skip{ position:fixed; left:12px; top:-60px; z-index:999; background:var(--cream); color:var(--charcoal); padding:10px 14px; border-radius:6px; text-decoration:none; font-weight:600 }
+.skip:focus{ top:12px }
 
-<!-- ===================== SỰ KIỆN ===================== -->
-<section id="su-kien">
-  <div class="wrap">
-    <div class="kicker rv"><span class="idx">01</span><span class="lbl">Sự kiện</span></div>
-    <div class="sec-head">
-      <div>
-        <h2 class="h2 rv">Ở nhà hàng xóm, cuối tuần không bao giờ buồn</h2>
-        <p class="sub rv">Tiệc, brunch và những đêm hơi điên một chút. Chọn một cánh cửa, rồi bước vào như về nhà.</p>
-      </div>
-      <a class="more-link rv" href="{{ '/events/' | relative_url }}">Tất cả sự kiện <span aria-hidden="true">→</span></a>
-    </div>
-    <div>
-      {%- comment -%} Tối đa 3 thẻ: ưu tiên sự kiện sắp diễn ra, còn chỗ thì lấy những đêm gần nhất đã qua. {%- endcomment -%}
-      {%- assign fill = 3 | minus: upcoming.size %}
-      <div class="ev-grid" data-ev-list="upcoming" data-on-past="mark">
-        {%- for e in upcoming limit: 3 %}
-        {% include event-card.html event=e variant="tile" h=3 %}
-        {%- endfor %}
-        {%- if fill > 0 %}{% for e in past limit: fill %}
-        {% include event-card.html event=e past=true variant="tile" h=3 %}
-        {%- endfor %}{% endif %}
-      </div>
-      <p class="ev-empty" data-ev-empty{% if upcoming.size > 0 %} hidden{% endif %}>Sự kiện mới sẽ được treo lên sớm. Hẹn bạn ở buổi tiếp theo.</p>
-    </div>
-  </div>
-</section>
+/* ---------- chrome: wordmark + ngõ map ---------- */
+.bar{ position:fixed; z-index:60; inset:0 0 auto 0; display:flex; align-items:center; justify-content:space-between; padding:18px var(--gutter); pointer-events:none }
+.bar > *{ pointer-events:auto }
+.bar__logo img{ height:34px; width:auto; display:block; filter:drop-shadow(0 1px 8px rgba(0,0,0,.35)); transition:filter .4s }
+.bar.on-paper .bar__logo img{ filter:brightness(0) opacity(.82) }
+.bar__go{ font-size:14px; font-weight:500; letter-spacing:.01em; text-decoration:none; padding:10px 16px; border-radius:999px; color:var(--charcoal); background:var(--tone); transition:transform .25s ease }
+.bar__go:hover{ transform:translateY(-1px) }
+.bar__r{ display:flex; align-items:center; gap:20px }
+.bar__menu{ font-size:14px; font-weight:500; text-decoration:none; color:var(--sc-ink); text-shadow:0 1px 10px rgba(0,0,0,.55); border-bottom:1px solid color-mix(in oklab, currentColor 45%, transparent); padding:4px 0 2px; transition:color .4s }
+.bar.on-paper .bar__menu{ color:var(--charcoal); text-shadow:none }
+.row.lnks{ margin-top:0; gap:10px 22px }
 
-<!-- ===================== TUYỂN DỤNG ===================== -->
-<section id="tuyen-dung">
-  <div class="wrap">
-    <div class="careers rv">
-      <div>
-        <div class="kicker"><span class="idx">02</span><span class="lbl">Tuyển dụng</span></div>
-        <h2 class="h2">Chúng mình đang tìm những "người hàng xóm" mới</h2>
-        <p class="sub" style="margin-bottom:22px">Một cửa hàng tuyệt vời bắt đầu từ những người Hàng xóm tuyệt vời.</p>
-        <div class="chips">
-          <span class="chip">Quản lý cửa hàng</span>
-          <span class="chip">Trưởng ca / Trợ lý quản lý</span>
-          <span class="chip">Bar Lead</span>
-          <span class="chip">Nhân viên pha chế</span>
-          <span class="chip">Nhân viên bàn full-time</span>
-          <span class="chip">Nhân viên bàn part-time</span>
-        </div>
-        <a class="btn dark" href="{{ '/tuyendung/' | relative_url }}">Xem vị trí &amp; ứng tuyển
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-      </div>
-      <div class="stack" aria-hidden="true">
-        <figure class="polaroid p1"><span class="tape"></span><img src="{{ '/images/bar_counter.jpg' | relative_url }}" alt="" loading="lazy" width="1000" height="1000"></figure>
-        <figure class="polaroid p2"><span class="tape"></span><img src="{{ '/images/serving_sofa.jpg' | relative_url }}" alt="" loading="lazy" width="1000" height="1778"><figcaption>Một ca làm</figcaption></figure>
-      </div>
-    </div>
-  </div>
-</section>
+.map{ position:fixed; z-index:60; right:var(--gutter); top:50%; transform:translateY(-50%); width:150px }
+.map svg{ position:absolute; left:6px; top:0; height:100%; width:24px; overflow:visible }
+.map path{ fill:none; stroke:color-mix(in oklab, var(--tone) 55%, transparent); stroke-width:1.4; stroke-dasharray:3 5 }
+.map ol{ list-style:none; margin:0; padding:0; display:grid; gap:14px }
+.map a{ display:flex; align-items:center; gap:12px; text-decoration:none; font-size:13px; color:color-mix(in oklab, var(--sc-ink) 62%, transparent); padding:4px 0; text-shadow:0 1px 10px rgba(0,0,0,.5) }
+.map a::before{ content:""; width:9px; height:9px; border-radius:50%; border:1.4px solid currentColor; flex:none; margin-left:7px; transition:background .3s, transform .3s }
+.map a[aria-current="true"]{ color:var(--sc-ink) }
+.map a[aria-current="true"]::before{ background:var(--tone); border-color:var(--tone); transform:scale(1.35) }
+.map a:hover{ color:var(--sc-ink) }
+.map.on-paper a{ color:color-mix(in oklab, var(--charcoal) 60%, transparent); text-shadow:none }
+.map.on-paper a[aria-current="true"]{ color:var(--charcoal) }
+.map.on-paper a[aria-current="true"]::before{ background:var(--terra); border-color:var(--terra) }
 
-<!-- ===================== CƠ SỞ ===================== -->
-<section id="co-so">
-  <div class="wrap">
-    <div class="kicker rv"><span class="idx">03</span><span class="lbl">Cơ sở</span></div>
-    <h2 class="h2 rv">{% case site.data.locations.size %}{% when 2 %}Hai{% when 3 %}Ba{% when 4 %}Bốn{% when 5 %}Năm{% else %}{{ site.data.locations.size }}{% endcase %} căn nhà, một khu phố</h2>
-    <p class="sub rv">Ghé bất cứ "hood" nào gần bạn nhất.</p>
-    <div class="places">
-      {%- for loc in site.data.locations %}
-      <article class="place rv">
-        <span class="num">{{ forloop.index }}</span>
-        <h3>{{ loc.title_html }}</h3>
-        <p>{{ loc.street }}{% if loc.district != "" %}, {{ loc.district }}{% endif %}</p>
-        <a class="map" href="{{ loc.map }}" target="_blank" rel="noopener">Chỉ đường <span aria-hidden="true">→</span></a>
-      </article>
-      {%- endfor %}
-    </div>
-  </div>
-</section>
+/* ---------- world planes ---------- */
+.pl{ position:absolute; inset:0; will-change:transform }
+.pl > img, .pl > picture > img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block }
+.out::after{ content:""; position:absolute; inset:0; background:#20344a; mix-blend-mode:color; opacity:calc(var(--cold) * .78); pointer-events:none }
+.out::before{ content:""; position:absolute; inset:0; background:#0c141d; opacity:calc(var(--cold) * .38); z-index:1; pointer-events:none }
 
-<!-- ===================== GALLERY ===================== -->
-<section aria-label="Một chút Hàng xóm">
-  <div class="wrap">
-    <div class="gallery">
-      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/bar_crowd.jpg' | relative_url }}" alt="Hàng xóm quây quần bên quầy bar" loading="lazy" width="1000" height="1334"><figcaption>Hàng xóm</figcaption></figure>
-      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/cup_menu.jpg' | relative_url }}" alt="Tách cà phê và thực đơn trên bàn gỗ" loading="lazy" width="1000" height="1334"><figcaption>Một tách chiều</figcaption></figure>
-      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/courtyard.jpg' | relative_url }}" alt="Sân trong nhìn từ trên cao" loading="lazy" width="1000" height="1334"><figcaption>Sân trong</figcaption></figure>
-      <figure class="polaroid rv"><span class="tape"></span><img src="{{ '/images/sofa_skylight.jpg' | relative_url }}" alt="Góc sofa dưới giếng trời" loading="lazy" width="1000" height="1334"><figcaption>Giếng trời</figcaption></figure>
+/* leg 1: phố, nhìn từ ban công xuống */
+.s-pho .pl--street{ transform:scale(calc(1.2 - var(--lp,0) * .14)) translate3d(0, calc(var(--lp,0) * -4vh), 0) }
+.s-pho .pl--street img{ object-position:50% 62% }
+.s-pho .haze{ background:radial-gradient(60% 40% at 30% 70%, rgba(150,170,190,.18), transparent 70%), radial-gradient(50% 35% at 80% 30%, rgba(150,170,190,.12), transparent 70%); transform:translate3d(calc(var(--lp,0) * 6vw), 0, 0) }
+.s-pho .rail{ transform:translate3d(0, calc(var(--lp,0) * 46vh), 0) scale(calc(1 + var(--lp,0) * .25)); transform-origin:50% 100% }
+.rail svg{ position:absolute; left:-2%; right:-2%; bottom:-2vh; width:104%; height:34vh }
+
+/* leg 2: ngõ, rèm dây leo */
+.s-ngo{ background:#0b0a09 }
+.s-ngo .pl--vine{ transform-origin:50% 56%; transform:scale(calc(1 + var(--lp,0) * 1.6)) }
+.s-ngo .pl > img{ inset:auto; top:0; left:50%; height:100%; width:auto; aspect-ratio:1333/2000; translate:-50% 0;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); mask-image:linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent) }
+.s-ngo .pl--vine img{ filter:brightness(calc(.62 + var(--lp,0) * .3)) saturate(.9) }
+.s-ngo .pl--near{ transform-origin:50% 56%; transform:scale(calc(1.25 + var(--lp,0) * 2.6)); filter:blur(9px); opacity:.55;
+  -webkit-mask-image:radial-gradient(closest-side, transparent 55%, #000 100%); mask-image:radial-gradient(closest-side, transparent 55%, #000 100%) }
+.s-ngo .glow{ background:radial-gradient(16% 30% at 49% 56%, rgba(255,190,110,.42), transparent 70%); opacity:calc(.25 + var(--lp,0) * .75); mix-blend-mode:screen }
+
+/* leg 3: ngưỡng cửa (đỉnh) */
+.s-cua .pl--room{ transform:scale(calc(1.24 - var(--door,0) * .22)) translate3d(calc((1 - var(--door,0)) * -6vw), 0, 0) }
+.s-cua .pl--room img{ object-position:40% 45%; filter:brightness(.84) }
+.s-cua .frame{ position:absolute; left:50%; top:46%; width:max(100vw, calc(100svh * .75)); aspect-ratio:3/4; transform:translate(-50%,-50%) }
+.s-cua .pl--wall{ transform-origin:27% 60%; transform:translate3d(calc(var(--door,0) * 92vw), 0, 0) scale(calc(1 + var(--door,0) * .9)) }
+.s-cua .pl--wall{ clip-path:polygon(24.6% 0, 100% 0, 100% 100%, 27.3% 100%, 27.3% 17.6%, 24.6% 17.6%) }
+.s-cua .pl--wall img{ object-fit:fill }
+.s-cua .bloom{ background:radial-gradient(55% 60% at 32% 55%, rgba(255,190,110,.42), transparent 72%); opacity:calc(var(--warm) * (1 - var(--lp,0) * .6)); mix-blend-mode:screen }
+
+/* leg 4: thân quen */
+.s-nha .pl--chess{ transform:scale(calc(1.1 - var(--lp,0) * .1)) }
+.s-nha .pl--chess img{ object-position:58% 50% }
+.print{ position:absolute; margin:0; background:var(--cream); padding:10px 10px 30px; box-shadow:0 18px 40px rgba(0,0,0,.42), 0 2px 6px rgba(0,0,0,.3); }
+.print img{ display:block; width:100%; height:auto }
+.print figcaption{ position:absolute; left:12px; right:12px; bottom:7px; font:italic 13px/1.2 var(--sc-font-display); color:#3b362f }
+.s-nha .p1{ width:min(22vw, 300px); right:22vw; bottom:6vh; rotate:-4deg; transform:translate3d(0, calc((1 - var(--lp,0)) * 58vh - 10vh), 0) }
+.s-nha .p2{ width:min(16vw, 220px); right:9vw; top:12vh; rotate:3deg; transform:translate3d(0, calc((1 - var(--lp,0)) * 95vh - 30vh), 0) }
+
+/* leg 5: ba căn nhà, giấy kem, đi ngang */
+.s-ba{ background:var(--cream) }
+.s-ba .paper{ background:var(--cream) radial-gradient(120% 90% at 70% 40%, #fffdf8, #efe7da) }
+.strip{ position:absolute; inset:0; width:300vw; display:flex; transform:translate3d(calc(var(--pan,0) * -200vw), 0, 0); will-change:transform }
+.house{ position:relative; width:100vw; height:100%; flex:none }
+.house figure{ position:absolute; margin:0; right:calc(var(--gutter) + 160px); top:11vh; bottom:11vh; aspect-ratio:2/3; max-width:44vw; background:#fff; padding:12px 12px 44px; box-shadow:0 30px 60px rgba(60,40,20,.18), 0 2px 8px rgba(60,40,20,.12); rotate:var(--rot,0deg) }
+.house figure img{ width:100%; height:100%; object-fit:cover; display:block }
+.house figcaption{ position:absolute; left:14px; right:14px; bottom:12px; font:italic 15px/1.2 var(--sc-font-display); color:#4a4237; display:flex; justify-content:space-between }
+.house .no{ position:absolute; left:var(--gutter); bottom:5vh; font:400 clamp(120px, 22vw, 320px)/.8 var(--sc-font-display); color:color-mix(in oklab, var(--terra) 16%, transparent); letter-spacing:-.04em }
+
+/* leg 6: đêm cuối tuần */
+.s-dem .night{ background:radial-gradient(70% 60% at 50% 60%, color-mix(in oklab, var(--terra) 70%, #2a120a), #120d0b 75%) }
+.s-dem .pulse{ background:radial-gradient(40% 35% at var(--px,30%) 40%, rgba(212,178,130,.35), transparent 70%); mix-blend-mode:screen; opacity:calc(.4 + var(--lp,0) * .6) }
+.pin{ position:absolute; margin:0; width:var(--w); left:var(--x); top:var(--y); rotate:var(--r);
+  transform:translate3d(0, calc((1 - var(--a,0)) * var(--d) * 90vh), 0) scale(calc(.7 + var(--a,0) * .3)); opacity:calc(var(--a,0) * 1.4) }
+.pin img{ display:block; width:100%; height:auto; box-shadow:0 20px 50px rgba(0,0,0,.55) }
+.pin.photo{ background:var(--cream); padding:8px 8px 26px }
+
+/* leg 7: ghé chơi */
+.s-ghe .pl--roof{ transform:scale(calc(1.12 - var(--lp,0) * .12)) }
+.s-ghe .pl--roof img{ object-position:50% 40% }
+
+/* grain over everything in the stage */
+.grain{ position:absolute; inset:-50%; z-index:400; pointer-events:none; opacity:.07; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") }
+
+/* ---------- copy ---------- */
+.blk{ position:absolute; max-width:min(560px, 86vw) }
+.blk::before{ content:""; position:absolute; inset:-14vh -12vw -12vh -14vw; z-index:-1; pointer-events:none;
+  background:radial-gradient(closest-side, rgba(18,15,12,.8), rgba(18,15,12,.5) 60%, transparent) }
+.lead{ left:var(--gutter); }
+.low{ bottom:12vh } .mid{ top:50%; translate:0 -50% } .high{ top:16vh }
+.trail{ right:calc(var(--gutter) + 180px) }
+.h1{ font:400 clamp(40px, 6.2vw, 92px)/1.02 var(--sc-font-display); letter-spacing:-.02em; margin:0 0 22px; text-wrap:balance }
+.h1 em, .h2 em{ font-style:italic; color:var(--tone) }
+.h2{ font:400 clamp(30px, 3.8vw, 56px)/1.08 var(--sc-font-display); letter-spacing:-.015em; margin:0 0 18px; text-wrap:balance }
+.p{ font-size:clamp(16px, 1.25vw, 19px); line-height:1.6; color:var(--sc-ink-soft); margin:0; max-width:46ch; text-wrap:pretty }
+.small{ font-size:15px; line-height:1.5; color:var(--sc-ink-soft) }
+.quiet{ font:italic 400 clamp(24px, 2.6vw, 38px)/1.25 var(--sc-font-display); margin:0; text-shadow:0 1px 18px rgba(0,0,0,.65), 0 0 4px rgba(0,0,0,.4) }
+
+.slogan{ left:0; right:0; top:50%; translate:0 -50%; max-width:none; text-align:center }
+.slogan::before{ inset:-14vh 4vw; background:radial-gradient(closest-side, rgba(30,16,6,.84), rgba(30,16,6,.58) 65%, transparent) }
+.slogan .big{ font:italic 400 clamp(56px, 11vw, 180px)/.95 var(--sc-font-display); letter-spacing:-.03em; margin:0; color:var(--cream); text-shadow:0 2px 30px rgba(20,10,4,.6) }
+.biglogo{ display:block; margin:0 auto; width:min(560px, 70vw); height:auto; filter:drop-shadow(0 2px 26px rgba(20,10,4,.6)) }
+.slogan .en{ font:500 13px/1 var(--sc-font-text); letter-spacing:.32em; text-transform:uppercase; color:var(--gold); margin-top:26px }
+
+.note{ position:absolute; left:calc(var(--gutter) + 4px); top:calc(100% + 26px); font:italic 22px/1.2 var(--sc-font-display); color:var(--gold); opacity:0; transform:rotate(-3deg) translateY(6px); transition:opacity .9s ease, transform .9s ease }
+.note.on{ opacity:1; transform:rotate(-3deg) translateY(0) }
+
+/* paper blocks (leg 5) */
+.paperblk{ color:var(--charcoal); max-width:min(470px, 40vw) }
+.paperblk::before{ display:none }
+.paperblk .kick{ font:500 12px/1 var(--sc-font-text); letter-spacing:.24em; text-transform:uppercase; color:var(--terra); margin:0 0 16px }
+.paperblk .h2{ color:var(--charcoal) }
+.paperblk .addr{ font:italic 400 19px/1.4 var(--sc-font-display); color:#4a4237; margin:0 0 14px }
+.paperblk .p{ color:#4d473f }
+.menu{ list-style:none; margin:22px 0 18px; padding:16px 0 0; border-top:1px solid rgba(26,26,24,.18); display:grid; gap:12px }
+.menu li{ display:grid; grid-template-columns:1fr auto; column-gap:16px }
+.menu b{ font:600 16px/1.3 var(--sc-font-text) }
+.menu span{ grid-column:1; font-size:14px; color:#6a6258; line-height:1.4 }
+.menu i{ grid-row:1; grid-column:2; font:italic 15px/1.3 var(--sc-font-display); color:#6a6258 }
+.menu-h{ font:500 12px/1 var(--sc-font-text); letter-spacing:.2em; text-transform:uppercase; color:#857b6e; margin:20px 0 0 }
+.lnk{ display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:15px; text-decoration:none; border-bottom:1.5px solid currentColor; padding:6px 0 3px }
+.lnk:hover{ color:var(--terra) }
+
+/* event card (leg 6) */
+.evt{ display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center; margin-top:26px; padding:14px; border-radius:12px; background:rgba(26,26,24,.62); border:1px solid rgba(212,178,130,.28); max-width:440px }
+.evt img{ width:74px; height:96px; object-fit:cover; border-radius:6px }
+.evt .tag{ font:500 11px/1 var(--sc-font-text); letter-spacing:.2em; text-transform:uppercase; color:var(--gold) }
+.evt b{ display:block; font:400 21px/1.2 var(--sc-font-display); margin:6px 0 4px }
+.evt span{ font-size:14px; color:var(--sc-ink-soft) }
+.row{ display:flex; flex-wrap:wrap; gap:18px 26px; margin-top:20px }
+
+/* finale: biển số nhà */
+.fin{ left:var(--gutter); right:var(--gutter); bottom:7vh; max-width:none }
+.fin::before{ inset:-16vh -100vw -10vh; background:linear-gradient(to top, rgba(16,12,9,.94), rgba(16,12,9,.86) 62%, transparent) }
+.fin .h2{ max-width:16ch }
+.plates{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:16px; margin-top:28px; max-width:980px }
+.plate{ position:relative; display:block; text-decoration:none; color:var(--charcoal); background:var(--cream); border-radius:10px; padding:16px 18px 14px; box-shadow:inset 0 0 0 3px var(--cream), inset 0 0 0 4.5px var(--charcoal), 0 14px 30px rgba(0,0,0,.4); transition:transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s }
+.plate:hover, .plate:focus-visible{ transform:translateY(-4px) rotate(-.6deg) }
+.plate .num{ font:600 44px/1 var(--sc-font-display); letter-spacing:-.02em }
+.plate .st{ display:block; font:600 15px/1.2 var(--sc-font-text); margin-top:6px }
+.plate .who{ display:block; font:italic 14px/1.3 var(--sc-font-display); color:#5b5347; margin-top:2px }
+.plate .go{ display:flex; justify-content:space-between; margin-top:14px; padding-top:10px; border-top:1px dashed rgba(26,26,24,.35); font:600 13px/1 var(--sc-font-text); color:var(--terra) }
+.foot{ display:flex; flex-wrap:wrap; gap:10px 24px; margin-top:26px; font-size:13px; color:rgba(250,247,242,.7) }
+.foot a{ text-decoration:none; border-bottom:1px solid rgba(250,247,242,.35) }
+
+/* ---------- mobile art direction ---------- */
+@media (max-width: 760px){
+  .bar{ padding:14px 16px }
+  .bar__logo img{ height:26px }
+  .bar__go{ font-size:13px; padding:9px 13px }
+  .bar__r{ gap:14px } .bar__menu{ font-size:13px }
+  .map{ top:auto; bottom:14px; right:16px; left:16px; transform:none; width:auto }
+  .map svg{ display:none }
+  .map ol{ display:flex; justify-content:space-between; gap:0 }
+  .map a{ font-size:0; gap:0; padding:10px 6px }
+  .map a::before{ margin:0 }
+  .blk{ left:16px; right:16px; max-width:none }
+  .low{ bottom:13vh } .high{ top:12vh }
+  .trail{ right:16px }
+  .blk::before{ inset:-10vh -16px -8vh; background:linear-gradient(to top, rgba(18,15,12,.0), rgba(18,15,12,.62) 30%, rgba(18,15,12,.62) 70%, transparent) }
+  .s-cua .frame{ left:0; transform:translate(0,-50%); width:max(100vw, calc(100svh * .75)) }
+  .s-cua .pl--wall{ transform-origin:27% 60% }
+  .print{ padding:6px 6px 22px } .print figcaption{ font-size:11px; bottom:5px }
+  .s-nha .p1{ width:38vw; right:auto; left:6vw; top:12vh; bottom:auto }
+  .s-nha .p2{ width:30vw; right:6vw; top:20vh }
+  :root{ --cardh:clamp(150px, calc(100svh - 400px), 44svh) }
+  .house figure{ left:16px; right:16px; top:74px; bottom:auto; height:var(--cardh); max-width:none; aspect-ratio:auto; padding:8px }
+  .house figcaption{ display:none }
+  .house .no{ display:none }
+  .paperblk{ max-width:none; top:calc(74px + var(--cardh) + 22px); bottom:auto; translate:none }
+  .paperblk .h2{ font-size:28px; margin-bottom:6px }
+  .paperblk .addr{ font-size:16px; margin-bottom:6px }
+  .paperblk .p, .paperblk .kick{ display:none }
+  .menu{ margin:12px 0 10px; padding-top:10px; gap:8px }
+  .menu span{ display:none }
+  .menu-h{ display:none }
+  .pin{ width:calc(var(--w) * 1.9); left:calc(var(--x) * .9) }
+  #trong-nha, #cuoi-tuan{ top:auto; bottom:11vh; translate:none }
+  #trong-nha .note{ top:auto; bottom:calc(100% + 14px) }
+  .pin{ top:calc(var(--y) * .5) }
+  .s-nha .p1{ top:9vh } .s-nha .p2{ top:13vh }
+  .slogan .big{ font-size:clamp(52px, 16vw, 90px) }
+  .fin{ bottom:9vh }
+  .fin .h2{ font-size:28px }
+  .plates{ grid-template-columns:1fr; gap:10px; margin-top:16px }
+  .plate{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:4px 14px; padding:12px 14px }
+  .plate .num{ font-size:30px; grid-row:span 2 }
+  .plate .st{ margin:0 } .plate .who{ margin:0 }
+  .plate .go{ grid-column:3; grid-row:1 / span 2; border:0; margin:0; padding:0 }
+  .plate .go span:first-child{ display:none }
+  .foot{ display:none }
+  .note{ font-size:18px }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .pl, .pin, .rail{ transform:none !important }
+  /* gentler, not zero: the door opens as a curtain drawn aside, nothing scales or drifts */
+  .s-cua .frame{ clip-path:inset(0 0 0 calc(var(--door,0) * 100%)) }
+  .s-ba .strip{ transform:none !important; width:100vw }
+  .s-ba .house{ position:absolute; inset:0 }
+  .note{ transition:none }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#ghe-choi">Bỏ qua, tới địa chỉ ba căn nhà</a>
+
+<header class="bar">
+  <a class="bar__logo" href="/" aria-label="Hanoi Neighbors, trang chủ"><img src="/assets/home/logo-trang.png" alt="Hanoi Neighbors" width="900" height="298"></a>
+  <nav class="bar__r" aria-label="Chính"><a class="bar__menu" href="/menu/">Menu</a><a class="bar__go" href="#ghe-choi" data-go="12.4">Ghé nhà hàng xóm</a></nav>
+</header>
+
+<nav class="map" aria-label="Bản đồ con ngõ">
+  <svg viewBox="0 0 24 300" preserveAspectRatio="none" aria-hidden="true"><path d="M12 4 C2 50, 22 80, 12 120 S2 200, 12 240 S20 280, 12 296"/></svg>
+  <ol>
+    <li><a href="#pho" data-go="0">Phố</a></li>
+    <li><a href="#ngo" data-go="2.05">Ngõ</a></li>
+    <li><a href="#cua" data-go="4.4">Cửa</a></li>
+    <li><a href="#trong-nha" data-go="6.2">Trong nhà</a></li>
+    <li><a href="#ba-can-nha" data-go="7.25">Ba căn nhà</a></li>
+    <li><a href="#cuoi-tuan" data-go="10.3">Cuối tuần</a></li>
+    <li><a href="#ghe-choi" data-go="12.4">Ghé chơi</a></li>
+  </ol>
+</nav>
+
+<main id="main" data-sc-mode="worldflight" data-sc-seam="0.16">
+
+  <div data-sc-world>
+    <!-- 1 Phố -->
+    <div class="s-pho" data-sc-segment data-sc-w="1.4" data-sc-waypoint="Phố">
+      <i data-sc-poster hidden></i>
+      <div class="pl pl--street out"><picture><source media="(min-width: 761px)" srcset="/assets/home/pho-lon.jpg"><img src="/assets/home/pho.jpg" alt="" fetchpriority="high"></picture></div>
+      <div class="pl haze"></div>
+      <div class="pl rail" aria-hidden="true">
+        <svg viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice">
+          <g fill="none" stroke="#0e0d0c" stroke-width="7" stroke-linecap="round">
+            <path d="M0 40 H1200 M0 62 H1200" stroke-width="10"/>
+            <path d="M0 292 H1200" stroke-width="16"/>
+            <g id="bay"><path d="M40 62 V292 M160 62 V292"/>
+              <path d="M100 70 c-34 0 -40 40 -8 46 c26 4 26 -28 6 -26 M100 70 c34 0 40 40 8 46 c-26 4 -26 -28 -6 -26"/>
+              <path d="M100 284 c-34 0 -40 -40 -8 -46 c26 -4 26 28 6 26 M100 284 c34 0 40 -40 8 -46 c-26 -4 -26 28 -6 26"/>
+              <path d="M100 116 V238 M70 177 c0 -22 60 -22 60 0 c0 22 -60 22 -60 0"/></g>
+            <use href="#bay" x="120"/><use href="#bay" x="240"/><use href="#bay" x="360"/><use href="#bay" x="480"/><use href="#bay" x="600"/><use href="#bay" x="720"/><use href="#bay" x="840"/><use href="#bay" x="960"/><use href="#bay" x="1080"/>
+          </g>
+        </svg>
+      </div>
     </div>
+
+    <!-- 2 Ngõ -->
+    <div class="s-ngo" data-sc-segment data-sc-w="1.4" data-sc-waypoint="Ngõ">
+      <i data-sc-poster hidden></i>
+      <div class="pl pl--vine"><img src="/assets/home/ngo.jpg" alt="" loading="lazy"></div>
+      <div class="pl glow"></div>
+      <div class="pl pl--near out" aria-hidden="true"><img src="/assets/home/ngo.jpg" alt="" loading="lazy"></div>
+    </div>
+
+    <!-- 3 Cửa: ngưỡng (đỉnh) -->
+    <div class="s-cua" data-sc-segment data-sc-w="2.6" data-sc-waypoint="Cửa">
+      <i data-sc-poster hidden></i>
+      <div class="pl pl--room"><img src="/assets/home/trong-nha.jpg" alt="" loading="lazy"></div>
+      <div class="pl bloom"></div>
+      <div class="frame"><div class="pl pl--wall out"><img src="/assets/home/cau-thang.jpg" alt="" loading="lazy"></div></div>
+    </div>
+
+    <!-- 4 Trong nhà -->
+    <div class="s-nha" data-sc-segment data-sc-w="1.6" data-sc-waypoint="Trong nhà">
+      <i data-sc-poster hidden></i>
+      <div class="pl pl--chess"><picture><source media="(max-aspect-ratio: 4/5)" srcset="/assets/home/co-vua-doc.jpg"><img src="/assets/home/co-vua.jpg" alt="" loading="lazy"></picture></div>
+      <figure class="print p1"><img src="/assets/home/meo.jpg" alt="Chú mèo mướp ngồi trên bậu tường cạnh chậu cây và mấy bức tranh nhỏ" loading="lazy" width="880" height="1100"><figcaption>Hàng xóm bốn chân, Nguyễn Thiếp</figcaption></figure>
+      <figure class="print p2"><img src="/assets/home/hx-cua-so.jpg" alt="Hai người khách nâng ly bên ô cửa sổ đầy nắng" loading="lazy" width="750" height="1000"><figcaption>Hai ly, một ô cửa sổ</figcaption></figure>
+    </div>
+
+    <!-- 5 Ba căn nhà -->
+    <div class="s-ba" data-sc-segment data-sc-w="2.4" data-sc-waypoint="Ba căn nhà">
+      <i data-sc-poster hidden></i>
+      <div class="pl paper"></div>
+      <div class="strip">
+        <div class="house" style="--rot:1.2deg"><span class="no" aria-hidden="true">114</span>
+          <figure><img src="/assets/home/wh.jpg" alt="Hai bạn ngồi thả lỏng trên sofa ở Warm Hands, một người đang uống nước" loading="lazy"><figcaption><span>Warm Hands</span><span>114 Tuệ Tĩnh</span></figcaption></figure></div>
+        <div class="house" style="--rot:-1.4deg"><span class="no" aria-hidden="true">8</span>
+          <figure><img src="/assets/home/bh.jpg" alt="Góc sân lát gạch bông ở Big Hug, sofa xanh dưới ô cửa chớp và cây xanh" loading="lazy"><figcaption><span>Big Hug</span><span>8 Nguyễn Thiếp</span></figcaption></figure></div>
+        <div class="house" style="--rot:.8deg"><span class="no" aria-hidden="true">131</span>
+          <figure><img src="/assets/home/sc.jpg" alt="Hiên nhà mái vòm cột xanh ở Sincerely, đèn lồng treo và sàn gạch đỏ" loading="lazy"><figcaption><span>Sincerely</span><span>131 Hoàng Cầu</span></figcaption></figure></div>
+      </div>
+    </div>
+
+    <!-- 6 Đêm cuối tuần -->
+    <div class="s-dem" data-sc-segment data-sc-w="1.6" data-sc-waypoint="Cuối tuần">
+      <i data-sc-poster hidden></i>
+      <div class="pl night"></div>
+      <div class="pl pulse"></div>
+      <figure class="pin photo" style="--w:19vw;--x:44vw;--y:7vh;--r:-5deg;--d:1"><img src="/assets/home/ev-tiec-do.jpg" alt="Đám đông nhảy dưới ánh đèn đỏ trong một đêm tiệc" loading="lazy" width="1000" height="750"></figure>
+      <figure class="pin" style="--w:12vw;--x:65vw;--y:17vh;--r:4deg;--d:1.3"><img src="/assets/home/poster-drag.webp" alt="Poster Dập Dìu Drag Brunch" loading="lazy"></figure>
+      <figure class="pin photo" style="--w:17vw;--x:79vw;--y:5vh;--r:-2deg;--d:.8"><img src="/assets/home/ev-dong-vui.jpg" alt="Rất đông hàng xóm chụp chung một tấm ảnh dưới đèn hồng và lá cờ cầu vồng" loading="lazy" width="1100" height="825"></figure>
+      <figure class="pin photo" style="--w:17vw;--x:45vw;--y:45vh;--r:3deg;--d:1.5"><img src="/assets/home/ev-acoustic.jpg" alt="Một ban nhạc acoustic chơi giữa vườn cây" loading="lazy" width="1000" height="666"></figure>
+      <figure class="pin" style="--w:11vw;--x:64vw;--y:50vh;--r:-3deg;--d:1.7"><img src="/assets/home/poster-halloween.webp" alt="Poster Back to the Rabbit Hole, Halloween House Party 2026" loading="lazy"></figure>
+      <figure class="pin photo" style="--w:9vw;--x:67vw;--y:75vh;--r:5deg;--d:1.1"><img src="/assets/home/ev-chieu-phim.jpg" alt="Một buổi chiếu phim hoạt hình trên gác, khách ngồi tối trong phòng" loading="lazy" width="750" height="1000"></figure>
+      <figure class="pin photo" style="--w:14vw;--x:78vw;--y:70vh;--r:-4deg;--d:1.9"><img src="/assets/home/ev-ban-dai.jpg" alt="Hàng xóm đứng quanh một chiếc bàn dài bày đồ ăn" loading="lazy" width="1000" height="667"></figure>
+      <figure class="pin photo" style="--w:9vw;--x:56vw;--y:72vh;--r:2deg;--d:2.1"><img src="/assets/home/hx-cam-hoa.jpg" alt="Một bạn ngồi cắm hoa bên sofa trong buổi workshop" loading="lazy" width="750" height="1000"></figure>
+    </div>
+
+    <!-- 7 Ghé chơi -->
+    <div class="s-ghe" data-sc-segment data-sc-w="1.4" data-sc-waypoint="Ghé chơi">
+      <i data-sc-poster hidden></i>
+      <div class="pl pl--roof"><img src="/assets/home/san-thuong.jpg" alt="" loading="lazy"></div>
+    </div>
+    <div class="grain" aria-hidden="true"></div>
   </div>
-</section>
-{% include schema-locations.html %}
+
+  <div data-sc-world-copy>
+    <section id="pho" class="blk lead mid" data-sc-copy data-sc-window="hero">
+      <h1 class="h1">Hà Nội giấu cái ấm của mình <em>trong ngõ.</em></h1>
+      <p class="p">Ba căn nhà nhỏ ở Tuệ Tĩnh, Nguyễn Thiếp và Hoàng Cầu. Người lạ đến, hàng xóm ra về.</p>
+    </section>
+
+    <section id="ngo" class="blk lead mid" data-sc-copy data-sc-window="0.13 0.215 0.3 0.35">
+      <p class="quiet">Rẽ vào. Đi thêm vài bước nữa thôi.</p>
+    </section>
+
+    <section id="cua-truoc" class="blk lead low" data-sc-copy data-sc-window="0.23 0.293 0.22 0.3">
+      <p class="quiet">Có khi một căn nhà sáng đèn đang đợi bạn.</p>
+    </section>
+
+    <section id="cua-logo" class="blk slogan" data-sc-copy data-sc-window="0.3 0.368 0.2 0.24">
+      <img class="biglogo" src="/assets/home/logo-trang.png" alt="Hanoi Neighbors" width="900" height="298">
+    </section>
+
+    <section id="cua" class="blk slogan" data-sc-copy data-sc-window="0.372 0.445 0.2 0.22">
+      <h2 class="big">Tự nhiên<br> như ở nhà.</h2>
+      <p class="en">Make yourself at home</p>
+    </section>
+
+    <section id="trong-nha" class="blk lead mid" data-sc-copy data-sc-window="0.448 0.566 0.2 0.2">
+      <h2 class="h2">Ở đây không có khách quen hay khách lạ. <em>Chỉ có hàng xóm.</em></h2>
+      <p class="p">Một ván cờ dưới ánh đèn bàn, chú mèo ngồi canh bên chậu cây, hai ly nước cạnh ô cửa sổ. Bạn cứ ngồi đâu cũng được, ở bao lâu cũng được.</p>
+      <p class="note" aria-hidden="true">Ngồi đâu cũng được nha.</p>
+    </section>
+
+    <section id="ba-can-nha" class="blk lead mid paperblk" data-sc-copy data-sc-window="0.56 0.627 0.1 0.15">
+      <p class="kick">Ba căn nhà, một khu phố</p>
+      <h2 class="h2">Warm Hands</h2>
+      <p class="addr">114 Tuệ Tĩnh, Hai Bà Trưng</p>
+      <p class="p">Đèn bàn, bàn cờ, một quầy bar nhỏ cho những buổi tối chậm.</p>
+      <p class="menu-h">Trên bàn nhà này</p>
+      <ul class="menu">
+        <li><b>Hoàng Hôn</b><i>65K</i><span>Espresso, siro cam nhà làm, tonic</span></li>
+        <li><b>Honey, I'm Home</b><i>135K</i><span>Whisky, quế, mật ong</span></li>
+        <li><b>Ấm Chén</b><i>180K</i><span>Rượu gạo ngâm táo mèo, bưởi hồng, dâm bụt, mật ong</span></li>
+      </ul>
+      <div class="row lnks"><a class="lnk" href="/menu/#tt">Xem đủ menu</a><a class="lnk" href="https://www.google.com/maps/search/?api=1&query=114+Tu%E1%BB%87+T%C4%A9nh+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener" aria-label="Chỉ đường tới Tuệ Tĩnh">Chỉ đường</a></div>
+    </section>
+
+    <section class="blk lead mid paperblk" data-sc-copy data-sc-window="0.629 0.693 0.15 0.15">
+      <h2 class="h2">Big Hug</h2>
+      <p class="addr">8 Nguyễn Thiếp, Ba Đình</p>
+      <p class="p">Sàn gạch bông, cây xanh trong sân, những góc sofa để ngồi lâu.</p>
+      <p class="menu-h">Trên bàn nhà này</p>
+      <ul class="menu">
+        <li><b>Cà phê Trứng</b><i>65K</i><span>Cà phê Việt, kem, trứng gà thả vườn</span></li>
+        <li><b>Êm Êm</b><i>65K</i><span>Cà phê, kem, sữa đặc</span></li>
+        <li><b>Green Flag</b><i>135K</i><span>Gin ngâm trà nhài, chanh, tonic</span></li>
+      </ul>
+      <div class="row lnks"><a class="lnk" href="/menu/#nt">Xem đủ menu</a><a class="lnk" href="https://www.google.com/maps/search/?api=1&query=8+Nguy%E1%BB%85n+Thi%E1%BA%BFp+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener" aria-label="Chỉ đường tới Nguyễn Thiếp">Chỉ đường</a></div>
+    </section>
+
+    <section class="blk lead mid paperblk" data-sc-copy data-sc-window="0.695 0.759 0.15 0.12">
+      <h2 class="h2">Sincerely</h2>
+      <p class="addr">Tầng 6, 131 Hoàng Cầu, Đống Đa</p>
+      <p class="p">Hiên nhà mái vòm, đèn mây tre và một sân thượng nhìn ra thành phố.</p>
+      <p class="menu-h">Trên bàn nhà này</p>
+      <ul class="menu">
+        <li><b>Phê Phin Dẻ Dừa</b><i>70K</i><span>Robusta Buôn Ma Thuột, hạt dẻ cười, kem dừa</span></li>
+        <li><b>Coldbrew Khế Vải</b><i>70K</i><span>Catimor Sơn La, Ethiopia Sidamo, khế, vải</span></li>
+        <li><b>Đại Ngàn</b><i>85K</i><span>Lê, dứa, chanh, gừng, rau rocket, cải kale, nước dừa</span></li>
+      </ul>
+      <div class="row lnks"><a class="lnk" href="/menu/#hc">Xem đủ menu</a><a class="lnk" href="https://www.google.com/maps/search/?api=1&query=131+Ho%C3%A0ng+C%E1%BA%A7u+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener" aria-label="Chỉ đường tới Hoàng Cầu">Chỉ đường</a></div>
+    </section>
+
+    <section id="cuoi-tuan" class="blk lead mid" data-sc-copy data-sc-window="0.762 0.889 0.18 0.2">
+      <h2 class="h2">Cuối tuần, nhà hàng xóm <em>không bao giờ buồn.</em></h2>
+      <p class="p">Brunch, tiệc, và những đêm hơi điên một chút. Chọn một cánh cửa, rồi bước vào như về nhà.</p>
+      <a class="evt" href="/events/dragbrunch/">
+        <img src="/assets/home/poster-drag.webp" alt="" loading="lazy">
+        <div><span class="tag">Đặt chỗ theo buổi</span><b>Dập Dìu Drag Brunch</b><span>Big Hug, 8 Nguyễn Thiếp</span></div>
+      </a>
+      <div class="row"><a class="lnk" href="/events/">Tất cả sự kiện</a></div>
+    </section>
+
+    <section id="ghe-choi" class="blk fin" data-sc-copy data-sc-window="finale">
+      <h2 class="h2">Đến là thấy ấm cúng, vui vẻ, và <em>được sạc lại năng lượng.</em></h2>
+      <p class="p">Chọn căn nhà gần bạn nhất. Cửa mở sẵn rồi.</p>
+      <div class="plates">
+        <a class="plate" href="https://www.google.com/maps/search/?api=1&query=114+Tu%E1%BB%87+T%C4%A9nh+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener"><span class="num">114</span><span class="st">Tuệ Tĩnh</span><span class="who">Warm Hands</span><span class="go"><span>Ghé nhà hàng xóm</span><span aria-hidden="true">→</span></span></a>
+        <a class="plate" href="https://www.google.com/maps/search/?api=1&query=8+Nguy%E1%BB%85n+Thi%E1%BA%BFp+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener"><span class="num">8</span><span class="st">Nguyễn Thiếp</span><span class="who">Big Hug</span><span class="go"><span>Ghé nhà hàng xóm</span><span aria-hidden="true">→</span></span></a>
+        <a class="plate" href="https://www.google.com/maps/search/?api=1&query=131+Ho%C3%A0ng+C%E1%BA%A7u+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener"><span class="num">131</span><span class="st">Hoàng Cầu, tầng 6</span><span class="who">Sincerely</span><span class="go"><span>Ghé nhà hàng xóm</span><span aria-hidden="true">→</span></span></a>
+      </div>
+      <div class="foot">
+        <a href="/menu/">Menu ba nhà</a>
+        <a href="/tuyendung/">Trở thành Hàng xóm</a>
+        <a href="/events/">Sự kiện</a>
+        <span>© 2026 Hanoi Neighbors · Hà Nội</span>
+      </div>
+    </section>
+  </div>
+
+  <div data-sc-spacer aria-hidden="true"></div>
+</main>
+
+<script src="/assets/js/scrollcraft.js"></script>
+<script>
+(function () {
+  ScrollCraft.mount(document);
+  function relayout() { dispatchEvent(new Event('resize')); }
+  addEventListener('load', relayout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+  var segs = [].slice.call(document.querySelectorAll('[data-sc-segment]'));
+  var c0 = [], acc = 0;
+  segs.forEach(function (s) { c0.push(acc); acc += parseFloat(s.getAttribute('data-sc-w')); });
+  var total = acc;
+  var pins = [].slice.call(document.querySelectorAll('.s-dem .pin'));
+  var note = document.querySelector('.note');
+  var map = document.querySelector('.map');
+  var bar = document.querySelector('.bar');
+  var houses = [].slice.call(document.querySelectorAll('.s-ba .house'));
+  var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+  var ss = function (a, b, v) { var x = clamp((v - a) / (b - a), 0, 1); return x * x * (3 - 2 * x); };
+
+  // pan across the three houses with a hold on each
+  function pan(lp) {
+    var stops = [[0, 0], [.3, 0], [.36, .5], [.64, .5], [.7, 1], [1, 1]];
+    for (var i = 1; i < stops.length; i++) if (lp <= stops[i][0]) {
+      var a = stops[i - 1], b = stops[i];
+      return a[1] + (b[1] - a[1]) * ss(a[0], b[0], lp);
+    }
+    return 1;
+  }
+
+  var last = -1, idleTimer = 0;
+  function frame() {
+    var t = clamp(scrollY / Math.max(innerHeight, 1), 0, total);
+    if (t === last) return; last = t;
+    var k = 0;
+    segs.forEach(function (s, i) {
+      var lp = clamp((t - c0[i]) / parseFloat(s.getAttribute('data-sc-w')), 0, 1);
+      if (t >= c0[i] - .1) k = i;
+      if (!reduce) s.style.setProperty('--lp', lp.toFixed(4));
+    });
+    // the threshold: Hà Nội night outside, lamp light inside
+    var w3 = parseFloat(segs[2].getAttribute('data-sc-w'));
+    var door = ss(c0[2] + .04 * w3, c0[2] + .6 * w3, t);
+    var warm = ss(c0[2] + .36 * w3, c0[2] + .56 * w3, t);
+    segs[2].style.setProperty('--door', door.toFixed(4));
+    root.style.setProperty('--warm', warm.toFixed(3));
+    root.style.setProperty('--cold', (1 - warm).toFixed(3));
+    // houses pan
+    var lp5 = clamp((t - c0[4]) / parseFloat(segs[4].getAttribute('data-sc-w')), 0, 1);
+    var pn = pan(lp5);
+    segs[4].style.setProperty('--pan', pn.toFixed(4));
+    // reduced motion: the houses cross-fade in place instead of travelling
+    if (reduce) houses.forEach(function (h, i) { h.style.opacity = clamp(1 - Math.abs(pn * 2 - i), 0, 1).toFixed(3); });
+    // weekend wall: each memory arrives on its own beat
+    var lp6 = clamp((t - c0[5]) / parseFloat(segs[5].getAttribute('data-sc-w')), 0, 1);
+    pins.forEach(function (p, i) { p.style.setProperty('--a', ss(.04 + i * .07, .28 + i * .07, lp6).toFixed(3)); });
+    segs[5].style.setProperty('--px', (25 + lp6 * 50).toFixed(1) + '%');
+    var onPaper = k === 4 && lp5 > .02 && lp5 < .98;
+    map.classList.toggle('on-paper', onPaper); bar.classList.toggle('on-paper', onPaper);
+    // reward for stopping inside
+    note.classList.remove('on'); clearTimeout(idleTimer);
+    if (k === 3) idleTimer = setTimeout(function () { note.classList.add('on'); }, 1400);
+  }
+  function loop() { frame(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+
+
+  // /#co-so (menu các trang khác) và /#ghe-choi: tới ba biển số nhà ở cuối trang
+  function landOnHash() {
+    if (location.hash === '#co-so' || location.hash === '#ghe-choi') scrollTo(0, 12.4 * innerHeight);
+  }
+  addEventListener('load', function () { setTimeout(landOnHash, 60); });
+
+  addEventListener('sc:waypoint', function (e) {
+    document.querySelectorAll('.map a').forEach(function (a, i) { a.setAttribute('aria-current', String(i === e.detail.index)); });
+  });
+  document.querySelectorAll('[data-go]').forEach(function (a) {
+    a.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      var go = parseFloat(a.getAttribute('data-go'));
+      scrollTo({ top: go * innerHeight, behavior: reduce ? 'auto' : 'smooth' });
+      if (go >= total) { var f = document.querySelector('.plate'); setTimeout(function () { f && f.focus({ preventScroll: true }); }, reduce ? 50 : 1200); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
