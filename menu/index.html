@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Menu | Hanoi Neighbors</title>
+<link rel="canonical" href="https://hanoineighbors.com/menu/">
+<link rel="icon" type="image/png" href="/images/logo-doc.png">
+<meta property="og:title" content="Menu ba căn nhà | Hanoi Neighbors">
+<meta property="og:image" content="https://hanoineighbors.com/images/facade_night.jpg">
+<meta name="description" content="Menu đầy đủ của ba căn nhà Hanoi Neighbors: Warm Hands 114 Tuệ Tĩnh, Big Hug 8 Nguyễn Thiếp, Sincerely 131 Hoàng Cầu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+@font-face{ font-family:"Float"; src:url("/assets/menu/dfvn-float.ttf") format("truetype"); font-display:swap }
+:root{
+  color-scheme:dark;
+  --charcoal:#1A1A18; --ink:#FAF7F2; --ink-soft:#C8BFAF; --gold:#D4B282;
+  --paper:#FFEBD7; --teal:#61C2A8; --red:#A51E24;
+  --gutter:clamp(16px, 4vw, 56px);
+  --p:clamp(250px, 28.5vw, 360px);   /* one panel of the tri-fold */
+  --h:calc(var(--p) * 2.12);          /* print panel ratio, raised by JS when a menu is longer */
+  --ease:cubic-bezier(.62,.04,.24,1);
+}
+*{ box-sizing:border-box }
+html,body{ margin:0 }
+body{ min-height:100svh; background:#15120f radial-gradient(70% 55% at 50% 58%, #3a2a1c 0%, #1d1713 55%, #120f0c 100%) fixed; color:var(--ink); font:400 16px/1.5 "DM Sans", system-ui, sans-serif; -webkit-font-smoothing:antialiased }
+a{ color:inherit }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap }
+
+/* ---------- page chrome ---------- */
+.top{ display:flex; align-items:center; justify-content:space-between; padding:18px var(--gutter) }
+.top img{ height:30px; width:auto; display:block }
+.top .back{ font-size:14px; text-decoration:none; border-bottom:1px solid rgba(250,247,242,.35); padding-bottom:2px; color:var(--ink-soft) }
+.head{ text-align:center; padding:14px var(--gutter) 0 }
+.kick{ font:500 12px/1 "DM Sans"; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin:0 0 14px }
+h1{ font:400 clamp(40px, 6vw, 76px)/1 "Playfair Display", serif; margin:0; letter-spacing:-.02em }
+h1 em{ color:var(--gold) }
+.tabs{ display:flex; justify-content:center; gap:clamp(8px, 2.5vw, 34px); margin:26px auto 0; padding:0 var(--gutter); flex-wrap:wrap }
+.tab{ appearance:none; background:none; border:0; color:var(--ink-soft); cursor:pointer; padding:8px 4px 10px; text-align:center; border-bottom:2px solid transparent; transition:color .3s, border-color .3s }
+.tab b{ display:block; font:400 21px/1.15 "Playfair Display", serif; color:var(--ink) }
+.tab span{ font-size:13px }
+.tab[aria-selected="true"]{ border-color:var(--gold) }
+.tab[aria-selected="true"] b{ font-style:italic; color:var(--gold) }
+.tab:focus-visible, .ctl button:focus-visible{ outline:2px solid var(--gold); outline-offset:3px }
+
+/* ---------- the table and the folded sheet ---------- */
+.table{ perspective:2600px; perspective-origin:50% 40%; display:flex; justify-content:center; padding:44px 0 28px }
+.sheet{ position:relative; flex:none; width:calc(var(--p) * 3); height:var(--h); transform-style:preserve-3d; transition:transform 1.1s var(--ease); cursor:pointer }
+.sheet[data-state="open"], .sheet[data-state="flip"]{ cursor:default }
+.sheet[data-state="flip"]{ transform:rotateY(180deg) }
+.sheet::before{ content:""; position:absolute; left:var(--p); width:var(--p); top:3%; bottom:-3%; background:rgba(0,0,0,.55); filter:blur(28px); transform:translateZ(-40px); transition:left 1s var(--ease), width 1s var(--ease) }
+.sheet[data-state="open"]::before, .sheet[data-state="flip"]::before{ left:0; width:calc(var(--p) * 3) }
+.sheet[data-state="flip"]::before{ transform:translateZ(40px) }
+.panel{ position:absolute; top:0; width:var(--p); height:100%; transform-style:preserve-3d; transition:transform 1s var(--ease) }
+.pa{ left:0; transform-origin:100% 50% }
+.pb{ left:var(--p) }
+.pc{ left:calc(var(--p) * 2); transform-origin:0 50% }
+/* roll fold: the right flap tucks in first, the left panel closes over it as the cover */
+.sheet[data-state="closed"] .pa{ transform:rotateY(180deg) translateZ(-2px) }
+.sheet[data-state="closed"] .pc, .sheet[data-state="half"] .pc{ transform:rotateY(-180deg) translateZ(-1px) }
+.face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; display:flex; flex-direction:column; padding:calc(var(--p) * .085) calc(var(--p) * .075) calc(var(--p) * .07); overflow:hidden }
+.back{ transform:rotateY(180deg) }
+.cream{ background:var(--paper); color:var(--charcoal) }
+.teal{ background:var(--teal); color:var(--charcoal) }
+.cover, .addr, .flap{ background:var(--teal) url("/assets/menu/hoa-van.jpg") center / cover }
+/* paper: a soft crease where the folds were */
+.face::after{ content:""; position:absolute; inset:0; pointer-events:none }
+.pa .front::after{ background:linear-gradient(to left, rgba(60,30,10,.12), transparent 7%) }
+.pb .front::after{ background:linear-gradient(to right, rgba(60,30,10,.1), transparent 6%), linear-gradient(to left, rgba(60,30,10,.1), transparent 6%) }
+.pc .front::after{ background:linear-gradient(to right, rgba(0,40,30,.16), transparent 7%) }
+
+/* menu type, scaled with the panel like the print */
+.sec + .sec{ margin-top:calc(var(--p) * .05) }
+.sec h3{ font:400 calc(var(--p) * .108)/1 "Float", "DM Sans", sans-serif; color:var(--red); text-align:center; margin:0 0 calc(var(--p) * .05) }
+.teal .sec h3{ color:var(--paper) }
+.sec ul{ list-style:none; margin:0; padding:0 }
+.sec li{ display:grid; grid-template-columns:1fr auto; align-items:baseline; column-gap:10px; margin-bottom:calc(var(--p) * .036) }
+.sec li b{ font:600 max(15px, calc(var(--p) * .05))/1.2 "DM Sans", sans-serif }
+.sec li i{ grid-column:2; grid-row:1; font:600 max(14px, calc(var(--p) * .046))/1.2 "DM Sans", sans-serif; font-style:normal }
+.sec li span{ grid-column:1 / -1; font-size:max(12px, calc(var(--p) * .037)); line-height:1.35; color:rgba(26,26,24,.74); margin-top:2px }
+.sec .hc{ grid-column:1; justify-self:end; font-size:max(12px, calc(var(--p) * .036)); color:rgba(26,26,24,.7); letter-spacing:.1em; margin-left:auto }
+.sec li:has(.hc){ grid-template-columns:auto 1fr auto }
+.sec li:has(.hc) b{ grid-column:1 } .sec li:has(.hc) .hc{ grid-column:2; grid-row:1 } .sec li:has(.hc) i{ grid-column:3 }
+.art{ display:block; margin:auto auto 0; padding-top:calc(var(--p) * .06); max-width:100%; height:auto }
+.art.bottom{ width:92% }
+.pc .art.bottom{ width:72% }
+
+/* outside faces */
+.cover{ align-items:center; justify-content:center; text-align:center }
+.cover-logo{ width:58%; height:auto }
+.cover-house{ margin:calc(var(--p) * .09) 0 0; font:400 calc(var(--p) * .075)/1 "Float", sans-serif; color:var(--paper) }
+.addr{ align-items:center; justify-content:center; text-align:center; color:var(--paper) }
+.addr-name{ font:400 calc(var(--p) * .11)/1 "Float", sans-serif; margin:0 0 14px }
+.addr-st{ font:600 15px/1.5 "DM Sans"; margin:0 0 18px }
+.addr a{ font:600 14px/1 "DM Sans"; text-decoration:none; border-bottom:1.5px solid currentColor; padding-bottom:3px; color:var(--paper) }
+.flap{ color:var(--paper) }
+.slogan{ width:86%; height:auto }
+.art.mid{ width:84%; margin:auto 0 }
+.rules{ font:600 max(11.5px, calc(var(--p) * .036))/1.55 "DM Sans" }
+.rules-h{ font-weight:700; letter-spacing:.06em; margin:0 0 6px; font-size:max(13px, calc(var(--p) * .045)) }
+.rules p{ margin:0 }
+
+/* ---------- controls ---------- */
+.ctl{ display:flex; justify-content:center; gap:12px; padding:0 var(--gutter) 46px; flex-wrap:wrap }
+.ctl button{ appearance:none; cursor:pointer; font:600 15px/1 "DM Sans"; padding:13px 20px; border-radius:999px; border:1.5px solid rgba(212,178,130,.55); background:transparent; color:var(--ink) }
+.ctl button.pri{ background:var(--gold); color:var(--charcoal); border-color:var(--gold) }
+.ctl button[hidden]{ display:none }
+.note{ text-align:center; color:var(--ink-soft); font-size:13px; padding:0 var(--gutter) 40px; margin:0 }
+
+/* ---------- phones: the open menu is held close, one panel at a time ---------- */
+@media (max-width: 760px){
+  :root{ --p:min(84vw, 380px) }
+  .table{ justify-content:flex-start; overflow-x:hidden; scroll-snap-type:x mandatory; padding:36px calc((100vw - var(--p)) / 2) 24px; scrollbar-width:none; overscroll-behavior-x:contain }
+  .table::-webkit-scrollbar{ display:none }
+  .table.can-scroll{ overflow-x:auto }
+  .panel{ scroll-snap-align:center }
+  .tab b{ font-size:18px } .tab span{ font-size:12px }
+  .top img{ height:24px }
+}
+@media (prefers-reduced-motion: reduce){
+  .sheet, .panel, .sheet::before{ transition-duration:.01s !important }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="/" aria-label="Hanoi Neighbors, về trang chủ"><img src="/assets/home/logo-trang.png" alt="Hanoi Neighbors" width="900" height="298"></a>
+  <a class="back" href="/">Về trang chủ</a>
+</header>
+
+<div class="head">
+  <p class="kick">Trên bàn nhà mình</p>
+  <h1>Menu <em>ba căn nhà</em></h1>
+  <div class="tabs" role="tablist" aria-label="Chọn nhà"><button class="tab" role="tab" aria-selected="true" aria-controls="m-tt" data-h="tt"><b>Warm Hands</b><span>114 Tuệ Tĩnh</span></button><button class="tab" role="tab" aria-selected="false" aria-controls="m-nt" data-h="nt"><b>Big Hug</b><span>8 Nguyễn Thiếp</span></button><button class="tab" role="tab" aria-selected="false" aria-controls="m-hc" data-h="hc"><b>Sincerely</b><span>131 Hoàng Cầu</span></button></div>
+</div>
+
+<main>
+  <article class="house on" id="m-tt" aria-labelledby="t-tt" >
+    <h2 class="sr" id="t-tt">Menu Warm Hands, 114 Tuệ Tĩnh</h2>
+    <div class="table">
+      <div class="sheet" data-state="closed">
+        <div class="panel pa">
+          <div class="face front cream"><section class="sec"><h3>Coffee Special</h3><ul><li><b>Êm Êm</b><i>65K</i><span>Coffee, cream, condensed milk</span></li><li><b>Dịu Dàng</b><i>75K</i><span>Espresso, housemade caramel, cream cheese</span></li><li><b>Coldbrew Mơ Muối</b><i>65K</i><span>Coldbrew coffee, salted apricot</span></li><li><b>Coldbrew Bưởi Hồng</b><i>65K</i><span>Coldbrew Coffee, Pink pomelo syrup</span></li><li><b>Coldbrew Tằm Mâm Xôi</b><i>65K</i><span>Coldbrew Coffee, Raspberry syrup, Mulberry syrup</span></li><li><b>Hoàng Hôn</b><i>65K</i><span>Espresso, housemade orange syrup, tonic</span></li></ul></section><section class="sec"><h3>Matcha</h3><ul><li><b>Matcha cha cha</b><span class="hc" title="Có nóng và đá" aria-label="có nóng và đá">❄︎ ♨︎</span><i>75K</i><span>Matcha almond latte</span></li><li><b>Matcha bồng bềnh</b><i>80K</i><span>Matcha, milk, earlgrey syrup, cream cheese</span></li><li><b>Matcha Cốm Rang</b><i>80K</i><span>Matcha, milk, pandan syrup, Cốm rang, Coconut Cream</span></li><li><b>Trà rang sữa mây bay</b><i>75K</i><span>Hojicha Latte</span></li></ul></section><img class="art bottom" src="/assets/menu/om.png" alt="" aria-hidden="true"></div>
+          <div class="face back teal cover"><img class="cover-logo" src="/assets/menu/logo-menu.png" alt="Hanoi Neighbors"><p class="cover-house">Warm Hands</p></div>
+        </div>
+        <div class="panel pb">
+          <div class="face front cream"><section class="sec"><h3>Tea &amp; Juice</h3><ul><li><b>Ngọt Ngọt cùng caramel</b><span class="hc" title="Có nóng và đá" aria-label="có nóng và đá">❄︎ ♨︎</span><i>70K</i><span>Earlgrey tea, caramel, salty cream</span></li><li><b>Thư Thả cùng Dâm Bụt</b><i>65K</i><span>Earlgrey tea, Hibicus &amp; Lemon syrup</span></li><li><b>Thanh thanh cùng Ô Mai</b><i>65K</i><span>Earlgrey tea, Pink Pomelo syrup, Apricot salted</span></li><li><b>Đậm Đà cùng Mơ Vải</b><i>70K</i><span>Olong tea, Lychee, Apricot</span></li><li><b>Đo Đỏ cùng Tằm Mâm Xôi</b><span class="hc" title="Có nóng và đá" aria-label="có nóng và đá">❄︎ ♨︎</span><i>65K</i><span>Hibicus Tea, Raspberry Syrup, Mulberry Syrup, Hibicus Jelly</span></li><li><b>Hồng Hào cùng Xoài Đào</b><i>65K</i><span>Mango peach juice</span></li></ul></section><section class="sec"><h3>Cocktail</h3><ul><li><b>Honey, I&#x27;m Home</b><i>135K</i><span>Whisky, cinamon, honey</span></li><li><b>Sakura Whisper</b><i>135K</i><span>Gin, lemon twist, sakura</span></li><li><b>Don&#x27;t Tell Mom</b><i>145K</i><span>Absinthe and shhh...</span></li><li><b>Green Flag</b><i>135K</i><span>Gin infusion Jasmine Tea, Lime &amp; Tonic</span></li><li><b>Ấm Chén</b><i>180K</i><span>Rice infused with H&#x27;mong apple, pink pomelo, hibiscus, honey</span></li></ul></section></div>
+          <div class="face back teal addr"><p class="addr-name">Warm Hands</p><p class="addr-st">114 Tuệ Tĩnh<br>Hai Bà Trưng, Hà Nội</p><a href="https://www.google.com/maps/search/?api=1&query=114+Tu%E1%BB%87+T%C4%A9nh+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Chỉ đường tới nhà</a></div>
+        </div>
+        <div class="panel pc">
+          <div class="face front teal plain"><section class="sec"><h3>Warm Hand</h3><ul><li><b>Bánh Sừng Bò nhồi Thịt Phô Mai</b><i>79K</i><span>Toasted croissant, cream cheese, slow-cooked caramelized onion, jambon</span></li><li><b>Nachos</b><i>75K</i><span>Nachos with housemade sour cream</span></li><li><b>Bánh Brownies cùng Kem Vanilla</b><i>75K</i><span>Brownies Cake, Vanilla Icecream</span></li><li><b>Khoai Tây Chiên</b><i>70K</i><span>French fries with salty rosemary</span></li><li><b>Cây gậy nóng bỏng</b><i>68K</i><span>Hot Sticks</span></li><li><b>Bánh Matcha Cheese Cháy</b><i>55K</i><span>Basque burnt matcha cheese cake</span></li><li><b>Bánh Sừng Bò Sốt Caramel</b><i>45K</i><span>Croissant with homemade caramel sauce</span></li><li><b>Bánh Cheese Chanh</b><i>55K</i><span>Lime cheese cake</span></li></ul></section><img class="art bottom" src="/assets/menu/nhay-mua.png" alt="" aria-hidden="true"></div>
+          <div class="face back teal flap"><img class="slogan" src="/assets/menu/slogan.png" alt="Tự nhiên như ở nhà"><img class="art mid" src="/assets/menu/nam-nghi.png" alt="" aria-hidden="true"><div class="rules"><p class="rules-h">HOUSE RULE ✿</p><p>Nhà chào đón thú cưng<br>Nhà có đồ ăn, vui lòng không dùng đồ ăn ngoài<br>Nhà siêu chill, vui lòng không dùng chất kích thích<br>Cùng chill và thân thiện với những người hàng xóm khác nhé!</p></div></div>
+        </div>
+      </div>
+    </div>
+  </article>
+  <article class="house" id="m-nt" aria-labelledby="t-nt" hidden>
+    <h2 class="sr" id="t-nt">Menu Big Hug, 8 Nguyễn Thiếp</h2>
+    <div class="table">
+      <div class="sheet" data-state="closed">
+        <div class="panel pa">
+          <div class="face front cream"><section class="sec"><h3>Coffee Special</h3><ul><li><b>Êm Êm</b><i>65K</i><span>Coffee, cream, condensed milk</span></li><li><b>Dịu Dàng</b><i>75K</i><span>Espresso, housemade caramel, cream cheese</span></li><li><b>Coldbrew Mơ Muối</b><i>65K</i><span>Coldbrew coffee, salted apricot</span></li><li><b>Coldbrew Bưởi Hồng</b><i>65K</i><span>Coldbrew Coffee, Pink pomelo syrup</span></li><li><b>Coldbrew Tằm Mâm Xôi</b><i>65K</i><span>Coldbrew Coffee, Raspberry syrup, Mulberry syrup</span></li><li><b>Cà phê Trứng</b><i>65K</i><span>Vietnamese Coffee, Cream, Free range Egg</span></li></ul></section><section class="sec"><h3>Matcha</h3><ul><li><b>Matcha cha cha</b><span class="hc" title="Có nóng và đá" aria-label="có nóng và đá">❄︎ ♨︎</span><i>75K</i><span>Matcha almond latte</span></li><li><b>Matcha bồng bềnh</b><i>80K</i><span>Matcha, milk, earlgrey syrup, cream cheese</span></li><li><b>Matcha Cốm Rang</b><i>80K</i><span>Matcha, milk, pandan syrup, Cốm rang, Coconut Cream</span></li><li><b>Trà rang sữa mây bay</b><i>75K</i><span>Hojicha Latte</span></li></ul></section><img class="art bottom" src="/assets/menu/om.png" alt="" aria-hidden="true"></div>
+          <div class="face back teal cover"><img class="cover-logo" src="/assets/menu/logo-menu.png" alt="Hanoi Neighbors"><p class="cover-house">Big Hug</p></div>
+        </div>
+        <div class="panel pb">
+          <div class="face front cream"><section class="sec"><h3>Tea &amp; Juice</h3><ul><li><b>Ngọt Ngọt cùng caramel</b><span class="hc" title="Có nóng và đá" aria-label="có nóng và đá">❄︎ ♨︎</span><i>70K</i><span>Earlgrey tea, caramel, salty cream</span></li><li><b>Thanh thanh cùng Ô Mai</b><i>65K</i><span>Earlgrey tea, Pink Pomelo syrup, Apricot salted</span></li><li><b>Thảnh thơi cùng Xoài tươi</b><i>65K</i><span>Olong tea, Mango Spice</span></li><li><b>Đậm Đà cùng Mơ Vải</b><i>70K</i><span>Olong tea, Lychee, Apricot</span></li><li><b>Đo Đỏ cùng Tằm Mâm Xôi</b><span class="hc" title="Có nóng và đá" aria-label="có nóng và đá">❄︎ ♨︎</span><i>65K</i><span>Hibicus Tea, Raspberry Syrup, Mulberry Syrup, Hibicus Jelly</span></li><li><b>Hồng Hào cùng Xoài Đào</b><i>65K</i><span>Mango peach juice</span></li></ul></section><section class="sec"><h3>Cocktail</h3><ul><li><b>Honey, I&#x27;m Home</b><i>135K</i><span>Whisky, cinamon, honey</span></li><li><b>Sakura Whisper</b><i>135K</i><span>Gin, lemon twist, sakura</span></li><li><b>Don&#x27;t Tell Mom</b><i>145K</i><span>Absinthe and shhh...</span></li><li><b>Green Flag</b><i>135K</i><span>Gin infusion Jasmine Tea, Lime &amp; Tonic</span></li><li><b>Ấm Chén</b><i>180K</i><span>Rice infused with H&#x27;mong apple, pink pomelo, hibiscus, honey</span></li></ul></section></div>
+          <div class="face back teal addr"><p class="addr-name">Big Hug</p><p class="addr-st">8 Nguyễn Thiếp<br>Ba Đình, Hà Nội</p><a href="https://www.google.com/maps/search/?api=1&query=8+Nguy%E1%BB%85n+Thi%E1%BA%BFp+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Chỉ đường tới nhà</a></div>
+        </div>
+        <div class="panel pc">
+          <div class="face front teal plain"><section class="sec"><h3>Bia Chay</h3><ul><li><b>Bia Đào / Dâu / Nam Việt Quất</b><i>75K</i><span>Non Alcoholic Beer (Peach / Strawberries / Cranberry)</span></li></ul></section><section class="sec"><h3>Warm Hand</h3><ul><li><b>Bánh Sừng Bò nhồi Thịt Phô Mai</b><i>79K</i><span>Toasted croissant, cream cheese, slow-cooked caramelized onion, jambon</span></li><li><b>Bánh Brownies cùng Kem Vanilla</b><i>75K</i><span>Brownies Cake, Vanilla Icecream</span></li><li><b>Khoai Tây Chiên</b><i>70K</i><span>French fries with salty rosemary</span></li><li><b>Cây gậy nóng bỏng</b><i>68K</i><span>Hot Sticks</span></li><li><b>Bánh Matcha Cheese Cháy</b><i>55K</i><span>Basque burnt matcha cheese cake</span></li><li><b>Bánh Sừng Bò Sốt Caramel</b><i>45K</i><span>Croissant with homemade caramel sauce</span></li><li><b>Bánh Cheese Chanh</b><i>55K</i><span>Lime cheese cake</span></li></ul></section><img class="art bottom" src="/assets/menu/nhay-mua.png" alt="" aria-hidden="true"></div>
+          <div class="face back teal flap"><img class="slogan" src="/assets/menu/slogan.png" alt="Tự nhiên như ở nhà"><img class="art mid" src="/assets/menu/nam-nghi.png" alt="" aria-hidden="true"><div class="rules"><p class="rules-h">HOUSE RULE ✿</p><p>Nhà chào đón thú cưng<br>Nhà có đồ ăn, vui lòng không dùng đồ ăn ngoài<br>Nhà siêu chill, vui lòng không dùng chất kích thích<br>Cùng chill và thân thiện với những người hàng xóm khác nhé!</p></div></div>
+        </div>
+      </div>
+    </div>
+  </article>
+  <article class="house" id="m-hc" aria-labelledby="t-hc" hidden>
+    <h2 class="sr" id="t-hc">Menu Sincerely, Tầng 6, 131 Hoàng Cầu</h2>
+    <div class="table">
+      <div class="sheet" data-state="closed">
+        <div class="panel pa">
+          <div class="face front cream"><section class="sec"><h3>Phê Phin</h3><ul><li><b>Phê Phin Dẻ Dừa</b><i>70K</i><span>Buon-me-thuot Robusta, Pistachio, Coconut Ice-Cream</span></li><li><b>Phê Phin Hạnh nhân</b><i>68K</i><span>Buon-me-thuot Robusta, Almond, Almond Tuile Cookies</span></li></ul></section><section class="sec"><h3>Cold Brew</h3><ul><li><b>Coldbrew Khế Vải</b><i>70K</i><span>Catimor Son La, Ethiopia Sidamo, Star Fruit, Lychee</span></li><li><b>Coldbrew Kem chanh vàng</b><i>70K</i><span>Catimor Son La, Ethiopia Sidamo, Lemon Creamy</span></li><li><b>Coldbrew Bưởi Hồng</b><i>68K</i><span>Catimor Son La, Ethiopia Sidamo, Pink Pomelo</span></li><li><b>Coldbrew Chanh Muối</b><i>68K</i><span>Catimor Son La, Ethiopia Sidamo, Salted Lime Seltzer</span></li></ul></section><section class="sec"><h3>Seasonal Special</h3><ul><li><b>Đại Ngàn</b><i>85K</i><span>Pear, Pineapple, Lemon, Ginger, Rocket, Kale, Coconut Water</span></li></ul></section><section class="sec"><h3>Cacao Origin</h3><ul><li><b>Rừng Thông</b><i>75K</i><span>Tay Nguyen Cacao, Mint, Milk</span></li><li><b>Bazan</b><i>75K</i><span>Tay Nguyen Cacao, Milk, Creamy</span></li></ul></section></div>
+          <div class="face back teal cover"><img class="cover-logo" src="/assets/menu/logo-menu.png" alt="Hanoi Neighbors"><p class="cover-house">Sincerely</p></div>
+        </div>
+        <div class="panel pb">
+          <div class="face front cream"><section class="sec"><h3>Cold Brew Tea</h3><ul><li><b>Thoang Thoảng cùng Quế Hoa</b><i>70K</i><span>Osmanthus Cold Brew Tea, Lemon, Lychee</span></li><li><b>Chua Thơm cùng Khế Cóc</b><i>70K</i><span>Jasmine Cold Brew Tea, Golden Ambarella, Star Fruit</span></li><li><b>Thanh Thanh cùng Ô Mai</b><i>68K</i><span>Earlgrey Cold Brew Tea, Pink Pomelo Puree, Salted Dried Apricot</span></li><li><b>Mơ Màng cùng Đào tươi</b><i>68K</i><span>Osmanthus Coldbrew Tea, Apricot, Peach</span></li><li><b>Đo Đỏ cùng Tằm Mâm Xôi</b><i>68K</i><span>Earlgrey Cold Brew Tea, Mulberry Syrup, Raspberry syrup</span></li></ul></section><section class="sec"><h3>Matcha &amp; Houjicha</h3><ul><li><b>Matcha Dưa Dịu Dàng</b><i>80K</i><span>Fuji Matcha, Cantaloupe, Lemon Creamy</span></li><li><b>Matcha Dừa Deo Dẻo</b><i>75K</i><span>Fuji Matcha Foam, Coconut Water, Jasmine Cold Brew Tea</span></li><li><b>Matcha Hạnh Nhân</b><i>75K</i><span>Fuji Matcha, Almond, Milk</span></li><li><b>Trà Rang Chuối Nướng</b><i>75K</i><span>Houjicha, Banana Puree, Milk</span></li><li><b>Trà Rang Sữa CaCao</b><i>75K</i><span>Houjicha, Cacao, Creamy</span></li><li><b>Trà Rang Sữa Latte</b><i>70K</i><span>Houjicha, Milk</span></li></ul></section></div>
+          <div class="face back teal addr"><p class="addr-name">Sincerely</p><p class="addr-st">Tầng 6, 131 Hoàng Cầu<br>Đống Đa, Hà Nội</p><a href="https://www.google.com/maps/search/?api=1&query=131+Ho%C3%A0ng+C%E1%BA%A7u+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Chỉ đường tới nhà</a></div>
+        </div>
+        <div class="panel pc">
+          <div class="face front teal plain"><section class="sec"><h3>Heartwarming</h3><ul><li><b>Ấm Chén Mơ Màng</b><i>230K</i><span>Fermented Wine, Coldbrew Tea, Apricot, Peach</span></li><li><b>Ấm Chén Chanh Chảnh</b><i>230K</i><span>Fermented Wine, Coldbrew Tea, Star Fruit</span></li><li><b>Ấm Chén Mâm Mê</b><i>230K</i><span>Fermented Wine, Coldbrew Tea, Pink Pomelo, Raspberry</span></li></ul></section><section class="sec"><h3>Warm Hand</h3><ul><li><b>Bánh Sừng Bò nhồi Thịt Phô Mai</b><i>79K</i><span>Toasted Croissant, Cream Cheese, Slow-cooked Caramelized Onion, Jambon</span></li><li><b>Bánh Sừng Bò Sốt Chanh Vàng</b><i>50K</i><span>Croissant with Homemade Lemon Creamy Sauce</span></li><li><b>Cây Gậy Nóng Bỏng</b><i>70K</i><span>Hotstick with Chilli Sauce</span></li><li><b>Bánh Cheese Dâu Tằm</b><i>60K</i><span>Mulberry Cheese Cake</span></li><li><b>Bánh Cheese Chanh</b><i>55K</i><span>Lime Cheese Cake</span></li><li><b>Brownie Kem Dừa</b><i>75K</i><span>Brownie Cake, Coconut Icecream</span></li></ul></section><img class="art bottom" src="/assets/menu/om.png" alt="" aria-hidden="true"></div>
+          <div class="face back teal flap"><img class="slogan" src="/assets/menu/slogan.png" alt="Tự nhiên như ở nhà"><img class="art mid" src="/assets/menu/nhay-mua.png" alt="" aria-hidden="true"><div class="rules"><p class="rules-h">HOUSE RULE ✿</p><p>Nhà chào đón thú cưng<br>Nhà có đồ ăn, vui lòng không dùng đồ ăn ngoài<br>Nhà siêu chill, vui lòng không dùng chất kích thích<br>Cùng chill và thân thiện với những người hàng xóm khác nhé!</p></div></div>
+        </div>
+      </div>
+    </div>
+  </article>
+</main>
+
+<div class="ctl">
+  <button class="pri" id="btn-open" type="button">Mở menu</button>
+  <button id="btn-flip" type="button" hidden>Lật mặt sau</button>
+  <button id="btn-close" type="button" hidden>Gấp lại</button>
+</div>
+
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var phone = matchMedia('(max-width: 760px)');
+  var bOpen = document.getElementById('btn-open'), bFlip = document.getElementById('btn-flip'), bClose = document.getElementById('btn-close');
+  var tabs = [].slice.call(document.querySelectorAll('.tab'));
+  var cur = document.querySelector('.house.on');
+  var timer = 0;
+  function sheet() { return cur.querySelector('.sheet'); }
+  function table() { return cur.querySelector('.table'); }
+  function pw() { return cur.querySelector('.pb').getBoundingClientRect().width; }
+
+  // the sheet is as tall as its longest panel, never shorter than the print ratio
+  function fit() {
+    document.querySelectorAll('.sheet').forEach(function (s) {
+      s.style.removeProperty('--h');
+      var max = 0;
+      s.querySelectorAll('.face').forEach(function (f) { max = Math.max(max, f.scrollHeight); });
+      if (max > s.getBoundingClientRect().height) s.style.setProperty('--h', Math.ceil(max) + 'px');
+    });
+    centre(false);
+  }
+  // on a phone, keep the folded menu (the middle panel) in the middle of the screen
+  function centre(smooth) {
+    if (!phone.matches) return;
+    var st = sheet().getAttribute('data-state'), t = table();
+    var x = st === 'open' ? 0 : st === 'flip' ? 0 : pw();
+    t.scrollTo({ left: x, behavior: smooth && !reduce ? 'smooth' : 'auto' });
+    t.classList.toggle('can-scroll', st === 'open' || st === 'flip');
+  }
+  function ui() {
+    var st = sheet().getAttribute('data-state');
+    bOpen.hidden = !(st === 'closed');
+    bFlip.hidden = !(st === 'open' || st === 'flip');
+    bFlip.textContent = st === 'flip' ? 'Lật lại mặt trong' : 'Lật mặt sau';
+    bClose.hidden = st === 'closed';
+  }
+  function set(st) { sheet().setAttribute('data-state', st); ui(); }
+  function open() {
+    clearTimeout(timer);
+    if (sheet().getAttribute('data-state') !== 'closed') return;
+    set('half');                                  // the cover swings open onto the slogan flap
+    timer = setTimeout(function () { set('open'); centre(true); }, reduce ? 0 : 780);
+  }
+  function close() {
+    clearTimeout(timer);
+    var st = sheet().getAttribute('data-state');
+    if (st === 'closed') return;
+    var fold = function () {
+      centre(true);
+      set('half');
+      timer = setTimeout(function () { set('closed'); centre(true); }, reduce ? 0 : 700);
+    };
+    if (st === 'flip') { set('open'); timer = setTimeout(fold, reduce ? 0 : 900); } else fold();
+  }
+  function flip() {
+    var st = sheet().getAttribute('data-state');
+    if (st === 'open') set('flip'); else if (st === 'flip') set('open');
+    // on a phone the snap follows the panel it was on; bring the reader back to the left edge of what now faces them
+    clearTimeout(timer); timer = setTimeout(function () { centre(true); }, reduce ? 0 : 1150);
+  }
+  bOpen.addEventListener('click', open);
+  bClose.addEventListener('click', close);
+  bFlip.addEventListener('click', flip);
+  document.querySelectorAll('.sheet').forEach(function (s) {
+    s.addEventListener('click', function (e) { if (e.target.closest('a')) return; if (s.getAttribute('data-state') === 'closed') open(); });
+  });
+  function pick(t, push) {
+      if (t.getAttribute('aria-selected') === 'true') return;
+      clearTimeout(timer);
+      sheet().setAttribute('data-state', 'closed');
+      cur.hidden = true; cur.classList.remove('on');
+      tabs.forEach(function (o) { o.setAttribute('aria-selected', String(o === t)); });
+      cur = document.getElementById(t.getAttribute('aria-controls'));
+      cur.hidden = false; cur.classList.add('on');
+      sheet().setAttribute('data-state', 'closed');
+      fit(); ui();
+      if (push) try { history.replaceState(null, '', '#' + t.getAttribute('data-h')); } catch (e) {}
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { pick(t, true); }); });
+  // menu.html#tt, #nt, #hc opens on that house
+  var fromHash = document.querySelector('.tab[data-h="' + (location.hash || '').slice(1) + '"]');
+  if (fromHash) pick(fromHash, false);
+  addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  addEventListener('load', fit);
+  fit(); ui();
+})();
+</script>
+</body>
+</html>
