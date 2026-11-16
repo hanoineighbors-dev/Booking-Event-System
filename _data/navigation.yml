@@ -4,6 +4,8 @@
   url: /events/
 - title: Cơ sở
   url: /#co-so
+- title: Menu
+  url: /menu/
 - title: Tuyển dụng
   url: /tuyendung/
   cta: true
